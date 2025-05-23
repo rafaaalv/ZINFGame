@@ -13,15 +13,25 @@
 #define ALTURA 860
 
 
-void ShowTopBar(int lifes, int level, int score, int sword);
+void ShowTopBar(status TopBarStatus);
 
 int menu(int gameInProgress);
+
+void killMonster(status *gameStatus, int arrayMonsters[5][4], int monster);
+
+int existMonster(int orientation, int arrayMonsters[5][4], int x_player, int y_player);
 
 void drawPlayer(int x, int y, int orientation);
 
 void genarateWall(int matriz[16][24]);
 
 int conferePosicao(int x, int y, int matriz[16][24]);
+
+void chatchLife(status *lifeStatus);
+
+void chatchSword(status *swordStatus, int arraySword[3]);
+
+void drawSword(int arraySword[3]);
 
 void drawMonsters(int MonstersArray[5][4], int MapArray[16][24]);
 

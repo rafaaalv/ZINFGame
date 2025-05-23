@@ -26,22 +26,28 @@ Texture2D playerWTexture;
 Image BackGround;
 Image img_wall;
 Texture2D wallTexture;
+typedef struct
+{
+    int lifes;
+    int level;
+    int score;
+    int sword;
+} status;
 
 
-void ShowTopBar(int lifes, int level, int score, int sword)
+void ShowTopBar(status TopBarStatus)
 {
     char l[10], lev[12], sc[15];
-    sprintf(l, "Vidas: %d", lifes);
-    sprintf(lev, "Nivel: %d", level);
-    sprintf(sc, "Escores: %d", score);
+    sprintf(l, "Vidas: %d", TopBarStatus.lifes);
+    sprintf(lev, "Nivel: %d", TopBarStatus.level);
+    sprintf(sc, "Escores: %d", TopBarStatus.score);
     DrawRectangle(0, 0, 1200, 60, BLACK);
     DrawText(l, 40, 5, 50, WHITE);
     DrawText(lev, 280, 5, 50, WHITE);
     DrawText(sc, 480, 5, 50, WHITE);
-    if(sword){
-        DrawTexture(swordTexture, 840 , 0, WHITE);
+    if(!TopBarStatus.sword){
+        DrawTexture(swordTexture, 1100 , 0, WHITE);
     }
-
 }
 void generateMap(char path[10], int MapArray[16][24], int MonsterArray[5][4], int SwordArray[3], int LifesArray[5][3], int *x_player, int *y_player)
 {
@@ -137,6 +143,42 @@ int menu(int gameInProgress)
     }
     return optionSelected;
 }
+void killMonster(status *gameStatus, int arrayMonsters[5][4], int monster)
+{
+    int monsterScore;
+    monsterScore = arrayMonsters[monster][2];
+    gameStatus->score += monsterScore;
+    arrayMonsters[monster][3] = 0;
+}
+int existMonster(int orientation, int arrayMonsters[5][4], int x_player, int y_player)
+{
+    int i, x, y, x_monster, y_monster;
+    x = x_player;
+    y = y_player;
+    switch(orientation){
+        case 1:
+            x += 150;
+            break;
+        case 2:
+            x -= 150;
+            break;
+        case 3:
+            y -= 150;
+            break;
+        default:
+            y += 150;
+    }
+    for(i = 0; i < 5; i++){
+        if(arrayMonsters[i][3]){
+            x_monster = arrayMonsters[i][0];
+            y_monster = arrayMonsters[i][1];
+            if(((x_monster <= x)&&(x_monster >= x_player))||((x_monster >= x)&&(x_monster <= x_player))||((y_monster <= y)&&(y_monster >= y_player))||((y_monster >= y)&&(y_monster <= y_player))){
+                return i;
+            }
+        }
+    }
+    return -1;
+}
 void drawPlayer(int x, int y, int orientation)
 {
     Texture2D playerTextureOriented;
@@ -169,11 +211,26 @@ void genarateWall(int matriz[16][24])
 
 int conferePosicao(int x, int y, int matriz[16][24])
 {
-    if(!matriz[(int) floor(y/50)][(int) floor(x/50)]){
+    if((!matriz[(int) floor(y/50)][(int) floor((x)/50)])&&(x < 1200)&&(x > -50)&&(y < 920)&&(y > 0)){
         return 1;
 	} else {
         return 0;
 	}
+}
+void chatchLife(status *lifeStatus)
+{
+    lifeStatus->lifes += 1;
+}
+void chatchSword(status *swordStatus, int arraySword[3])
+{
+    swordStatus->sword = 1;
+    arraySword[2] = 0;
+}
+void drawSword(int arraySword[3])
+{
+    if(arraySword[2]){
+        DrawTexture(swordTexture, arraySword[0], arraySword[1], BLACK);
+    }
 }
 void drawMonsters(int MonstersArray[5][4], int MapArray[16][24])
 {
@@ -263,7 +320,12 @@ void unloadTextures()
 }
 int StartGame()
 {
-    int MapArray[16][24], i, j, MenuAnswer, MonsterArray[5][4], SwordArray[3], LifesArray[5][3] = {{0}}, x_player, y_player, orientation = 1;
+    status InGameStatus;
+    InGameStatus.lifes = 3;
+    InGameStatus.level = 1;
+    InGameStatus.score = 0;
+    InGameStatus.sword = 0;
+    int MapArray[16][24], i, j, MenuAnswer, MonsterArray[5][4], SwordArray[3], LifesArray[5][3] = {{0}}, x_player, y_player, orientation = 1, monsterKilled;
     InitWindow(LARGURA, ALTURA, "ZINF"); //Inicializa janela, com certo tamanho e titulo
     SetTargetFPS(20);// Ajusta a janela para 60 frames por segundo
 
@@ -273,13 +335,7 @@ int StartGame()
     srand(time(NULL));
     generateMap("../assets/mapa01.txt", MapArray, MonsterArray, SwordArray, LifesArray, &x_player, &y_player);
 
-    for(i = 0; i < 16; i++){
-        for(j = 0; j < 24; j++){
-            printf("%d", MapArray[i][j]);
-        }
-        printf("\n");
-    }
-    printf("%d\n%d", x_player, y_player);
+    printf("%d, %d\n", SwordArray[0], SwordArray[1]);
     drawPlayer(x_player, y_player, orientation);
     while (!WindowShouldClose())
     {
@@ -330,13 +386,30 @@ int StartGame()
                 }
             }
         }
+        if((SwordArray[2])&&(SwordArray[0] == x_player)&&(SwordArray[1] == y_player)){
+            chatchSword(&InGameStatus, SwordArray);
+        }
 
+        if(InGameStatus.sword = 1){
+            if(IsKeyPressed(KEY_J)){
+                monsterKilled = existMonster(orientation, MonsterArray, x_player, y_player);
+                if(monsterKilled > -1){
+                    killMonster(&InGameStatus, MonsterArray, monsterKilled);
+                }
+            }
+        }
+        for(i = 0; i < 5; i++){
+            if((LifesArray[i][2])&&(LifesArray[i][0] == x_player)&&(LifesArray[i][1] == y_player)){
+                LifesArray[i][2] = 0;
+                chatchLife(&InGameStatus);
+            }
+        }
         drawPlayer(x_player, y_player, orientation);
         genarateWall(MapArray);
         drawMonsters(MonsterArray, MapArray);
         drawLifes(LifesArray);
 
-        ShowTopBar(3, 1, 0, 1);
+        ShowTopBar(InGameStatus);
         // Atualiza o que eh mostrado na tela a partir do estado do jogo
         BeginDrawing(); //Inicia o ambiente de desenho na tela
         EndDrawing(); //Finaliza o ambiente de desenho na tela
