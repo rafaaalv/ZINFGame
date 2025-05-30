@@ -12,36 +12,43 @@
 #define LARGURA 1200
 #define ALTURA 860
 
+void generateTextures();
+
+void unloadTextures();
 
 void ShowTopBar(status TopBarStatus);
 
 int menu(int gameInProgress);
 
-void killMonster(status *gameStatus, int arrayMonsters[5][4], int monster);
+void attackMonster(status *atualStatus, int arrayMonsters[5][MONSTERS_COLLUM], int x_player, int y_player);
 
-int existMonster(int orientation, int arrayMonsters[5][4], int x_player, int y_player);
+void restartStatus(status *gameStatus, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int MonsterArray[5][MONSTERS_COLLUM], int SwordArray[3], int LifesArray[5][3], int *x_player, int *y_player);
+
+void killMonster(status *gameStatus, int arrayMonsters[5][MONSTERS_COLLUM], int monster);
+
+int existMonster(int orientation, int arrayMonsters[5][MONSTERS_COLLUM], int x_player, int y_player);
 
 void drawPlayer(int x, int y, int orientation);
 
-void genarateWall(int matriz[16][24]);
+void genarateWall(int matriz[SPRITE_HEIGHT][SPRITE_WIDHT]);
 
-int conferePosicao(int x, int y, int matriz[16][24]);
+int conferePosicao(int x, int y, int matriz[SPRITE_HEIGHT][SPRITE_WIDHT]);
 
-void chatchLife(status *lifeStatus);
+void changeLife(status *lifeStatus, int value);
 
 void chatchSword(status *swordStatus, int arraySword[3]);
 
 void drawSword(int arraySword[3]);
 
-void drawMonsters(int MonstersArray[5][4], int MapArray[16][24]);
+void drawMonsters(int MonstersArray[5][MONSTERS_COLLUM], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT]);
 
 void drawLifes(int LifeArray[5][3]);
 
-void generateTextures();
+int gameOver();
 
-void unloadTextures();
+int callMenu(int gameInProgress, int *continueGame);
 
-void generateMap(char path[10], int MapArray[16][24], int MonsterArray[5][4], int SwordArray[3], int LifesArray[5][3], int *x_player, int *y_player);
+void generateMap(char path[10], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int MonsterArray[5][MONSTERS_COLLUM], int SwordArray[3], int LifesArray[5][3], int *x_player, int *y_player);
 
 int StartGame();
 
