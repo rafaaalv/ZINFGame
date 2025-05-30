@@ -465,7 +465,7 @@ int callMenu(int gameInProgress, int *continueGame)
     MenuAswer = menu(gameInProgress);
     if(gameInProgress){
         if(MenuAswer == 1){
-            callMenu(0, continueGame);
+            return callMenu(0, continueGame);
         } else if(MenuAswer == 2){
             *continueGame = 0;
         }
