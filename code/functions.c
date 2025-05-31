@@ -753,7 +753,7 @@ int StartGame()
 {
     status InGameStatus;
     score Highscores[5];
-    int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], i, j, game, continueGame = 1, MenuAnswer, MonsterArray[MAX_MONSTERS][MONSTERS_COLLUM];
+    int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], i, j, game, continueGame = 1, MenuAnswer, MonsterArray[MAX_MONSTERS][MONSTERS_COLLUM] = {{0}}, imune = 0, contador = 0;
     int SwordArray[3], LifesArray[5][3] = {{0}}, x_player, y_player, orientation = 1, monsterKilled, respostaMenu;
     char atualFile[20];
 
@@ -829,49 +829,15 @@ int StartGame()
                 game = 1;
                 break;
             }
-            if(attackMonster(&InGameStatus, MonsterArray, x_player, y_player)){
-                    switch(orientation){
-                        case 1:
-                            if(conferePosicao((x_player -SPRITE_SIZE), y_player, MapArray))
-                                x_player -= SPRITE_SIZE;
-                            else if(conferePosicao((x_player + SPRITE_SIZE), y_player, MapArray))
-                                x_player += SPRITE_SIZE;
-                            else if(conferePosicao(x_player, (y_player + SPRITE_SIZE), MapArray))
-                                y_player += SPRITE_SIZE;
-                            else if(conferePosicao(x_player, (y_player -SPRITE_SIZE), MapArray))
-                                y_player -= SPRITE_SIZE;
-                            break;
-                        case 2:
-                            if(conferePosicao((x_player + SPRITE_SIZE), y_player, MapArray))
-                                x_player += SPRITE_SIZE;
-                            else if(conferePosicao((x_player -SPRITE_SIZE), y_player, MapArray))
-                                x_player -= SPRITE_SIZE;
-                            else if(conferePosicao(x_player, (y_player + SPRITE_SIZE), MapArray))
-                                y_player += SPRITE_SIZE;
-                            else if(conferePosicao(x_player, (y_player -SPRITE_SIZE), MapArray))
-                                y_player -= SPRITE_SIZE;
-                            break;
-                        case 3:
-                            if(conferePosicao(x_player, (y_player + SPRITE_SIZE), MapArray))
-                                y_player += SPRITE_SIZE;
-                            else if(conferePosicao(x_player, (y_player -SPRITE_SIZE), MapArray))
-                                y_player -= SPRITE_SIZE;
-                            else if(conferePosicao((x_player + SPRITE_SIZE), y_player, MapArray))
-                                x_player += SPRITE_SIZE;
-                            else if(conferePosicao((x_player -SPRITE_SIZE), y_player, MapArray))
-                                x_player -= SPRITE_SIZE;
-                            break;
-                        case 4:
-                            if(conferePosicao(x_player, (y_player -SPRITE_SIZE), MapArray))
-                                y_player -= SPRITE_SIZE;
-                            else if(conferePosicao(x_player, (y_player + SPRITE_SIZE), MapArray))
-                                y_player += SPRITE_SIZE;
-                            else if(conferePosicao((x_player + SPRITE_SIZE), y_player, MapArray))
-                                x_player += SPRITE_SIZE;
-                            else if(conferePosicao((x_player -SPRITE_SIZE), y_player, MapArray))
-                                x_player -= SPRITE_SIZE;
-                    }
+            if(!imune){
+                if(attackMonster(&InGameStatus, MonsterArray, x_player, y_player)){
+                    imune = 1;
+                    contador = 0;
+                }
             }
+            else contador++;
+            if(contador > 39)
+                imune = 0;
             drawPlayer(x_player, y_player, orientation);
             genarateWall(MapArray);
             drawMonsters(MonsterArray, MapArray);
