@@ -573,72 +573,39 @@ int winGame()
     }
     return optionSelected;
 }
-/*/void showHighScores(score highscores[5])
-//{
-  //  int i;
-   // char text[40], *optionsText[3];
-   // int optionSelected, i, draw;
-   // optionSelected = 0;
-   // draw = 1;
-   // if(gameInProgress){
-   //     optionsText[0] = "Continuar Jogo";
-   //     optionsText[1] = "Voltar ao menu";
-        optionsText[2] = "Sair";
-    } else {
-        optionsText[0] = "Iniciar";
-        optionsText[1] = "Scoreboard";
-        optionsText[2] = "Sair";
-    }
-
-    InitWindow(LARGURA, ALTURA, "Menu");
+void showHighScores(score highscores[5])
+{
+    char scoreString[20];
+    int i, draw;
+    draw = 1;
+    InitWindow(LARGURA, ALTURA, "HIGHSCORES");
     generateTextures();
     SetTargetFPS(60);
     while(draw){
-        DrawText("ZINF", 100, 20, 100, WHITE);
-        for(i = 0; i < 3; i++){
-            if(optionSelected == i){
-                DrawCircle(90, i*110 + 220, 5, RED);
-                DrawText(optionsText[i], 100, i*110 + 200, SPRITE_SIZE, RED);
-            } else {
-                DrawText(optionsText[i], 100, i*110 + 200, SPRITE_SIZE, WHITE);
-            }
+        DrawText("Lista dos highscores:", 100, 20, 80, WHITE);
+        for(i = 0; i < 5; i++){
+            sprintf(scoreString, "%d", highscores[i].score);
+            DrawText(highscores[i].name, 100, i*80 + 200, SPRITE_SIZE, WHITE);
+            DrawText(scoreString, 500, i*80 + 200, SPRITE_SIZE, WHITE);
         }
-        if(IsKeyPressed(KEY_DOWN)){
-            if(optionSelected == 2){
-                optionSelected = 0;
-            } else {
-                optionSelected++;
-            }
-        }
-        if(IsKeyPressed(KEY_UP)){
-            if(optionSelected == 0){
-                optionSelected = 2;
-            } else {
-                optionSelected--;
-            }
-        }
+        DrawCircle(90, 625, 5, RED);
+        DrawText("Voltar", 100, 600, SPRITE_SIZE, RED);
         BeginDrawing();
 	    EndDrawing();
 	    ClearBackground(BLACK);
-	    if(IsKeyPressed(KEY_ENTER)||IsKeyPressed(KEY_LEFT)){
+	    if(IsKeyPressed(KEY_ENTER)){
             draw = 0;
             CloseWindow();
 	    }
     }
-    return optionSelected;
-    printf("Lista dos highscores: \n");
-    for(i = 0; i < 5; i ++){
-        printf("%s", highscores[i].nome);
-        printf("\t\t\t\t\t\t%d\n", highscores[i].score);
-    }
-}*/
-int callMenu(int gameInProgress, int *continueGame)
+}
+int callMenu(int gameInProgress, int *continueGame, score highscores[5])
 {
     int MenuAswer;
     MenuAswer = menu(gameInProgress);
     if(gameInProgress){
         if(MenuAswer == 1){
-            return callMenu(0, continueGame);
+            return callMenu(0, continueGame, highscores);
         } else if(MenuAswer == 2){
             *continueGame = 0;
         }
@@ -646,25 +613,157 @@ int callMenu(int gameInProgress, int *continueGame)
         if(MenuAswer == 0){
             return 1; //precisa (re)comecar o jogo
         } else if(MenuAswer == 1){
-            //ScoreBoard
+            showHighScores(highscores);
+            return callMenu(gameInProgress, continueGame, highscores);
         } else {
             *continueGame = 0;
         }
     }
     return 0;
 }
+void readHighscores(score highscores[5])
+{
+    score generateScore;
+    int i, score;
+    char line[20];
+    FILE *FHighscores = fopen("../assets/highscores.txt", "r");
+    for(i = 0; i < 5; i++){
+        fgets(line, 20, FHighscores);
+        strcpy(generateScore.name, line);
+        fgets(line, 20, FHighscores);
+        score = atoi(line);
+        generateScore.score = score;
+        highscores[i] = generateScore;
+    }
+}
+int updateScores(score highscores[5], score new_score)
+{
+    int i, removedI, changed;
+    char strScore[20];
+    FILE *FHighscores = fopen("../assets/highscores.txt", "w");
+    score removed_score, med_score;
+    removedI = 5;
+    changed = 0;
+    for(i = 0; i < 5; i++){
+        if(new_score.score > highscores[i].score){
+            removed_score = highscores[i];
+            highscores[i] = new_score;
+            removedI = i;
+            changed = 1;
+            break;
+        }
+    }
+    while(removedI < 4){
+        for(i = removedI + 1; i < 5; i++){
+            if(removed_score.score > highscores[i].score){
+                med_score = highscores[i];
+                highscores[i] = removed_score;
+                removed_score = med_score;
+                removedI = i;
+            }
+        }
+    }
+    for(i = 0; i < 5; i++){
+        highscores[i].name[strcspn(highscores[i].name, "\n")] = '\0';
+        fprintf(FHighscores, highscores[i].name);
+        fprintf(FHighscores, "\n");
+        sprintf(strScore, "%d", highscores[i].score);
+        fprintf(FHighscores, strScore);
+        fprintf(FHighscores, "\n");
+    }
+    fclose(FHighscores);
+    return changed;
+}
+void newScore(score highscores[5], int playerScore)
+{
+    score new_score;
+    char scoreString[20], name[20] = "\0";
+    int i, draw, letterCount = 0, key, nameEntered = 0, updated, randow = 0, indconf = 0;
+    draw = 1;
+    InitWindow(LARGURA, ALTURA, "Digite seu nome");
+    SetTargetFPS(60);
+    while(!nameEntered){
+        DrawText("Digite seu nome:", 100, 20, 100, WHITE);
+        key = GetCharPressed();
+        while (key > 0){
+            if (((key >= 32) && (key <= 125)) && (letterCount < 20)){
+                name[letterCount] = (char)key;
+                letterCount++;
+                name[letterCount] = '\0';  // Garante fim de string
+            }
+            key = GetCharPressed();  // Continua lendo se houve mais de um char
+        }
+        if (IsKeyPressed(KEY_BACKSPACE)){
+            if (letterCount > 0){
+                letterCount--;
+                name[letterCount] = '\0';
+            }
+        }
+        DrawRectangle(100, 150, 300, 50, LIGHTGRAY);
+        DrawText(name, 105, 150, 40, BLACK);
+        if (((GetTime() * 2) - (int)(GetTime() * 2)) < 0.5 && letterCount < 40)
+            DrawText("_", 105 + MeasureText(name, 40), 170, 35, BLACK);
+        BeginDrawing();
+        EndDrawing();
+        ClearBackground(BLACK);
+        if(IsKeyPressed(KEY_ENTER)){
+            nameEntered = 1;
+            CloseWindow();
+        }
+    }
+    strcpy(new_score.name, name);
+    new_score.score = playerScore;
+    updated = updateScores(highscores, new_score);
+
+    InitWindow(LARGURA, ALTURA, "Escore atulizado");
+    generateTextures();
+    SetTargetFPS(60);
+    while(draw&&!WindowShouldClose()){
+        if(updated){
+            DrawText("Voce conseguiu um novo recorde!!", 100, 40, 50, GREEN);
+            if(randow == 60){
+                if(indconf == 0){
+                    indconf = 1;
+                } else if(indconf == 1){
+                    indconf = 0;
+                } else {
+                    indconf++;
+                }
+                randow = 0;
+            } else{
+                randow++;
+            }
+            drawConfetti(indconf);
+        } else{
+            DrawText("Puxa! Voce não conseguiu nenhum novo recorde", 100, 40, 50, RED);
+        }
+        DrawText("Voltar", 100, 300, 50, RED);
+        BeginDrawing();
+        EndDrawing();
+        ClearBackground(BLACK);
+        if(IsKeyPressed(KEY_ENTER)){
+            draw = 0;
+            CloseWindow();
+        }
+    }
+
+}
 int StartGame()
 {
     status InGameStatus;
+    score Highscores[5];
     int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], i, j, game, continueGame = 1, MenuAnswer, MonsterArray[MAX_MONSTERS][MONSTERS_COLLUM];
-    int SwordArray[3], LifesArray[5][3] = {{0}}, x_player, y_player, orientation = 1, monsterKilled;
+    int SwordArray[3], LifesArray[5][3] = {{0}}, x_player, y_player, orientation = 1, monsterKilled, respostaMenu;
     char atualFile[20];
 
     BackGround = LoadImage("../assets/background.png");
     restartStatus(&InGameStatus, MapArray, MonsterArray, SwordArray, LifesArray, &x_player, &y_player);
     srand(time(NULL));
 
+    readHighscores(Highscores);
+    callMenu(0, &continueGame, Highscores);
     while(continueGame){
+        readHighscores(Highscores);
         InitWindow(LARGURA, ALTURA, "ZINF"); //Inicializa janela, com certo tamanho e titulo
         generateTextures();
         SetTargetFPS(20);// Ajusta a janela para 20 frames por segundo
@@ -791,7 +890,7 @@ int StartGame()
                 if(MenuAnswer == 0){
                     restartStatus(&InGameStatus, MapArray, MonsterArray, SwordArray, LifesArray, &x_player, &y_player);
                 } else if(MenuAnswer == 1){
-                    if(callMenu(0, &continueGame)){
+                    if(callMenu(0, &continueGame, Highscores)){
                         restartStatus(&InGameStatus, MapArray, MonsterArray, SwordArray, LifesArray, &x_player, &y_player);
                     }
                 } else {
@@ -801,17 +900,20 @@ int StartGame()
             case 2:
                 MenuAnswer = winGame();
                 if(MenuAnswer == 0){
+                    newScore(Highscores, InGameStatus.score);
                     restartStatus(&InGameStatus, MapArray, MonsterArray, SwordArray, LifesArray, &x_player, &y_player);
                 } else if(MenuAnswer == 1){
-                    if(callMenu(0, &continueGame)){
+                    newScore(Highscores, InGameStatus.score);
+                    if(callMenu(0, &continueGame, Highscores)){
                         restartStatus(&InGameStatus, MapArray, MonsterArray, SwordArray, LifesArray, &x_player, &y_player);
                     }
                 } else {
                     continueGame = 0;
+                    newScore(Highscores, InGameStatus.score);
                 }
                 break;
             case 3:
-                if(callMenu(1, &continueGame)){
+                if(callMenu(1, &continueGame, Highscores)){
                     restartStatus(&InGameStatus, MapArray, MonsterArray, SwordArray, LifesArray, &x_player, &y_player);
                 }
 
