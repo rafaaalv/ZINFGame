@@ -183,7 +183,7 @@ void ShowTopBar(status TopBarStatus)
     DrawText(l, 40, 5, SPRITE_SIZE, WHITE);
     DrawText(lev, 280, 5, SPRITE_SIZE, WHITE);
     DrawText(sc, 480, 5, SPRITE_SIZE, WHITE);
-    if(!TopBarStatus.sword){
+    if(TopBarStatus.sword){
         DrawTexture(swordTexture, 1100 , 0, WHITE);
     }
 }
@@ -437,14 +437,16 @@ void changeLife(status *lifeStatus, int value)
 {
     lifeStatus->lifes += value;
 }
-void attackMonster(status *atualStatus, int arrayMonsters[MAX_MONSTERS][MONSTERS_COLLUM], int x_player, int y_player)
+int attackMonster(status *atualStatus, int arrayMonsters[MAX_MONSTERS][MONSTERS_COLLUM], int x_player, int y_player)
 {
     int i;
     for(i = 0; i < MAX_MONSTERS; i++){
         if((x_player == arrayMonsters[i][0])&&(y_player == arrayMonsters[i][1])&&(arrayMonsters[i][3])){
             changeLife(atualStatus, -1);
+            return 1;
         }
     }
+    return 0;
 }
 void chatchSword(status *swordStatus, int arraySword[3])
 {
@@ -454,7 +456,7 @@ void chatchSword(status *swordStatus, int arraySword[3])
 void drawSword(int arraySword[3])
 {
     if(arraySword[2]){
-        DrawTexture(swordTexture, arraySword[0], arraySword[1], BLACK);
+        DrawTexture(swordTexture, arraySword[0], arraySword[1], WHITE);
     }
 }
 void drawMonsters(int MonstersArray[MAX_MONSTERS][MONSTERS_COLLUM], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT])
@@ -571,16 +573,16 @@ int winGame()
     }
     return optionSelected;
 }
-void showHighScores(score highscores[5])
-{
-    int i;
-    char text[40], *optionsText[3];
-    int optionSelected, i, draw;
-    optionSelected = 0;
-    draw = 1;
-    if(gameInProgress){
-        optionsText[0] = "Continuar Jogo";
-        optionsText[1] = "Voltar ao menu";
+/*/void showHighScores(score highscores[5])
+//{
+  //  int i;
+   // char text[40], *optionsText[3];
+   // int optionSelected, i, draw;
+   // optionSelected = 0;
+   // draw = 1;
+   // if(gameInProgress){
+   //     optionsText[0] = "Continuar Jogo";
+   //     optionsText[1] = "Voltar ao menu";
         optionsText[2] = "Sair";
     } else {
         optionsText[0] = "Iniciar";
@@ -629,7 +631,7 @@ void showHighScores(score highscores[5])
         printf("%s", highscores[i].nome);
         printf("\t\t\t\t\t\t%d\n", highscores[i].score);
     }
-}
+}*/
 int callMenu(int gameInProgress, int *continueGame)
 {
     int MenuAswer;
@@ -701,7 +703,7 @@ int StartGame()
                 chatchSword(&InGameStatus, SwordArray);
             }
 
-            if(InGameStatus.sword = 1){
+            if(InGameStatus.sword){
                 if(IsKeyPressed(KEY_J)){
                     monsterKilled = existMonster(orientation, MonsterArray, x_player, y_player);
                     if(monsterKilled > -1){
@@ -727,11 +729,54 @@ int StartGame()
                 game = 1;
                 break;
             }
-            attackMonster(&InGameStatus, MonsterArray, x_player, y_player);
+            if(attackMonster(&InGameStatus, MonsterArray, x_player, y_player)){
+                    switch(orientation){
+                        case 1:
+                            if(conferePosicao((x_player -SPRITE_SIZE), y_player, MapArray))
+                                x_player -= SPRITE_SIZE;
+                            else if(conferePosicao((x_player + SPRITE_SIZE), y_player, MapArray))
+                                x_player += SPRITE_SIZE;
+                            else if(conferePosicao(x_player, (y_player + SPRITE_SIZE), MapArray))
+                                y_player += SPRITE_SIZE;
+                            else if(conferePosicao(x_player, (y_player -SPRITE_SIZE), MapArray))
+                                y_player -= SPRITE_SIZE;
+                            break;
+                        case 2:
+                            if(conferePosicao((x_player + SPRITE_SIZE), y_player, MapArray))
+                                x_player += SPRITE_SIZE;
+                            else if(conferePosicao((x_player -SPRITE_SIZE), y_player, MapArray))
+                                x_player -= SPRITE_SIZE;
+                            else if(conferePosicao(x_player, (y_player + SPRITE_SIZE), MapArray))
+                                y_player += SPRITE_SIZE;
+                            else if(conferePosicao(x_player, (y_player -SPRITE_SIZE), MapArray))
+                                y_player -= SPRITE_SIZE;
+                            break;
+                        case 3:
+                            if(conferePosicao(x_player, (y_player + SPRITE_SIZE), MapArray))
+                                y_player += SPRITE_SIZE;
+                            else if(conferePosicao(x_player, (y_player -SPRITE_SIZE), MapArray))
+                                y_player -= SPRITE_SIZE;
+                            else if(conferePosicao((x_player + SPRITE_SIZE), y_player, MapArray))
+                                x_player += SPRITE_SIZE;
+                            else if(conferePosicao((x_player -SPRITE_SIZE), y_player, MapArray))
+                                x_player -= SPRITE_SIZE;
+                            break;
+                        case 4:
+                            if(conferePosicao(x_player, (y_player -SPRITE_SIZE), MapArray))
+                                y_player -= SPRITE_SIZE;
+                            else if(conferePosicao(x_player, (y_player + SPRITE_SIZE), MapArray))
+                                y_player += SPRITE_SIZE;
+                            else if(conferePosicao((x_player + SPRITE_SIZE), y_player, MapArray))
+                                x_player += SPRITE_SIZE;
+                            else if(conferePosicao((x_player -SPRITE_SIZE), y_player, MapArray))
+                                x_player -= SPRITE_SIZE;
+                    }
+            }
             drawPlayer(x_player, y_player, orientation);
             genarateWall(MapArray);
             drawMonsters(MonsterArray, MapArray);
             drawLifes(LifesArray);
+            drawSword(SwordArray);
 
             ShowTopBar(InGameStatus);
             BeginDrawing(); //Inicia o ambiente de desenho na tela

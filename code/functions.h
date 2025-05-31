@@ -20,7 +20,7 @@ void ShowTopBar(status TopBarStatus);
 
 int menu(int gameInProgress);
 
-void attackMonster(status *atualStatus, int arrayMonsters[5][MONSTERS_COLLUM], int x_player, int y_player);
+int attackMonster(status *atualStatus, int arrayMonsters[5][MONSTERS_COLLUM], int x_player, int y_player);
 
 void restartStatus(status *gameStatus, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int MonsterArray[5][MONSTERS_COLLUM], int SwordArray[3], int LifesArray[5][3], int *x_player, int *y_player);
 
