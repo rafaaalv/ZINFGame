@@ -204,17 +204,17 @@ void generateMap(char path[10], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int M
                 switch(item){
                     case 'J':
                         *x_player = x;
-                        *y_player = y;
+                        *y_player = 60+y;
                         break;
                     case 'V':
                         LifesArray[lifes][0] = x;
-                        LifesArray[lifes][1] = y;
+                        LifesArray[lifes][1] = 60+y;
                         LifesArray[lifes][2] = 1;
                         lifes++;
                         break;
                     case 'M':
                         MonsterArray[monsters][0] = x;
-                        MonsterArray[monsters][1] = y;
+                        MonsterArray[monsters][1] = 60+y;
                         MonsterArray[monsters][2] = rand()%(100 + 1);
                         MonsterArray[monsters][3] = 1;
                         MonsterArray[monsters][4] = 1;
@@ -222,7 +222,7 @@ void generateMap(char path[10], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int M
                         break;
                     case 'E':
                         SwordArray[0] = x;
-                        SwordArray[1] = y;
+                        SwordArray[1] = 60+y;
                         SwordArray[2] = 1;
                 }
             }
@@ -400,7 +400,7 @@ void genarateWall(int matriz[SPRITE_HEIGHT][SPRITE_WIDHT])
     for(i = 0; i < 16; i++){
         for(j = 0; j < SPRITE_WIDHT; j++){
             if(matriz[i][j]){
-                DrawTexture(wallTexture, j*SPRITE_SIZE, i*SPRITE_SIZE, WHITE);
+                DrawTexture(wallTexture, j*SPRITE_SIZE, i*SPRITE_SIZE + 60, WHITE);
             }
         }
     }
@@ -427,7 +427,7 @@ int nextLevel(status *atualStatus, char file[20])
 }
 int conferePosicao(int x, int y, int matriz[SPRITE_HEIGHT][SPRITE_WIDHT])
 {
-    if((!matriz[(int) floor(y/SPRITE_SIZE)][(int) floor((x)/SPRITE_SIZE)])&&(x < 1200)&&(x > -SPRITE_SIZE)&&(y < 920)&&(y > 0)){
+    if((!matriz[(int) floor((y- 60)/SPRITE_SIZE)][(int) floor((x)/SPRITE_SIZE)])&&(x < 1200)&&(x > -SPRITE_SIZE)&&(y < 920)&&(y > 0)){
         return 1;
 	} else {
         return 0;
