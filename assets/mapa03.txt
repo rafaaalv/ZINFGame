@@ -1,0 +1,16 @@
+  M  P          P   E  
+     P M        P  P   
+     P     P M  P  PPPP
+     P     P    P     M
+     P     P    P M    
+     P     P    P      
+     P     P    P      
+     P     P    P      
+J    P     P    P      
+     P   M P    P      
+     P     P  M P      
+           P    P M    
+           P    P      
+   M       P    P      
+           PM          
+           P            
