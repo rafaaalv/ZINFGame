@@ -44,11 +44,19 @@ void drawMonsters(int MonstersArray[5][MONSTERS_COLLUM], int MapArray[SPRITE_HEI
 
 void drawLifes(int LifeArray[5][3]);
 
+void readHighscores(score highscores[5]);
+
+void showHighScores(score highscores[5]);
+
 int gameOver();
 
-int callMenu(int gameInProgress, int *continueGame);
+int callMenu(int gameInProgress, int *continueGame, score highscores[5]);
 
 void generateMap(char path[10], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int MonsterArray[5][MONSTERS_COLLUM], int SwordArray[3], int LifesArray[5][3], int *x_player, int *y_player);
+
+int updateScores(score highscores[5], score new_score);
+
+void newScore(score highscores[5], int playerScore);
 
 int StartGame();
 
