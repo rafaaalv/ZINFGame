@@ -10,7 +10,7 @@
 #define SPRITE_WIDHT 24
 #define SPRITE_HEIGHT 16
 #define SPRITE_SIZE 50
-#define MAX_MONSTERS 5
+#define MAX_MONSTERS 10
 #define MAX_LIFES 5
 #define MONSTERS_COLLUM 5
 #define SWORD_COLLUM 3
@@ -423,6 +423,7 @@ int nextLevel(status *atualStatus, char file[20])
     } else {
         sprintf(file, "../assets/mapa%d.txt", atualStatus->level);
     }
+    atualStatus->sword = 0;
     return FileExists(file);
 }
 int conferePosicao(int x, int y, int matriz[SPRITE_HEIGHT][SPRITE_WIDHT])
