@@ -25,15 +25,23 @@ Texture2D swordTexture;
 Image img_life;
 Texture2D lifeTexture;
 //Texturas do player com cada uma das orienta��es
-Image img_playerN;
-Texture2D playerNTexture;
-Image img_playerS;
-Texture2D playerSTexture;
-Image img_playerE;
-Texture2D playerETexture;
-Image img_playerW;
-Texture2D playerWTexture;
-Texture2D arrayTexturesPlayer[4];
+Image img_playerNDip;
+Texture2D playerNDipTexture;
+Image img_playerSDip;
+Texture2D playerSDipTexture;
+Image img_playerEDip;
+Texture2D playerEDipTexture;
+Image img_playerWDip;
+Texture2D playerWDipTexture;
+Image img_playerNMab;
+Texture2D playerNMabTexture;
+Image img_playerSMab;
+Texture2D playerSMabTexture;
+Image img_playerEMab;
+Texture2D playerEMabTexture;
+Image img_playerWMab;
+Texture2D playerWMabTexture;
+Texture2D arrayTexturesPlayer[2][4];
 Image BackGround;
 Image img_wall;
 Texture2D wallTexture;
@@ -58,6 +66,8 @@ Texture2D confettis[2];
 //Fontes
 //Font fontBm;
 //Font fontTtf;
+//Personagem escolhido
+int person;//0 para dipper, 1 para mabel
 
 typedef struct score
 {
@@ -83,7 +93,7 @@ void generateTextures()
     lifeTexture = LoadTextureFromImage(img_life);
     //texturas do player
     //norte
-    img_playerN = LoadImage("../assets/jogador-norte.png");
+    /*img_playerN = LoadImage("../assets/jogador-norte.png");
     ImageResize(&img_playerN, SPRITE_SIZE, SPRITE_SIZE);
     playerNTexture = LoadTextureFromImage(img_playerN);
     //leste
@@ -97,11 +107,47 @@ void generateTextures()
     //oeste
     img_playerW = LoadImage("../assets/jogador-oeste.png");
     ImageResize(&img_playerW, SPRITE_SIZE, SPRITE_SIZE);
-    playerWTexture = LoadTextureFromImage(img_playerW);
-    arrayTexturesPlayer[0] = playerETexture;
-    arrayTexturesPlayer[1] = playerWTexture;
-    arrayTexturesPlayer[2] = playerNTexture;
-    arrayTexturesPlayer[3] = playerSTexture;
+    playerWTexture = LoadTextureFromImage(img_playerW);*/
+    //Dipper
+    img_playerNDip = LoadImage("../assets/sprite_dipper03.png");
+    ImageResize(&img_playerNDip, SPRITE_SIZE, SPRITE_SIZE);
+    playerNDipTexture = LoadTextureFromImage(img_playerNDip);
+    //leste
+    img_playerEDip = LoadImage("../assets/sprite_dipper00.png");
+    ImageResize(&img_playerEDip, SPRITE_SIZE, SPRITE_SIZE);
+    playerEDipTexture = LoadTextureFromImage(img_playerEDip);
+    //sul
+    img_playerSDip = LoadImage("../assets/sprite_dipper02.png");
+    ImageResize(&img_playerSDip, SPRITE_SIZE, SPRITE_SIZE);
+    playerSDipTexture = LoadTextureFromImage(img_playerSDip);
+    //oeste
+    img_playerWDip = LoadImage("../assets/sprite_dipper01.png");
+    ImageResize(&img_playerWDip, SPRITE_SIZE, SPRITE_SIZE);
+    playerWDipTexture = LoadTextureFromImage(img_playerWDip);
+    arrayTexturesPlayer[0][0] = playerEDipTexture;
+    arrayTexturesPlayer[0][1] = playerWDipTexture;
+    arrayTexturesPlayer[0][2] = playerNDipTexture;
+    arrayTexturesPlayer[0][3] = playerSDipTexture;
+    //Mabel
+    img_playerNMab = LoadImage("../assets/sprite_mabel03.png");
+    ImageResize(&img_playerNMab, SPRITE_SIZE, SPRITE_SIZE);
+    playerNMabTexture = LoadTextureFromImage(img_playerNMab);
+    //leste
+    img_playerEMab = LoadImage("../assets/sprite_mabel00.png");
+    ImageResize(&img_playerEMab, SPRITE_SIZE, SPRITE_SIZE);
+    playerEMabTexture = LoadTextureFromImage(img_playerEMab);
+    //sul
+    img_playerSMab = LoadImage("../assets/sprite_mabel02.png");
+    ImageResize(&img_playerSMab, SPRITE_SIZE, SPRITE_SIZE);
+    playerSMabTexture = LoadTextureFromImage(img_playerSMab);
+    //oeste
+    img_playerWMab = LoadImage("../assets/sprite_mabel01.png");
+    ImageResize(&img_playerWMab, SPRITE_SIZE, SPRITE_SIZE);
+    playerWMabTexture = LoadTextureFromImage(img_playerWMab);
+    arrayTexturesPlayer[1][0] = playerEMabTexture;
+    arrayTexturesPlayer[1][1] = playerWMabTexture;
+    arrayTexturesPlayer[1][2] = playerNMabTexture;
+    arrayTexturesPlayer[1][3] = playerSMabTexture;
     //parede
     img_wall = LoadImage("../assets/wall.png");
     ImageResize(&img_wall, SPRITE_SIZE, SPRITE_SIZE);
@@ -143,10 +189,10 @@ void unloadTextures()
 {
     UnloadImage(img_sword);
     UnloadImage(img_life);
-    UnloadImage(img_playerE);
+    /*UnloadImage(img_playerE);
     UnloadImage(img_playerN);
     UnloadImage(img_playerS);
-    UnloadImage(img_playerW);
+    UnloadImage(img_playerW);*/
     UnloadImage(img_wall);
     UnloadImage(img_monsterE);
     UnloadImage(img_monsterN);
@@ -160,10 +206,10 @@ void unloadTextures()
     //Texturas
     UnloadTexture(swordTexture);
     UnloadTexture(lifeTexture);
-    UnloadTexture(playerETexture);
+    /*UnloadTexture(playerETexture);
     UnloadTexture(playerNTexture);
     UnloadTexture(playerSTexture);
-    UnloadTexture(playerWTexture);
+    UnloadTexture(playerWTexture);*/
     UnloadTexture(monsterETexture);
     UnloadTexture(monsterNTexture);
     UnloadTexture(monsterSTexture);
@@ -233,18 +279,20 @@ void generateMap(char path[10], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int M
 }
 int menu(int gameInProgress)
 {
-    char text[40], *optionsText[3];
+    char text[40], *optionsText[4];
     int optionSelected, i, draw;
     optionSelected = 0;
     draw = 1;
     if(gameInProgress){
         optionsText[0] = "Continuar Jogo";
         optionsText[1] = "Voltar ao menu";
-        optionsText[2] = "Sair";
+        optionsText[2] = "Personagem";
+        optionsText[3] = "Sair";
     } else {
         optionsText[0] = "Iniciar";
         optionsText[1] = "Scoreboard";
-        optionsText[2] = "Sair";
+        optionsText[2] = "Personagem";
+        optionsText[3] = "Sair";
     }
 
     InitWindow(LARGURA, ALTURA, "Menu");
@@ -252,7 +300,7 @@ int menu(int gameInProgress)
     SetTargetFPS(60);
     while(draw){
         DrawText("ZINF", 100, 20, 100, WHITE);
-        for(i = 0; i < 3; i++){
+        for(i = 0; i < 4; i++){
             if(optionSelected == i){
                 DrawCircle(90, i*110 + 220, 5, RED);
                 DrawText(optionsText[i], 100, i*110 + 200, SPRITE_SIZE, RED);
@@ -260,8 +308,16 @@ int menu(int gameInProgress)
                 DrawText(optionsText[i], 100, i*110 + 200, SPRITE_SIZE, WHITE);
             }
         }
+        DrawTexture(arrayTexturesPlayer[person][0], 800, 440, WHITE);
+        if((IsKeyPressed(KEY_LEFT)||IsKeyPressed(KEY_RIGHT))&&(optionSelected == 2)&&!gameInProgress){
+            if(person == 1){
+                person = 0;
+            } else {
+                person = 1;
+            }
+        }
         if(IsKeyPressed(KEY_DOWN)){
-            if(optionSelected == 2){
+            if(optionSelected == 3){
                 optionSelected = 0;
             } else {
                 optionSelected++;
@@ -269,7 +325,7 @@ int menu(int gameInProgress)
         }
         if(IsKeyPressed(KEY_UP)){
             if(optionSelected == 0){
-                optionSelected = 2;
+                optionSelected = 3;
             } else {
                 optionSelected--;
             }
@@ -277,7 +333,7 @@ int menu(int gameInProgress)
         BeginDrawing();
 	    EndDrawing();
 	    ClearBackground(BLACK);
-	    if(IsKeyPressed(KEY_ENTER)||IsKeyPressed(KEY_LEFT)){
+	    if(IsKeyPressed(KEY_ENTER)&&optionSelected!=2){
             draw = 0;
             CloseWindow();
 	    }
@@ -323,7 +379,7 @@ int gameOver()
         BeginDrawing();
 	    EndDrawing();
 	    ClearBackground(BLACK);
-	    if(IsKeyPressed(KEY_ENTER)||IsKeyPressed(KEY_LEFT)){
+	    if(IsKeyPressed(KEY_ENTER)){
             draw = 0;
             CloseWindow();
 	    }
@@ -392,7 +448,7 @@ int existMonster(int orientation, int arrayMonsters[MAX_MONSTERS][MONSTERS_COLLU
 }
 void drawPlayer(int x, int y, int orientation)
 {
-    DrawTexture(arrayTexturesPlayer[orientation - 1], x, y, WHITE);
+    DrawTexture(arrayTexturesPlayer[person][orientation - 1], x, y, WHITE);
 }
 void genarateWall(int matriz[SPRITE_HEIGHT][SPRITE_WIDHT])
 {
@@ -607,7 +663,7 @@ int callMenu(int gameInProgress, int *continueGame, score highscores[5])
     if(gameInProgress){
         if(MenuAswer == 1){
             return callMenu(0, continueGame, highscores);
-        } else if(MenuAswer == 2){
+        } else if(MenuAswer == 3){
             *continueGame = 0;
         }
     } else {
@@ -616,7 +672,7 @@ int callMenu(int gameInProgress, int *continueGame, score highscores[5])
         } else if(MenuAswer == 1){
             showHighScores(highscores);
             return callMenu(gameInProgress, continueGame, highscores);
-        } else {
+        } else if(MenuAswer == 3){
             *continueGame = 0;
         }
     }
@@ -761,6 +817,7 @@ int StartGame()
     restartStatus(&InGameStatus, MapArray, MonsterArray, SwordArray, LifesArray, &x_player, &y_player);
     srand(time(NULL));
 
+    person = 0;
     readHighscores(Highscores);
     callMenu(0, &continueGame, Highscores);
     while(continueGame){
