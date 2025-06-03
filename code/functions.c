@@ -551,6 +551,40 @@ void drawMonsters(int MonstersArray[MAX_MONSTERS][MONSTERS_COLLUM], int MapArray
                 MonstersArray[i][0] = x;
                 MonstersArray[i][1] = y;
             }
+            else do{
+                switch(move){
+                case 1:
+                    x -= SPRITE_SIZE;
+                    break;
+                case 2:
+                    x += SPRITE_SIZE;
+                    break;
+                case 3:
+                    y -= SPRITE_SIZE;
+                    break;
+                case 4:
+                    y += SPRITE_SIZE;
+                }
+                move = rand()%(4) + 1;
+                MonstersArray[i][4] = move;
+                switch(move){
+                case 1:
+                    x += SPRITE_SIZE;
+                    break;
+                case 2:
+                    x -= SPRITE_SIZE;
+                    break;
+                case 3:
+                    y += SPRITE_SIZE;
+                    break;
+                case 4:
+                    y -= SPRITE_SIZE;
+                }
+                if(conferePosicao(x, y, MapArray)){
+                    MonstersArray[i][0] = x;
+                    MonstersArray[i][1] = y;
+                }
+            }while(!conferePosicao(x, y, MapArray));
         }
     }
 }
