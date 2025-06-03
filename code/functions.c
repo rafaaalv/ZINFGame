@@ -230,7 +230,7 @@ void ShowTopBar(status TopBarStatus)
     DrawText(lev, 280, 5, SPRITE_SIZE, WHITE);
     DrawText(sc, 480, 5, SPRITE_SIZE, WHITE);
     if(TopBarStatus.sword){
-        DrawTexture(swordTexture, 1100 , 0, WHITE);
+        DrawTexture(swordTexture, 1100 , 5, WHITE);
     }
 }
 void generateMap(char path[10], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int MonsterArray[MAX_MONSTERS][MONSTERS_COLLUM], int SwordArray[3], int LifesArray[5][3], int *x_player, int *y_player)
@@ -484,7 +484,7 @@ int nextLevel(status *atualStatus, char file[20])
 }
 int conferePosicao(int x, int y, int matriz[SPRITE_HEIGHT][SPRITE_WIDHT])
 {
-    if((!matriz[(int) floor((y- 60)/SPRITE_SIZE)][(int) floor((x)/SPRITE_SIZE)])&&(x < 1200)&&(x > -SPRITE_SIZE)&&(y < 920)&&(y > 0)){
+    if((!matriz[(int) floor((y- 60)/SPRITE_SIZE)][(int) floor((x)/SPRITE_SIZE)])&&(x < 1200)&&(x > -SPRITE_SIZE)&&(y < 920)&&(y > 10)){
         return 1;
 	} else {
         return 0;
@@ -551,7 +551,6 @@ void drawMonsters(int MonstersArray[MAX_MONSTERS][MONSTERS_COLLUM], int MapArray
                 MonstersArray[i][0] = x;
                 MonstersArray[i][1] = y;
             }
-
         }
     }
 }
@@ -673,7 +672,7 @@ int callMenu(int gameInProgress, int *continueGame, score highscores[5])
             showHighScores(highscores);
             return callMenu(gameInProgress, continueGame, highscores);
         } else if(MenuAswer == 3){
-            *continueGame = 0;
+            *continueGame = 0; // sair do jogo
         }
     }
     return 0;
@@ -893,7 +892,7 @@ int StartGame()
                 }
             }
             else contador++;
-            if(contador > 39)
+            if(contador > 29)
                 imune = 0;
             drawPlayer(x_player, y_player, orientation);
             genarateWall(MapArray);
