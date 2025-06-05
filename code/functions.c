@@ -855,6 +855,10 @@ void newScore(score highscores[5], int playerScore)
     }
 
 }
+int muahaha()
+{
+
+}
 int StartGame()
 {
     status InGameStatus;
