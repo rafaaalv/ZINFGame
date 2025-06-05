@@ -10,12 +10,12 @@
 #define SPRITE_WIDHT 24
 #define SPRITE_HEIGHT 16
 #define SPRITE_SIZE 50
+#define SPRITE_SIZE2 55
 #define MAX_MONSTERS 10
 #define MAX_LIFES 5
 #define MONSTERS_COLLUM 5
 #define SWORD_COLLUM 3
 #define LIFES_COLLUM 4
-#define A 1000
 //DEFINIDO AT� AQUI
 
 
@@ -112,19 +112,19 @@ void generateTextures()
     playerWTexture = LoadTextureFromImage(img_playerW);*/
     //Dipper
     img_playerNDip = LoadImage("../assets/sprite_dipper03.png");
-    ImageResize(&img_playerNDip, SPRITE_SIZE, SPRITE_SIZE);
+    ImageResize(&img_playerNDip, SPRITE_SIZE2, SPRITE_SIZE2);
     playerNDipTexture = LoadTextureFromImage(img_playerNDip);
     //leste
     img_playerEDip = LoadImage("../assets/sprite_dipper00.png");
-    ImageResize(&img_playerEDip, SPRITE_SIZE, SPRITE_SIZE);
+    ImageResize(&img_playerEDip, SPRITE_SIZE2, SPRITE_SIZE2);
     playerEDipTexture = LoadTextureFromImage(img_playerEDip);
     //sul
     img_playerSDip = LoadImage("../assets/sprite_dipper02.png");
-    ImageResize(&img_playerSDip, SPRITE_SIZE, SPRITE_SIZE);
+    ImageResize(&img_playerSDip, SPRITE_SIZE2, SPRITE_SIZE2);
     playerSDipTexture = LoadTextureFromImage(img_playerSDip);
     //oeste
     img_playerWDip = LoadImage("../assets/sprite_dipper01.png");
-    ImageResize(&img_playerWDip, SPRITE_SIZE, SPRITE_SIZE);
+    ImageResize(&img_playerWDip, SPRITE_SIZE2, SPRITE_SIZE2);
     playerWDipTexture = LoadTextureFromImage(img_playerWDip);
     arrayTexturesPlayer[0][0] = playerEDipTexture;
     arrayTexturesPlayer[0][1] = playerWDipTexture;
@@ -132,19 +132,19 @@ void generateTextures()
     arrayTexturesPlayer[0][3] = playerSDipTexture;
     //Mabel
     img_playerNMab = LoadImage("../assets/sprite_mabel03.png");
-    ImageResize(&img_playerNMab, SPRITE_SIZE, SPRITE_SIZE);
+    ImageResize(&img_playerNMab, SPRITE_SIZE2, SPRITE_SIZE2);
     playerNMabTexture = LoadTextureFromImage(img_playerNMab);
     //leste
     img_playerEMab = LoadImage("../assets/sprite_mabel00.png");
-    ImageResize(&img_playerEMab, SPRITE_SIZE, SPRITE_SIZE);
+    ImageResize(&img_playerEMab, SPRITE_SIZE2, SPRITE_SIZE2);
     playerEMabTexture = LoadTextureFromImage(img_playerEMab);
     //sul
     img_playerSMab = LoadImage("../assets/sprite_mabel02.png");
-    ImageResize(&img_playerSMab, SPRITE_SIZE, SPRITE_SIZE);
+    ImageResize(&img_playerSMab, SPRITE_SIZE2, SPRITE_SIZE2);
     playerSMabTexture = LoadTextureFromImage(img_playerSMab);
     //oeste
     img_playerWMab = LoadImage("../assets/sprite_mabel01.png");
-    ImageResize(&img_playerWMab, SPRITE_SIZE, SPRITE_SIZE);
+    ImageResize(&img_playerWMab, SPRITE_SIZE2, SPRITE_SIZE2);
     playerWMabTexture = LoadTextureFromImage(img_playerWMab);
     arrayTexturesPlayer[1][0] = playerEMabTexture;
     arrayTexturesPlayer[1][1] = playerWMabTexture;
