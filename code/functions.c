@@ -15,6 +15,7 @@
 #define MONSTERS_COLLUM 5
 #define SWORD_COLLUM 3
 #define LIFES_COLLUM 4
+#define A 1000
 //DEFINIDO AT� AQUI
 
 
@@ -56,6 +57,7 @@ Image img_monsterW;
 Texture2D monsterWTexture;
 Texture2D arrayTexturesMonster[4];
 Image BackGround;
+Texture2D BackGroundTexture;
 Image img_wall;
 Texture2D wallTexture;
 //Confetes
@@ -184,6 +186,9 @@ void generateTextures()
     //fontBm = LoadFont("resources/pixantiqua.fnt");
     //fontTtf = LoadFontEx("resources/pixantiqua.ttf", 32, 0, 2SPRITE_SIZE);
     //SetTextLineSpacing(16);
+    BackGround = LoadImage("../assets/background.png");
+    ImageResize(&BackGround, LARGURA, ALTURA);
+    BackGroundTexture = LoadTextureFromImage(BackGround);
 }
 void unloadTextures()
 {
@@ -214,6 +219,7 @@ void unloadTextures()
     UnloadTexture(monsterNTexture);
     UnloadTexture(monsterSTexture);
     UnloadTexture(monsterWTexture);
+    UnloadTexture(BackGroundTexture);
     UnloadTexture(wallTexture);
     UnloadTexture(confettis[0]);
     UnloadTexture(confettis[1]);
@@ -565,7 +571,18 @@ void drawMonsters(int MonstersArray[MAX_MONSTERS][MONSTERS_COLLUM], int MapArray
                 case 4:
                     y += SPRITE_SIZE;
                 }
-                move = rand()%(4) + 1;
+                if(move == 1){
+                    move = 4;
+                }
+                else if(move == 2){
+                    move = 3;
+                }
+                else if(move == 3){
+                    move = 1;
+                }
+                else{
+                    move = 2;
+                }
                 MonstersArray[i][4] = move;
                 switch(move){
                 case 1:
@@ -846,7 +863,6 @@ int StartGame()
     int SwordArray[3], LifesArray[5][3] = {{0}}, x_player, y_player, orientation = 1, monsterKilled, respostaMenu;
     char atualFile[20];
 
-    BackGround = LoadImage("../assets/background.png");
     restartStatus(&InGameStatus, MapArray, MonsterArray, SwordArray, LifesArray, &x_player, &y_player);
     srand(time(NULL));
 
@@ -861,6 +877,7 @@ int StartGame()
         drawPlayer(x_player, y_player, orientation);
         while (!WindowShouldClose())
         {
+            DrawTexture(BackGroundTexture, 0, 0, WHITE);
             if (IsKeyPressed(KEY_RIGHT)||IsKeyDown(KEY_RIGHT)||IsKeyPressed(KEY_D)||IsKeyDown(KEY_D)) {
                 orientation = 1;
                 if(conferePosicao((x_player + SPRITE_SIZE), y_player, MapArray)){
