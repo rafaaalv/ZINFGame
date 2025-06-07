@@ -22,7 +22,7 @@ int menu(int gameInProgress);
 
 int attackMonster(status *atualStatus, int arrayMonsters[5][MONSTERS_COLLUM], int x_player, int y_player);
 
-void restartStatus(status *gameStatus, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int MonsterArray[5][MONSTERS_COLLUM], int SwordArray[3], int LifesArray[5][3], int *x_player, int *y_player);
+void restartStatus(status *gameStatus, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int MonsterArray[5][MONSTERS_COLLUM], int SwordArray[3], int LifesArray[5][3], int *x_player, int *y_player, boss *bossBill);
 
 void killMonster(status *gameStatus, int arrayMonsters[5][MONSTERS_COLLUM], int monster);
 
@@ -38,6 +38,14 @@ void changeLife(status *lifeStatus, int value);
 
 void chatchSword(status *swordStatus, int arraySword[3]);
 
+void killBoss(int x_player, int y_player, boss *bossBill);
+
+int fireBallsMove(boss *bossBill, fireBall fireBalls[5], int *counter, int mapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int x_player, int y_player, int imune);
+
+void attackBoss(boss *bossBill, int *counter, fireBall fireBalls[5]);
+
+void drawBoss(boss *bossBill, int *counter);
+
 void drawSword(int arraySword[3]);
 
 void drawMonsters(int MonstersArray[5][MONSTERS_COLLUM], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT]);
@@ -52,7 +60,7 @@ int gameOver();
 
 int callMenu(int gameInProgress, int *continueGame, score highscores[5]);
 
-void generateMap(char path[10], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int MonsterArray[5][MONSTERS_COLLUM], int SwordArray[3], int LifesArray[5][3], int *x_player, int *y_player);
+void generateMap(char path[10], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int MonsterArray[5][MONSTERS_COLLUM], int SwordArray[3], int LifesArray[5][3], int *x_player, int *y_player, boss *bossBill);
 
 int updateScores(score highscores[5], score new_score);
 
