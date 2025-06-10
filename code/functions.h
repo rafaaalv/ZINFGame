@@ -56,9 +56,15 @@ void readHighscores(score highscores[5]);
 
 void showHighScores(score highscores[5]);
 
+void saveGame(save saveSave, status *saveStatus, int MonsterArray[5][MONSTERS_COLLUM], int SwordArray[3], int LifesArray[5][3], int *x_player, int *y_player, boss *bossBill);
+
+void loadGame(save loadSave, status *saveStatus, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int MonsterArray[5][MONSTERS_COLLUM], int SwordArray[3], int LifesArray[5][3], int *x_player, int *y_player, boss *bossBill);
+
+void saves(status *saveStatus, int option, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int MonsterArray[5][MONSTERS_COLLUM], int SwordArray[3], int LifesArray[5][3], int *x_player, int *y_player, boss *bossBill);
+
 int gameOver();
 
-int callMenu(int gameInProgress, int *continueGame, score highscores[5]);
+int callMenu(int gameInProgress, int *continueGame, score highscores[5], status *gameStatus, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int MonsterArray[5][MONSTERS_COLLUM], int SwordArray[3], int LifesArray[5][3], int *x_player, int *y_player, boss *bossBill);
 
 void generateMap(char path[10], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int MonsterArray[5][MONSTERS_COLLUM], int SwordArray[3], int LifesArray[5][3], int *x_player, int *y_player, boss *bossBill);
 

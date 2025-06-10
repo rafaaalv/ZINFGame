@@ -105,6 +105,12 @@ typedef struct fireBall
     int x;
     int y;
 } fireBall;
+typedef struct save
+{
+    int index;
+    char date[24];
+    char path[30];
+} save;
 
 void generateTextures()
 {
@@ -173,7 +179,7 @@ void generateTextures()
     arrayTexturesPlayer[1][3] = playerSMabTexture;
     //parede
     img_wall = LoadImage("../assets/wall.png");
-    ImageResize(&img_wall, SPRITE_SIZE, SPRITE_SIZE);
+    ImageResize(&img_wall, 2*SPRITE_SIZE, 2*SPRITE_SIZE);
     wallTexture = LoadTextureFromImage(img_wall);
     //texturas do monster
     //norte
@@ -268,7 +274,23 @@ void ShowTopBar(status TopBarStatus)
         DrawTexture(swordTexture, 1100 , 5, WHITE);
     }
 }
-void generateMap(char path[10], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int MonsterArray[MAX_MONSTERS][MONSTERS_COLLUM], int SwordArray[3], int LifesArray[5][3], int *x_player, int *y_player, boss *bossBill)
+void generateArrayMap(char path[20], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT])
+{
+    int i, j;
+    char  item;
+    FILE *map = fopen(path, "r");
+    for(i = 0; i < 16; i++){
+        for(j = 0; j < SPRITE_WIDHT; j++){
+            item = (char)fgetc(map);
+            if(item == 'P'){
+                MapArray[i][j] = 1;
+            }else{
+                MapArray[i][j] = 0;
+            }
+        }
+    }
+}
+void generateMap(char path[20], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int MonsterArray[MAX_MONSTERS][MONSTERS_COLLUM], int SwordArray[3], int LifesArray[5][3], int *x_player, int *y_player, boss *bossBill)
 {
     int i, j, lifes = 0, monsters = 0, x, y;
     char line[16], item;
@@ -321,7 +343,7 @@ void generateMap(char path[10], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int M
 }
 int menu(int gameInProgress)
 {
-    char text[40], *optionsText[4];
+    char text[40], *optionsText[5];
     int optionSelected, i, draw;
     optionSelected = 0;
     draw = 1;
@@ -329,12 +351,14 @@ int menu(int gameInProgress)
         optionsText[0] = "Continuar Jogo";
         optionsText[1] = "Voltar ao menu";
         optionsText[2] = "Personagem";
-        optionsText[3] = "Sair";
+        optionsText[3] = "Salvar jogo";
+        optionsText[4] = "Sair";
     } else {
         optionsText[0] = "Iniciar";
         optionsText[1] = "Scoreboard";
         optionsText[2] = "Personagem";
-        optionsText[3] = "Sair";
+        optionsText[3] = "Carregar jogo";
+        optionsText[4] = "Sair";
     }
 
     InitWindow(LARGURA, ALTURA, "Menu");
@@ -342,7 +366,7 @@ int menu(int gameInProgress)
     SetTargetFPS(60);
     while(draw){
         DrawText("ZINF", 100, 20, 100, WHITE);
-        for(i = 0; i < 4; i++){
+        for(i = 0; i < 5; i++){
             if(optionSelected == i){
                 DrawCircle(90, i*110 + 220, 5, RED);
                 DrawText(optionsText[i], 100, i*110 + 200, SPRITE_SIZE, RED);
@@ -359,7 +383,7 @@ int menu(int gameInProgress)
             }
         }
         if(IsKeyPressed(KEY_DOWN)){
-            if(optionSelected == 3){
+            if(optionSelected == 4){
                 optionSelected = 0;
             } else {
                 optionSelected++;
@@ -367,7 +391,7 @@ int menu(int gameInProgress)
         }
         if(IsKeyPressed(KEY_UP)){
             if(optionSelected == 0){
-                optionSelected = 3;
+                optionSelected = 4;
             } else {
                 optionSelected--;
             }
@@ -500,7 +524,7 @@ void genarateWall(int matriz[SPRITE_HEIGHT][SPRITE_WIDHT])
     for(i = 0; i < 16; i++){
         for(j = 0; j < SPRITE_WIDHT; j++){
             if(matriz[i][j]){
-                DrawTexture(wallTexture, j*SPRITE_SIZE, i*SPRITE_SIZE + 60, WHITE);
+                DrawTexture(wallTexture, j*SPRITE_SIZE - 20, i*SPRITE_SIZE + 60 - 20, WHITE);
             }
         }
     }
@@ -867,24 +891,135 @@ void showHighScores(score highscores[5])
 	    }
     }
 }
-int callMenu(int gameInProgress, int *continueGame, score highscores[5])
+void saveGame(save saveSave, status *saveStatus, int MonsterArray[5][MONSTERS_COLLUM], int SwordArray[3], int LifesArray[5][3], int *x_player, int *y_player, boss *bossBill)
+{
+    printf("%s\n", saveSave.path);
+    FILE *saveFileSave = fopen(saveSave.path, "wb");
+    fwrite(saveStatus, sizeof(status), 1, saveFileSave);
+    fwrite(MonsterArray, sizeof(MonsterArray), 1, saveFileSave);
+    fwrite(SwordArray, sizeof(SwordArray), 1, saveFileSave);
+    fwrite(LifesArray, sizeof(LifesArray), 1, saveFileSave);
+    fwrite(x_player, sizeof(int), 1, saveFileSave);
+    fwrite(y_player, sizeof(int), 1, saveFileSave);
+    fwrite(bossBill, sizeof(boss), 1, saveFileSave);
+    fwrite(&person, sizeof(int), 1, saveFileSave);
+    fclose(saveFileSave);
+}
+void loadGame(save loadSave, status *saveStatus, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int MonsterArray[5][MONSTERS_COLLUM], int SwordArray[3], int LifesArray[5][3], int *x_player, int *y_player, boss *bossBill)
+{
+    FILE *loadFileSave = fopen(loadSave.path, "rb");
+    char atualFile[20];
+    fread(saveStatus, sizeof(status), 1, loadFileSave);
+    sprintf(atualFile, "../assets/mapa0%d.txt", saveStatus->level);
+    generateArrayMap(atualFile, MapArray);
+    fread(MonsterArray, sizeof(MonsterArray), 1, loadFileSave);
+    fread(SwordArray, sizeof(SwordArray), 1, loadFileSave);
+    fread(LifesArray, sizeof(LifesArray), 1, loadFileSave);
+    fread(x_player, sizeof(int), 1, loadFileSave);
+    fread(y_player, sizeof(int), 1, loadFileSave);
+    fread(bossBill, sizeof(boss), 1, loadFileSave);
+    fread(&person, sizeof(int), 1, loadFileSave);
+    fclose(loadFileSave);
+}
+void saves(status *saveStatus, int option, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int MonsterArray[5][MONSTERS_COLLUM], int SwordArray[3], int LifesArray[5][3], int *x_player, int *y_player, boss *bossBill)//option pode ser 0, para salvar o jogo, ou 1 para carregar o jogo
+{
+    FILE *file_saves = fopen("../assets/saves/saves.bin", "rb");
+    save savesList[3];
+    int draw = 1, i, optionSelected = 0, index;
+    char text[20], optionsText[4][40];
+    if(option){
+        strcpy(text, "Carregar jogo");
+    } else {
+        strcpy(text, "Salvar jogo");
+    }
+    for(i = 0; i < 3; i++){
+        fread(&savesList[i], sizeof(save), 1, file_saves);
+        sprintf(optionsText[i], "Save %d da data: %s", i + 1, savesList[i].date);
+    }
+    fclose(file_saves);
+    strcpy(optionsText[3], "Voltar");
+    InitWindow(LARGURA, ALTURA, text);
+    generateTextures();
+    SetTargetFPS(60);
+    while(draw){
+        DrawText(text, 100, 20, 80, WHITE);
+        for(i = 0; i < 4; i++){
+            if(optionSelected == i){
+                DrawCircle(90, i*110 + 220, 5, RED);
+                DrawText(optionsText[i], 100, i*110 + 200, SPRITE_SIZE, RED);
+                if(optionSelected != 3){
+                    DrawText(text, 100, i*110 + 200 + 50, SPRITE_SIZE/2, RED);
+                }
+            } else {
+                DrawText(optionsText[i], 100, i*110 + 200, SPRITE_SIZE, WHITE);
+            }
+        }
+        if(IsKeyPressed(KEY_DOWN)){
+            if(optionSelected == 3){
+                optionSelected = 0;
+            } else {
+                optionSelected++;
+            }
+        }
+        if(IsKeyPressed(KEY_UP)){
+            if(optionSelected == 0){
+                optionSelected = 3;
+            } else {
+                optionSelected--;
+            }
+        }
+        BeginDrawing();
+	    EndDrawing();
+	    ClearBackground(BLACK);
+	    if(IsKeyPressed(KEY_ENTER)){
+            if(optionSelected != 3){
+                if(option){
+                    loadGame(savesList[optionSelected], saveStatus, MapArray, MonsterArray, SwordArray, LifesArray, x_player, y_player, bossBill);
+                } else {
+                    time_t rawtime;
+                    time(&rawtime);
+                    struct tm *current_info = localtime(&rawtime);
+                    strftime(savesList[optionSelected].date, sizeof(savesList[optionSelected].date), "%d/%m/%Y %H:%M:%S", current_info);
+                    FILE *file_saves = fopen("../assets/saves/saves.bin", "wb");
+                    if(file_saves == NULL){
+                        printf("FALHOU\n\n\n");
+                    }
+                    savesList[optionSelected].index = optionSelected + 1;
+                    sprintf(savesList[optionSelected].path, "../assets/saves/save%d.bin", savesList[optionSelected].index);
+                    for(i = 0; i < 3; i++){
+                        fwrite(&savesList[i], sizeof(save), 1, file_saves);
+                    }
+                    fclose(file_saves);
+                    saveGame(savesList[optionSelected], saveStatus, MonsterArray, SwordArray, LifesArray, x_player, y_player, bossBill);
+                }
+            }
+            draw = 0;
+            CloseWindow();
+	    }
+    }
+}
+int callMenu(int gameInProgress, int *continueGame, score highscores[5], status *gameStatus, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int MonsterArray[5][MONSTERS_COLLUM], int SwordArray[3], int LifesArray[5][3], int *x_player, int *y_player, boss *bossBill)
 {
     int MenuAswer;
     MenuAswer = menu(gameInProgress);
     if(gameInProgress){
         if(MenuAswer == 1){
-            return callMenu(0, continueGame, highscores);
-        } else if(MenuAswer == 3){
+            return callMenu(0, continueGame, highscores, gameStatus, MapArray, MonsterArray, SwordArray, LifesArray, x_player, y_player, bossBill);
+        } else if(MenuAswer == 4){
             *continueGame = 0;
+        } else if(MenuAswer == 3){
+            saves(gameStatus, 0, MapArray, MonsterArray, SwordArray, LifesArray, x_player, y_player, bossBill);
         }
     } else {
         if(MenuAswer == 0){
             return 1; //precisa (re)comecar o jogo
         } else if(MenuAswer == 1){
             showHighScores(highscores);
-            return callMenu(gameInProgress, continueGame, highscores);
-        } else if(MenuAswer == 3){
+            return callMenu(gameInProgress, continueGame, highscores, gameStatus, MapArray, MonsterArray, SwordArray, LifesArray, x_player, y_player, bossBill);
+        } else if(MenuAswer == 4){
             *continueGame = 0; // sair do jogo
+        } else if(MenuAswer == 3){
+            saves(gameStatus, 1, MapArray, MonsterArray, SwordArray, LifesArray, x_player, y_player, bossBill);
         }
     }
     return 0;
@@ -1036,7 +1171,7 @@ int StartGame()
 
     person = 0;
     readHighscores(Highscores);
-    callMenu(0, &continueGame, Highscores);
+    callMenu(0, &continueGame, Highscores, &InGameStatus, MapArray, MonsterArray, SwordArray, LifesArray, &x_player, &y_player, &bossBill);
     while(continueGame){
         readHighscores(Highscores);
         InitWindow(LARGURA, ALTURA, "ZINF"); //Inicializa janela, com certo tamanho e titulo
@@ -1140,7 +1275,7 @@ int StartGame()
                 if(MenuAnswer == 0){
                     restartStatus(&InGameStatus, MapArray, MonsterArray, SwordArray, LifesArray, &x_player, &y_player, &bossBill);
                 } else if(MenuAnswer == 1){
-                    if(callMenu(0, &continueGame, Highscores)){
+                    if(callMenu(0, &continueGame, Highscores, &InGameStatus, MapArray, MonsterArray, SwordArray, LifesArray, &x_player, &y_player, &bossBill)){
                         restartStatus(&InGameStatus, MapArray, MonsterArray, SwordArray, LifesArray, &x_player, &y_player, &bossBill);
                     }
                 } else {
@@ -1154,7 +1289,7 @@ int StartGame()
                     restartStatus(&InGameStatus, MapArray, MonsterArray, SwordArray, LifesArray, &x_player, &y_player, &bossBill);
                 } else if(MenuAnswer == 1){
                     newScore(Highscores, InGameStatus.score);
-                    if(callMenu(0, &continueGame, Highscores)){
+                    if(callMenu(0, &continueGame, Highscores, &InGameStatus, MapArray, MonsterArray, SwordArray, LifesArray, &x_player, &y_player, &bossBill)){
                         restartStatus(&InGameStatus, MapArray, MonsterArray, SwordArray, LifesArray, &x_player, &y_player, &bossBill);
                     }
                 } else {
@@ -1163,7 +1298,7 @@ int StartGame()
                 }
                 break;
             case 3:
-                if(callMenu(1, &continueGame, Highscores)){
+                if(callMenu(1, &continueGame, Highscores, &InGameStatus, MapArray, MonsterArray, SwordArray, LifesArray, &x_player, &y_player, &bossBill)){
                     restartStatus(&InGameStatus, MapArray, MonsterArray, SwordArray, LifesArray, &x_player, &y_player, &bossBill);
                 }
 
