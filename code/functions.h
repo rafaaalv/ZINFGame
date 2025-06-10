@@ -18,55 +18,57 @@ void unloadTextures();
 
 void ShowTopBar(status TopBarStatus);
 
-int menu(int gameInProgress);
+int menu(int gameInProgress, player *gamePlayer);
 
-int attackMonster(status *atualStatus, int arrayMonsters[5][MONSTERS_COLLUM], int x_player, int y_player);
+int attackMonster(game *InGame);
 
-void restartStatus(status *gameStatus, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int MonsterArray[5][MONSTERS_COLLUM], int SwordArray[3], int LifesArray[5][3], int *x_player, int *y_player, boss *bossBill);
+void restartStatus(int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame);
 
-void killMonster(status *gameStatus, int arrayMonsters[5][MONSTERS_COLLUM], int monster);
+void killMonster(game *InGame,  int monster);
 
-int existMonster(int orientation, int arrayMonsters[5][MONSTERS_COLLUM], int x_player, int y_player);
+int existMonster(game *InGame);
 
-void drawPlayer(int x, int y, int orientation);
+void drawPlayer(player atualPlayer);
 
 void genarateWall(int matriz[SPRITE_HEIGHT][SPRITE_WIDHT]);
 
 int conferePosicao(int x, int y, int matriz[SPRITE_HEIGHT][SPRITE_WIDHT]);
 
+int allMonstersKilled(monster monsters[MAX_MONSTERS]);
+
 void changeLife(status *lifeStatus, int value);
 
-void chatchSword(status *swordStatus, int arraySword[3]);
+void chatchSword(game *InGame);
 
-void killBoss(int x_player, int y_player, boss *bossBill);
+void killBoss(game *InGame);
 
-int fireBallsMove(boss *bossBill, fireBall fireBalls[5], int *counter, int mapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int x_player, int y_player, int imune);
+int fireBallsMove(boss *bossBill, fireBall fireBalls[5], int *counter, int mapArray[SPRITE_HEIGHT][SPRITE_WIDHT], player atualPlayer);
 
 void attackBoss(boss *bossBill, int *counter, fireBall fireBalls[5]);
 
 void drawBoss(boss *bossBill, int *counter);
 
-void drawSword(int arraySword[3]);
+void drawSword(sword *atualSword);
 
-void drawMonsters(int MonstersArray[5][MONSTERS_COLLUM], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT]);
+void drawMonsters(monster monsters[MAX_MONSTERS], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT]);
 
-void drawLifes(int LifeArray[5][3]);
+void drawLifes(life lifes[MAX_LIFES]);
 
 void readHighscores(score highscores[5]);
 
 void showHighScores(score highscores[5]);
 
-void saveGame(save saveSave, status *saveStatus, int MonsterArray[5][MONSTERS_COLLUM], int SwordArray[3], int LifesArray[5][3], int *x_player, int *y_player, boss *bossBill);
+void saveGame(save saveSave, game *InGame);
 
-void loadGame(save loadSave, status *saveStatus, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int MonsterArray[5][MONSTERS_COLLUM], int SwordArray[3], int LifesArray[5][3], int *x_player, int *y_player, boss *bossBill);
+void loadGame(save loadSave, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame);
 
-void saves(status *saveStatus, int option, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int MonsterArray[5][MONSTERS_COLLUM], int SwordArray[3], int LifesArray[5][3], int *x_player, int *y_player, boss *bossBill);
+void saves(int option, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame);
 
 int gameOver();
 
-int callMenu(int gameInProgress, int *continueGame, score highscores[5], status *gameStatus, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int MonsterArray[5][MONSTERS_COLLUM], int SwordArray[3], int LifesArray[5][3], int *x_player, int *y_player, boss *bossBill);
+int callMenu(int gameInProgress, int *continueGame, score highscores[5], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame);
 
-void generateMap(char path[10], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int MonsterArray[5][MONSTERS_COLLUM], int SwordArray[3], int LifesArray[5][3], int *x_player, int *y_player, boss *bossBill);
+void generateMap(char path[20], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame);
 
 int updateScores(score highscores[5], score new_score);
 
