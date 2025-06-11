@@ -22,7 +22,7 @@ int menu(int gameInProgress, player *gamePlayer);
 
 int attackMonster(game *InGame);
 
-void restartStatus(int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame);
+void restartStatus(int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame, fireBall fireBalls[5]);
 
 void killMonster(game *InGame,  int monster);
 
@@ -68,12 +68,12 @@ int gameOver();
 
 int callMenu(int gameInProgress, int *continueGame, score highscores[5], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame);
 
-void generateMap(char path[20], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame);
+void generateMap(char path[20], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame, fireBall fireBalls[5]);
 
 int updateScores(score highscores[5], score new_score);
 
 void newScore(score highscores[5], int playerScore);
 
-int StartGame();
+void StartGame();
 
 #endif
