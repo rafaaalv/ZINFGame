@@ -69,6 +69,9 @@ Texture2D confettis[2];
 //Textura do boss
 Image img_boss;
 Texture2D bossTexture;
+//Textura do bosso no modo com raiva
+Image img_bossDificult;
+Texture2D bossDificultTexture;
 //Textura da bola de fogo
 Image img_fireBall;
 Texture2D fireBallTexture;
@@ -252,6 +255,10 @@ void generateTextures()
     img_boss = LoadImage("../assets/boss.png");
     ImageResize(&img_boss, 3*SPRITE_SIZE, 4*SPRITE_SIZE);// o tamanho do boss é 3x4 sprites
     bossTexture = LoadTextureFromImage(img_boss);
+    //boss dificult
+    img_bossDificult = LoadImage("../assets/bossDificult.png");
+    ImageResize(&img_bossDificult, 3*SPRITE_SIZE, 4*SPRITE_SIZE);// o tamanho do boss é 3x4 sprites
+    bossDificultTexture = LoadTextureFromImage(img_bossDificult);
     //bola de fogo
     img_fireBall = LoadImage("../assets/fireBall.png");
     ImageResize(&img_fireBall, 2*SPRITE_SIZE, 2*SPRITE_SIZE); // o tamanho do boss é 2x3 sprites
@@ -633,6 +640,10 @@ void drawSword(sword *atualSword)
     }
 }
 
+void bossDificultMode(boss *bossBill)
+{
+    bossBill->attack = 5;
+}
 void killBoss(game *InGame)
 {
     int x_max, x_min, y_max, y_min, y_monster, x_monster;
@@ -670,6 +681,9 @@ void killBoss(game *InGame)
             // }
         if((y_monster <= y_max)&&(y_monster >= y_min)&&(x_monster >= x_min)&&(x_monster <= x_max)){
             InGame->bossBill.lifes--;
+            if(InGame->bossBill.lifes == 5){
+                bossDificultMode(&InGame->bossBill);
+            }
         }
     }
 
@@ -688,7 +702,7 @@ int fireBallsMove(boss *bossBill, fireBall fireBalls[5], int *counter, int mapAr
                 DrawTexture(fireBallTexture, fireBalls[i].x, fireBalls[i].y, WHITE);
             }
         }
-        if(*counter == 5){
+        if(*counter == 8 - bossBill->attack){
             new_counter = 0;
             for(i = 0; i < bossBill->attack; i++){
                 if(fireBalls[i].exist == 1){
@@ -716,7 +730,7 @@ void attackBoss(boss *bossBill, int *counter, fireBall fireBalls[5])
 {
     int new_counter, i;
     if(bossBill->lifes != 0){
-        if(*counter == 5){
+        if(*counter == 8 - bossBill->attack){
             for(i = 0; i < bossBill->attack; i++){
                 if(fireBalls[i].exist != 1){
                     fireBalls[i].exist = 1;
@@ -739,9 +753,14 @@ void drawBoss(boss *bossBill, int *counter)
     if(bossBill->lifes != 0){
         DrawRectangleLines(bossBill->x - 5 - 2, bossBill->y - 5 - 2, MAX_LIFES_BOSS*10 +2,  20 + 2, RED);
         DrawRectangle(bossBill->x - 5, bossBill->y - 5, bossBill->lifes*10, 20, RED);
-        DrawTexture(bossTexture, bossBill->x, bossBill->y, WHITE);
+        if(bossBill->attack == 5){
+            DrawTexture(bossDificultTexture, bossBill->x, bossBill->y, WHITE);
+        } else {
+            DrawTexture(bossTexture, bossBill->x, bossBill->y, WHITE);
+        }
+
         //movimentacao
-        if(*counter == 5){
+        if(*counter == 8 - bossBill->attack){
             if(bossBill->orientation){
                 bossBill->y += 50;
             } else {
@@ -1098,6 +1117,8 @@ int updateScores(score highscores[5], score new_score)
     while(removedI < 4){
         for(i = removedI + 1; i < 5; i++){
             if(removed_score.score > highscores[i].score){
+                printf("\nNome: %s\n", highscores[i].name);
+                printf("\nScore: %d\n", highscores[i].score);
                 med_score = highscores[i];
                 highscores[i] = removed_score;
                 removed_score = med_score;
