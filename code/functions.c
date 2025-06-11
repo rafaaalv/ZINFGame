@@ -99,7 +99,7 @@ typedef struct boss
     int lifes;
     int x;
     int y;
-    int attack;
+    int attack; //pode ser 3 bolas de fogo por vez ou 5
     int orientation; //pode ser 0(subindo), ou 1(descendo)
 } boss;
 typedef struct fireBall
@@ -702,7 +702,7 @@ int fireBallsMove(boss *bossBill, fireBall fireBalls[5], int *counter, int mapAr
                 DrawTexture(fireBallTexture, fireBalls[i].x, fireBalls[i].y, WHITE);
             }
         }
-        if(*counter == 8 - bossBill->attack){
+        if(*counter == 8 - bossBill->attack){ //8 - 3(bolas de fogo pro vez) para quando ele esta no modo normal e 8 - 5 quando esta no modo difcil diminuindo o tempo do contador para o boss fazer a acao ele fica mais rapido e as bolas de fogo sao geradas mais rapidamente
             new_counter = 0;
             for(i = 0; i < bossBill->attack; i++){
                 if(fireBalls[i].exist == 1){
@@ -730,7 +730,7 @@ void attackBoss(boss *bossBill, int *counter, fireBall fireBalls[5])
 {
     int new_counter, i;
     if(bossBill->lifes != 0){
-        if(*counter == 8 - bossBill->attack){
+        if(*counter == 8 - bossBill->attack){ //8 - 3(bolas de fogo pro vez) para quando ele esta no modo normal e 8 - 5 quando esta no modo difcil diminuindo o tempo do contador para o boss fazer a acao ele fica mais rapido e as bolas de fogo sao geradas mais rapidamente
             for(i = 0; i < bossBill->attack; i++){
                 if(fireBalls[i].exist != 1){
                     fireBalls[i].exist = 1;
@@ -760,7 +760,7 @@ void drawBoss(boss *bossBill, int *counter)
         }
 
         //movimentacao
-        if(*counter == 8 - bossBill->attack){
+        if(*counter == 8 - bossBill->attack){//8 - 3(bolas de fogo pro vez) para quando ele esta no modo normal e 8 - 5 quando esta no modo difcil diminuindo o tempo do contador para o boss fazer a acao ele fica mais rapido e as bolas de fogo sao geradas mais rapidamente
             if(bossBill->orientation){
                 bossBill->y += 50;
             } else {
