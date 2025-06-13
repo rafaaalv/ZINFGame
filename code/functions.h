@@ -28,7 +28,7 @@ void killMonster(game *InGame,  int monster);
 
 int existMonster(game *InGame);
 
-void drawPlayer(player atualPlayer);
+void drawPlayer(player atualPlayer, int counter);
 
 void genarateWall(int matriz[SPRITE_HEIGHT][SPRITE_WIDHT]);
 

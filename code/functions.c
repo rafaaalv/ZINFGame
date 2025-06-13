@@ -569,9 +569,11 @@ int existMonster(game *InGame)
     }
     return -1;
 }
-void drawPlayer(player atualPlayer)
+void drawPlayer(player atualPlayer, int counter)
 {
-    DrawTexture(arrayTexturesPlayer[atualPlayer.person][atualPlayer.orientation - 1], atualPlayer.x, atualPlayer.y, WHITE);
+    if((!atualPlayer.imune)||(counter%4 == 0)){
+        DrawTexture(arrayTexturesPlayer[atualPlayer.person][atualPlayer.orientation - 1], atualPlayer.x, atualPlayer.y, WHITE);
+    }
 }
 void genarateWall(int matriz[SPRITE_HEIGHT][SPRITE_WIDHT])
 {
@@ -1327,7 +1329,7 @@ void StartGame()
                 contador = 0;
                 changeLife(&InGame.atualStatus, -2);
             }
-            drawPlayer(InGame.atualPlayer);
+            drawPlayer(InGame.atualPlayer, contador);
             genarateWall(MapArray);
             drawBoss(&InGame.bossBill, &bossCounter);
             attackBoss(&InGame.bossBill, &bossCounter, fireBalls);
