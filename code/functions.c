@@ -11,6 +11,7 @@
 #define SPRITE_HEIGHT 16
 #define SPRITE_SIZE 50
 #define SPRITE_SIZE2 55
+#define SPRITE_SIZE3 100
 #define MAX_MONSTERS 10
 #define MAX_LIFES 5
 #define MONSTERS_COLLUM 5
@@ -173,7 +174,7 @@ void generateTextures()
     arrayTexturesPlayer[1][3] = playerSMabTexture;
     //parede
     img_wall = LoadImage("../assets/wall.png");
-    ImageResize(&img_wall, SPRITE_SIZE, SPRITE_SIZE);
+    ImageResize(&img_wall, SPRITE_SIZE3, SPRITE_SIZE3);
     wallTexture = LoadTextureFromImage(img_wall);
     //texturas do monster
     //norte
@@ -429,13 +430,15 @@ int gameOver()
     }
     return optionSelected;
 }
-void restartStatus(status *gameStatus, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int MonsterArray[MAX_MONSTERS][MONSTERS_COLLUM], int SwordArray[3], int LifesArray[5][3], int *x_player, int *y_player, boss *bossBill)
+void restartStatus(status *gameStatus, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int MonsterArray[MAX_MONSTERS][MONSTERS_COLLUM], int SwordArray[3], int LifesArray[5][3], int *x_player, int *y_player, boss *bossBill,int *imune_muahaha)
 {
+    int i;
     gameStatus->lifes = 3;
     gameStatus->level = 1;
     gameStatus->score = 0;
     gameStatus->sword = 0;
     generateMap("../assets/mapa01.txt", MapArray, MonsterArray, SwordArray, LifesArray, x_player, y_player, bossBill);
+    *imune_muahaha = 0;
     bossBill->lifes = 0;
 }
 void killMonster(status *gameStatus, int arrayMonsters[MAX_MONSTERS][MONSTERS_COLLUM], int monster)
@@ -500,7 +503,7 @@ void genarateWall(int matriz[SPRITE_HEIGHT][SPRITE_WIDHT])
     for(i = 0; i < 16; i++){
         for(j = 0; j < SPRITE_WIDHT; j++){
             if(matriz[i][j]){
-                DrawTexture(wallTexture, j*SPRITE_SIZE, i*SPRITE_SIZE + 60, WHITE);
+                DrawTexture(wallTexture, j*SPRITE_SIZE-20, i*SPRITE_SIZE + 40, WHITE);
             }
         }
     }
@@ -515,8 +518,9 @@ int allMonstersKilled(int monstersArray[MAX_MONSTERS][MONSTERS_COLLUM])
     }
     return 1;
 }
-int nextLevel(status *atualStatus, char file[20])
+int nextLevel(status *atualStatus, char file[20], int *muahaha, char test[8])
 {
+    int i;
     atualStatus->level += 1;
     if(atualStatus->level <= 9){
         sprintf(file, "../assets/mapa0%d.txt", atualStatus->level);
@@ -524,11 +528,15 @@ int nextLevel(status *atualStatus, char file[20])
         sprintf(file, "../assets/mapa%d.txt", atualStatus->level);
     }
     atualStatus->sword = 0;
+    *muahaha = 0;
+    for(i=0;i<8;i++){
+        test[i] = 0;
+    }
     return FileExists(file);
 }
 int conferePosicao(int x, int y, int matriz[SPRITE_HEIGHT][SPRITE_WIDHT])
 {
-    if((!matriz[(int) floor((y- 60)/SPRITE_SIZE)][(int) floor((x)/SPRITE_SIZE)])&&(x < 1200)&&(x > -SPRITE_SIZE)&&(y < 920)&&(y > 10)){
+    if((!matriz[(int) floor((y- 60)/SPRITE_SIZE)][(int) floor((x)/SPRITE_SIZE)])&&(x < 1200)&&(x > -SPRITE_SIZE)&&(y < 860)&&(y > 10)){
         return 1;
 	} else {
         return 0;
@@ -603,7 +611,7 @@ void killBoss(int x_player, int y_player, boss *bossBill)
 
 }
 
-int fireBallsMove(boss *bossBill, fireBall fireBalls[5], int *counter, int mapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int x_player, int y_player, int imune)
+int fireBallsMove(boss *bossBill, fireBall fireBalls[5], int *counter, int mapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int x_player, int y_player, int imune, int imune_muahaha)
 {
     int new_counter, i;
     if(bossBill->lifes != 0){
@@ -620,7 +628,7 @@ int fireBallsMove(boss *bossBill, fireBall fireBalls[5], int *counter, int mapAr
                     } else {
                         fireBalls[i].exist = 0;
                     }
-                    if(!imune){
+                    if(!imune && !imune_muahaha){
                         if(((fireBalls[i].x + 100 >= x_player)&&(fireBalls[i].x <= x_player))&&((fireBalls[i].y + 50 >= y_player)&&(fireBalls[i].y <= y_player))){
                             fireBalls[i].exist = 0;
                             return 1;
@@ -903,6 +911,7 @@ void readHighscores(score highscores[5])
         generateScore.score = score;
         highscores[i] = generateScore;
     }
+    fclose(FHighscores);
 }
 int updateScores(score highscores[5], score new_score)
 {
@@ -1016,9 +1025,24 @@ void newScore(score highscores[5], int playerScore)
     }
 
 }
-int muahaha()
+void muahaha(int *imune_muahaha, char test[8])
 {
-
+    int i = 0;
+    char muahaha[8] = {'M','U','A','H','A','H','A','\0'}, current, read;
+    current = GetKeyPressed();
+    if(current != 0){
+        for(i=0;i<7;i++){
+            if(i==6){
+                test[6] = current;
+            }
+            else{
+                test[i] = test [i+1];
+            }
+        }
+    }
+    if(strcmp(test, muahaha) == 0){
+        *imune_muahaha = 1;
+    }
 }
 int StartGame()
 {
@@ -1026,11 +1050,11 @@ int StartGame()
     score Highscores[5];
     fireBall fireBalls[5];
     boss bossBill;
-    int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], i, j, game, continueGame = 1, MenuAnswer, MonsterArray[MAX_MONSTERS][MONSTERS_COLLUM] = {{0}}, imune = 0, contador = 0;
-    int SwordArray[3], LifesArray[5][3] = {{0}}, x_player, y_player, orientation = 1, monsterKilled, respostaMenu, bossCounter = 0;
-    char atualFile[20];
+    int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], i, j, game, continueGame = 1, MenuAnswer, MonsterArray[MAX_MONSTERS][MONSTERS_COLLUM] = {{0}}, imune = 0, imune_muahaha = 0;
+    int SwordArray[3], LifesArray[5][3] = {{0}}, x_player, y_player, orientation = 1, monsterKilled, respostaMenu, bossCounter = 0, contador = 0;
+    char atualFile[20], test[8] = {0,0,0,0,0,0,0,'\0'};
 
-    restartStatus(&InGameStatus, MapArray, MonsterArray, SwordArray, LifesArray, &x_player, &y_player, &bossBill);
+    restartStatus(&InGameStatus, MapArray, MonsterArray, SwordArray, LifesArray, &x_player, &y_player, &bossBill, &imune_muahaha);
 
     srand(time(NULL));
 
@@ -1094,7 +1118,7 @@ int StartGame()
                 }
             }
             if((allMonstersKilled(MonsterArray))&&(bossBill.lifes == 0)){
-                if(nextLevel(&InGameStatus, atualFile)){
+                if(nextLevel(&InGameStatus, atualFile, &imune_muahaha, test)){
                     generateMap(atualFile, MapArray, MonsterArray, SwordArray, LifesArray, &x_player, &y_player, &bossBill);
                 } else{
                     game = 2;
@@ -1105,7 +1129,8 @@ int StartGame()
                 game = 1;
                 break;
             }
-            if(!imune){
+            muahaha(&imune_muahaha, test);
+            if(!imune && !imune_muahaha){
                 if(attackMonster(&InGameStatus, MonsterArray, x_player, y_player)){
                     imune = 1;
                     contador = 0;
@@ -1114,7 +1139,7 @@ int StartGame()
             else contador++;
             if(contador > 29)
                 imune = 0;
-            if(fireBallsMove(&bossBill, fireBalls, &bossCounter, MapArray, x_player, y_player, imune)){
+            if(fireBallsMove(&bossBill, fireBalls, &bossCounter, MapArray, x_player, y_player, imune, imune_muahaha)){
                 imune = 1;
                 contador = 0;
                 changeLife(&InGameStatus, -1);
@@ -1138,10 +1163,10 @@ int StartGame()
             case 1:
                 MenuAnswer = gameOver();
                 if(MenuAnswer == 0){
-                    restartStatus(&InGameStatus, MapArray, MonsterArray, SwordArray, LifesArray, &x_player, &y_player, &bossBill);
+                     restartStatus(&InGameStatus, MapArray, MonsterArray, SwordArray, LifesArray, &x_player, &y_player, &bossBill, &imune_muahaha);
                 } else if(MenuAnswer == 1){
                     if(callMenu(0, &continueGame, Highscores)){
-                        restartStatus(&InGameStatus, MapArray, MonsterArray, SwordArray, LifesArray, &x_player, &y_player, &bossBill);
+                         restartStatus(&InGameStatus, MapArray, MonsterArray, SwordArray, LifesArray, &x_player, &y_player, &bossBill, &imune_muahaha);
                     }
                 } else {
                     continueGame = 0;
@@ -1151,11 +1176,11 @@ int StartGame()
                 MenuAnswer = winGame();
                 if(MenuAnswer == 0){
                     newScore(Highscores, InGameStatus.score);
-                    restartStatus(&InGameStatus, MapArray, MonsterArray, SwordArray, LifesArray, &x_player, &y_player, &bossBill);
+                     restartStatus(&InGameStatus, MapArray, MonsterArray, SwordArray, LifesArray, &x_player, &y_player, &bossBill, &imune_muahaha);
                 } else if(MenuAnswer == 1){
                     newScore(Highscores, InGameStatus.score);
                     if(callMenu(0, &continueGame, Highscores)){
-                        restartStatus(&InGameStatus, MapArray, MonsterArray, SwordArray, LifesArray, &x_player, &y_player, &bossBill);
+                         restartStatus(&InGameStatus, MapArray, MonsterArray, SwordArray, LifesArray, &x_player, &y_player, &bossBill, &imune_muahaha);
                     }
                 } else {
                     continueGame = 0;
@@ -1164,7 +1189,7 @@ int StartGame()
                 break;
             case 3:
                 if(callMenu(1, &continueGame, Highscores)){
-                    restartStatus(&InGameStatus, MapArray, MonsterArray, SwordArray, LifesArray, &x_player, &y_player, &bossBill);
+                      restartStatus(&InGameStatus, MapArray, MonsterArray, SwordArray, LifesArray, &x_player, &y_player, &bossBill, &imune_muahaha);
                 }
 
         }
