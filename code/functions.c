@@ -47,18 +47,29 @@ Texture2D arrayTexturesPlayer[2][4];
 Image BackGround;
 Image img_wall;
 Texture2D wallTexture;
-//Texturas do monstro com cada uma das orientacoes
-Image img_monsterN;
-Texture2D monsterNTexture;
-Image img_monsterS;
-Texture2D monsterSTexture;
-Image img_monsterE;
-Texture2D monsterETexture;
-Image img_monsterW;
-Texture2D monsterWTexture;
-Texture2D arrayTexturesMonster[4];
+//Texturas dos monstros com cada uma das orientacoes
+Image img_monster1N;
+Texture2D monster1NTexture;
+Image img_monster1S;
+Texture2D monster1STexture;
+Image img_monster1E;
+Texture2D monster1ETexture;
+Image img_monster1W;
+Texture2D monster1WTexture;
+Image img_monster2N;
+Texture2D monster2NTexture;
+Image img_monster2S;
+Texture2D monster2STexture;
+Image img_monster2E;
+Texture2D monster2ETexture;
+Image img_monster2W;
+Texture2D monster2WTexture;
+Texture2D arrayTexturesMonster[2][4];
+//Fundos
 Image BackGround;
 Texture2D BackGroundTexture;
+Image BackGroundGameOver;
+Texture2D BackGroundGameOverTexture;
 Image img_wall;
 Texture2D wallTexture;
 //Confetes
@@ -125,6 +136,7 @@ typedef struct monster
     int alive;
     int orientation;
     int qnt;
+    int sprite; //um numero que representa o monstro sorteado para ele ser
 } monster;
 typedef struct sword
 {
@@ -166,22 +178,6 @@ void generateTextures()
     ImageResize(&img_life, SPRITE_SIZE, SPRITE_SIZE);
     lifeTexture = LoadTextureFromImage(img_life);
     //texturas do player
-    //norte
-    /*img_playerN = LoadImage("../assets/jogador-norte.png");
-    ImageResize(&img_playerN, SPRITE_SIZE, SPRITE_SIZE);
-    playerNTexture = LoadTextureFromImage(img_playerN);
-    //leste
-    img_playerE = LoadImage("../assets/jogador-leste.png");
-    ImageResize(&img_playerE, SPRITE_SIZE, SPRITE_SIZE);
-    playerETexture = LoadTextureFromImage(img_playerE);
-    //sul
-    img_playerS = LoadImage("../assets/jogador-sul.png");
-    ImageResize(&img_playerS, SPRITE_SIZE, SPRITE_SIZE);
-    playerSTexture = LoadTextureFromImage(img_playerS);
-    //oeste
-    img_playerW = LoadImage("../assets/jogador-oeste.png");
-    ImageResize(&img_playerW, SPRITE_SIZE, SPRITE_SIZE);
-    playerWTexture = LoadTextureFromImage(img_playerW);*/
     //Dipper
     img_playerNDip = LoadImage("../assets/sprite_dipper03.png");
     ImageResize(&img_playerNDip, SPRITE_SIZE2, SPRITE_SIZE2);
@@ -226,27 +222,47 @@ void generateTextures()
     img_wall = LoadImage("../assets/wall.png");
     ImageResize(&img_wall, 2*SPRITE_SIZE, 2*SPRITE_SIZE);
     wallTexture = LoadTextureFromImage(img_wall);
-    //texturas do monster
+    //texturas dos monstros
     //norte
-    img_monsterN = LoadImage("../assets/monsterN.png");
-    ImageResize(&img_monsterN, SPRITE_SIZE, SPRITE_SIZE);
-    monsterNTexture = LoadTextureFromImage(img_monsterN);
+    img_monster1N = LoadImage("../assets/monster1N.png");
+    ImageResize(&img_monster1N, SPRITE_SIZE, SPRITE_SIZE);
+    monster1NTexture = LoadTextureFromImage(img_monster1N);
     //leste
-    img_monsterE = LoadImage("../assets/monsterE.png");
-    ImageResize(&img_monsterE, SPRITE_SIZE, SPRITE_SIZE);
-    monsterETexture = LoadTextureFromImage(img_monsterE);
+    img_monster1E = LoadImage("../assets/monster1E.png");
+    ImageResize(&img_monster1E, SPRITE_SIZE, SPRITE_SIZE);
+    monster1ETexture = LoadTextureFromImage(img_monster1E);
     //sul
-    img_monsterS = LoadImage("../assets/monsterS.png");
-    ImageResize(&img_monsterS, SPRITE_SIZE, SPRITE_SIZE);
-    monsterSTexture = LoadTextureFromImage(img_monsterS);
+    img_monster1S = LoadImage("../assets/monster1S.png");
+    ImageResize(&img_monster1S, SPRITE_SIZE, SPRITE_SIZE);
+    monster1STexture = LoadTextureFromImage(img_monster1S);
     //oeste
-    img_monsterW = LoadImage("../assets/monsterW.png");
-    ImageResize(&img_monsterW, SPRITE_SIZE, SPRITE_SIZE);
-    monsterWTexture = LoadTextureFromImage(img_monsterW);
-    arrayTexturesMonster[0] = monsterETexture;
-    arrayTexturesMonster[1] = monsterWTexture;
-    arrayTexturesMonster[2] = monsterSTexture;
-    arrayTexturesMonster[3] = monsterNTexture;
+    img_monster1W = LoadImage("../assets/monster1W.png");
+    ImageResize(&img_monster1W, SPRITE_SIZE, SPRITE_SIZE);
+    monster1WTexture = LoadTextureFromImage(img_monster1W);
+    arrayTexturesMonster[0][0] = monster1ETexture;
+    arrayTexturesMonster[0][1] = monster1WTexture;
+    arrayTexturesMonster[0][2] = monster1STexture;
+    arrayTexturesMonster[0][3] = monster1NTexture;
+    //norte
+    img_monster2N = LoadImage("../assets/monster2N.png");
+    ImageResize(&img_monster2N, SPRITE_SIZE, SPRITE_SIZE);
+    monster2NTexture = LoadTextureFromImage(img_monster2N);
+    //leste
+    img_monster2E = LoadImage("../assets/monster2E.png");
+    ImageResize(&img_monster2E, SPRITE_SIZE, SPRITE_SIZE);
+    monster2ETexture = LoadTextureFromImage(img_monster2E);
+    //sul
+    img_monster2S = LoadImage("../assets/monster2S.png");
+    ImageResize(&img_monster2S, SPRITE_SIZE, SPRITE_SIZE);
+    monster2STexture = LoadTextureFromImage(img_monster2S);
+    //oeste
+    img_monster2W = LoadImage("../assets/monster2W.png");
+    ImageResize(&img_monster2W, SPRITE_SIZE, SPRITE_SIZE);
+    monster2WTexture = LoadTextureFromImage(img_monster2W);
+    arrayTexturesMonster[1][0] = monster2ETexture;
+    arrayTexturesMonster[1][1] = monster2WTexture;
+    arrayTexturesMonster[1][2] = monster2STexture;
+    arrayTexturesMonster[1][3] = monster2NTexture;
     //confetes
     img_conf1 = LoadImage("../assets/confete1.png");
     img_conf2 = LoadImage("../assets/confete2.png");
@@ -274,9 +290,13 @@ void generateTextures()
     //fontBm = LoadFont("resources/pixantiqua.fnt");
     //fontTtf = LoadFontEx("resources/pixantiqua.ttf", 32, 0, 2SPRITE_SIZE);
     //SetTextLineSpacing(16);
+    //Fundos
     BackGround = LoadImage("../assets/background.png");
     ImageResize(&BackGround, LARGURA, ALTURA);
     BackGroundTexture = LoadTextureFromImage(BackGround);
+    BackGroundGameOver = LoadImage("../assets/background_gameOver.png");
+    ImageResize(&BackGroundGameOver, LARGURA, ALTURA);
+    BackGroundGameOverTexture = LoadTextureFromImage(BackGroundGameOver);
 }
 void unloadTextures()
 {
@@ -287,12 +307,18 @@ void unloadTextures()
     UnloadImage(img_playerS);
     UnloadImage(img_playerW);*/
     UnloadImage(img_wall);
-    UnloadImage(img_monsterE);
-    UnloadImage(img_monsterN);
-    UnloadImage(img_monsterS);
-    UnloadImage(img_monsterW);
+    UnloadImage(img_monster1E);
+    UnloadImage(img_monster1N);
+    UnloadImage(img_monster1S);
+    UnloadImage(img_monster1W);
+    UnloadImage(img_monster2E);
+    UnloadImage(img_monster2N);
+    UnloadImage(img_monster2S);
+    UnloadImage(img_monster2W);
     UnloadImage(img_conf1);
     UnloadImage(img_conf2);
+    UnloadImage(BackGround);
+    UnloadImage(BackGroundGameOver);
     //Fontes
     //UnloadFont(fontBm);
     //UnloadFont(fontTtf);
@@ -303,11 +329,16 @@ void unloadTextures()
     UnloadTexture(playerNTexture);
     UnloadTexture(playerSTexture);
     UnloadTexture(playerWTexture);*/
-    UnloadTexture(monsterETexture);
-    UnloadTexture(monsterNTexture);
-    UnloadTexture(monsterSTexture);
-    UnloadTexture(monsterWTexture);
+    UnloadTexture(monster1ETexture);
+    UnloadTexture(monster1NTexture);
+    UnloadTexture(monster1STexture);
+    UnloadTexture(monster1WTexture);
+    UnloadTexture(monster2ETexture);
+    UnloadTexture(monster2NTexture);
+    UnloadTexture(monster2STexture);
+    UnloadTexture(monster2WTexture);
     UnloadTexture(BackGroundTexture);
+    UnloadTexture(BackGroundGameOverTexture);
     UnloadTexture(wallTexture);
     UnloadTexture(confettis[0]);
     UnloadTexture(confettis[1]);
@@ -376,6 +407,7 @@ void generateMap(char path[20], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game 
                         InGame->monsters[monsters].score = rand()%(100 + 1);
                         InGame->monsters[monsters].alive = 1;
                         InGame->monsters[monsters].orientation = 1;
+                        InGame->monsters[monsters].sprite = rand()%(2);
                         monsters++;
                         break;
                     case 'E':
@@ -478,18 +510,26 @@ int gameOver()
     optionsText[2] = "Sair";
     InitWindow(LARGURA, ALTURA, "Game Over");
     generateTextures();
+    ImageResize(&img_boss, 4.5*SPRITE_SIZE, 6*SPRITE_SIZE);// o tamanho do boss é 3x4 sprites
+    bossTexture = LoadTextureFromImage(img_boss);
     SetTargetFPS(60);
     while(draw){
+        DrawTexture(BackGroundGameOverTexture, 0, 0, WHITE);
         DrawText("VOCE PERDEU", 100, 20, 100, WHITE);
         for(i = 0; i < 3; i++){
             if(optionSelected == i){
+                DrawText(optionsText[i], 100 - 3, i*110 + 200, SPRITE_SIZE, BLACK);
+                DrawText(optionsText[i], 100, i*110 + 200 - 3, SPRITE_SIZE, BLACK);
+                DrawText(optionsText[i], 100, i*110 + 200 + 3, SPRITE_SIZE, BLACK);
+                DrawText(optionsText[i], 100 + 3, i*110 + 200, SPRITE_SIZE, BLACK);
+                DrawCircle(90, i*110 + 220, 5 + 3, BLACK);
                 DrawCircle(90, i*110 + 220, 5, RED);
                 DrawText(optionsText[i], 100, i*110 + 200, SPRITE_SIZE, RED);
             } else {
                 DrawText(optionsText[i], 100, i*110 + 200, SPRITE_SIZE, WHITE);
             }
         }
-        DrawTexture(bossTexture, 800, 330, WHITE);
+        DrawTexture(bossTexture, 600, 330, WHITE);
         if(IsKeyPressed(KEY_DOWN)){
             if(optionSelected == 2){
                 optionSelected = 0;
@@ -512,6 +552,7 @@ int gameOver()
             CloseWindow();
 	    }
     }
+    ImageResize(&img_boss, 3*SPRITE_SIZE, 4*SPRITE_SIZE);// o tamanho do boss é 3x4 sprites
     return optionSelected;
 }
 void restartStatus(int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame, fireBall fireBalls[5], int *imune_muahaha)
@@ -533,7 +574,7 @@ void killMonster(game *InGame,  int monster)
 }
 void drawPlayer(player atualPlayer, int counter)
 {
-    if((!atualPlayer.imune)||(counter%4 == 0)){
+    if((!atualPlayer.imune)||(counter%4 == 0)){ //exibe a sprite normal se não estiver imune, se estiver, exibe apenas a cada 4 frames, para dar a impressão de piscando!
         DrawTexture(arrayTexturesPlayer[atualPlayer.person][atualPlayer.orientation - 1], atualPlayer.x, atualPlayer.y, WHITE);
     }
 }
@@ -814,7 +855,7 @@ void drawMonsters(monster monsters[MAX_MONSTERS], int MapArray[SPRITE_HEIGHT][SP
         if(monsters[i].alive){
             x = monsters[i].x;
             y = monsters[i].y;
-            DrawTexture(arrayTexturesMonster[monsters[i].orientation - 1], x, y, WHITE);
+            DrawTexture(arrayTexturesMonster[monsters[i].sprite][monsters[i].orientation - 1], x, y, WHITE);
             randow = rand()%(2);
             if(randow == 1){
                 move = monsters[i].orientation;
