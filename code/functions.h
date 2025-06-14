@@ -30,7 +30,7 @@ void drawPlayer(player atualPlayer, int counter);
 
 void genarateWall(int matriz[SPRITE_HEIGHT][SPRITE_WIDHT]);
 
-int conferePosicao(int x, int y, int matriz[SPRITE_HEIGHT][SPRITE_WIDHT]);
+int checkPosition(int x, int y, int matriz[SPRITE_HEIGHT][SPRITE_WIDHT]);
 
 int existMonster(game *InGame,  int matriz[SPRITE_HEIGHT][SPRITE_WIDHT]);
 
@@ -45,6 +45,8 @@ void killBoss(game *InGame);
 int fireBallsMove(boss *bossBill, fireBall fireBalls[5], int *counter, int mapArray[SPRITE_HEIGHT][SPRITE_WIDHT], player atualPlayer, int imune_muahaha);
 
 void attackBoss(boss *bossBill, int *counter, fireBall fireBalls[5]);
+
+int attackContactBoss(game *InGame);
 
 void drawBoss(boss *bossBill, int *counter);
 
