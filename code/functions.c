@@ -821,7 +821,7 @@ void drawMonsters(monster monsters[MAX_MONSTERS], int MapArray[SPRITE_HEIGHT][SP
             } else{
                 move = rand()%(4) + 1;
             }
-            randow = rand()%(8 + 1);
+            randow = rand()%(6 + 1);
             if(randow == 1){
                 monsters[i].orientation = move;
                 switch(move){
