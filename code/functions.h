@@ -22,17 +22,17 @@ int menu(int gameInProgress, player *gamePlayer);
 
 int attackMonster(game *InGame);
 
-void restartStatus(int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame, fireBall fireBalls[5]);
+void restartStatus(int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame, fireBall fireBalls[5], int *imune_muahaha);
 
 void killMonster(game *InGame,  int monster);
-
-int existMonster(game *InGame);
 
 void drawPlayer(player atualPlayer, int counter);
 
 void genarateWall(int matriz[SPRITE_HEIGHT][SPRITE_WIDHT]);
 
-int conferePosicao(int x, int y, int matriz[SPRITE_HEIGHT][SPRITE_WIDHT]);
+int checkPosition(int x, int y, int matriz[SPRITE_HEIGHT][SPRITE_WIDHT]);
+
+int existMonster(game *InGame,  int matriz[SPRITE_HEIGHT][SPRITE_WIDHT]);
 
 int allMonstersKilled(monster monsters[MAX_MONSTERS]);
 
@@ -42,9 +42,11 @@ void chatchSword(game *InGame);
 
 void killBoss(game *InGame);
 
-int fireBallsMove(boss *bossBill, fireBall fireBalls[5], int *counter, int mapArray[SPRITE_HEIGHT][SPRITE_WIDHT], player atualPlayer);
+int fireBallsMove(boss *bossBill, fireBall fireBalls[5], int *counter, int mapArray[SPRITE_HEIGHT][SPRITE_WIDHT], player atualPlayer, int imune_muahaha);
 
 void attackBoss(boss *bossBill, int *counter, fireBall fireBalls[5]);
+
+int attackContactBoss(game *InGame);
 
 void drawBoss(boss *bossBill, int *counter);
 
@@ -73,6 +75,8 @@ void generateMap(char path[20], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game 
 int updateScores(score highscores[5], score new_score);
 
 void newScore(score highscores[5], int playerScore);
+
+void muahaha(int *imune_muahaha, char test[8]);
 
 void StartGame();
 

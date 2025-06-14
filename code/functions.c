@@ -47,18 +47,29 @@ Texture2D arrayTexturesPlayer[2][4];
 Image BackGround;
 Image img_wall;
 Texture2D wallTexture;
-//Texturas do monstro com cada uma das orientacoes
-Image img_monsterN;
-Texture2D monsterNTexture;
-Image img_monsterS;
-Texture2D monsterSTexture;
-Image img_monsterE;
-Texture2D monsterETexture;
-Image img_monsterW;
-Texture2D monsterWTexture;
-Texture2D arrayTexturesMonster[4];
+//Texturas dos monstros com cada uma das orientacoes
+Image img_monster1N;
+Texture2D monster1NTexture;
+Image img_monster1S;
+Texture2D monster1STexture;
+Image img_monster1E;
+Texture2D monster1ETexture;
+Image img_monster1W;
+Texture2D monster1WTexture;
+Image img_monster2N;
+Texture2D monster2NTexture;
+Image img_monster2S;
+Texture2D monster2STexture;
+Image img_monster2E;
+Texture2D monster2ETexture;
+Image img_monster2W;
+Texture2D monster2WTexture;
+Texture2D arrayTexturesMonster[2][4];
+//Fundos
 Image BackGround;
 Texture2D BackGroundTexture;
+Image BackGroundGameOver;
+Texture2D BackGroundGameOverTexture;
 Image img_wall;
 Texture2D wallTexture;
 //Confetes
@@ -75,6 +86,9 @@ Texture2D bossDificultTexture;
 //Textura da bola de fogo
 Image img_fireBall;
 Texture2D fireBallTexture;
+//Textura da bola de fogo azul
+Image img_fireBallBlue;
+Texture2D fireBallBlueTexture;
 //Fontes
 //Font fontBm;
 //Font fontTtf;
@@ -122,6 +136,7 @@ typedef struct monster
     int alive;
     int orientation;
     int qnt;
+    int sprite; //um numero que representa o monstro sorteado para ele ser
 } monster;
 typedef struct sword
 {
@@ -163,22 +178,6 @@ void generateTextures()
     ImageResize(&img_life, SPRITE_SIZE, SPRITE_SIZE);
     lifeTexture = LoadTextureFromImage(img_life);
     //texturas do player
-    //norte
-    /*img_playerN = LoadImage("../assets/jogador-norte.png");
-    ImageResize(&img_playerN, SPRITE_SIZE, SPRITE_SIZE);
-    playerNTexture = LoadTextureFromImage(img_playerN);
-    //leste
-    img_playerE = LoadImage("../assets/jogador-leste.png");
-    ImageResize(&img_playerE, SPRITE_SIZE, SPRITE_SIZE);
-    playerETexture = LoadTextureFromImage(img_playerE);
-    //sul
-    img_playerS = LoadImage("../assets/jogador-sul.png");
-    ImageResize(&img_playerS, SPRITE_SIZE, SPRITE_SIZE);
-    playerSTexture = LoadTextureFromImage(img_playerS);
-    //oeste
-    img_playerW = LoadImage("../assets/jogador-oeste.png");
-    ImageResize(&img_playerW, SPRITE_SIZE, SPRITE_SIZE);
-    playerWTexture = LoadTextureFromImage(img_playerW);*/
     //Dipper
     img_playerNDip = LoadImage("../assets/sprite_dipper03.png");
     ImageResize(&img_playerNDip, SPRITE_SIZE2, SPRITE_SIZE2);
@@ -223,27 +222,47 @@ void generateTextures()
     img_wall = LoadImage("../assets/wall.png");
     ImageResize(&img_wall, 2*SPRITE_SIZE, 2*SPRITE_SIZE);
     wallTexture = LoadTextureFromImage(img_wall);
-    //texturas do monster
+    //texturas dos monstros
     //norte
-    img_monsterN = LoadImage("../assets/monsterN.png");
-    ImageResize(&img_monsterN, SPRITE_SIZE, SPRITE_SIZE);
-    monsterNTexture = LoadTextureFromImage(img_monsterN);
+    img_monster1N = LoadImage("../assets/monster1N.png");
+    ImageResize(&img_monster1N, SPRITE_SIZE, SPRITE_SIZE);
+    monster1NTexture = LoadTextureFromImage(img_monster1N);
     //leste
-    img_monsterE = LoadImage("../assets/monsterE.png");
-    ImageResize(&img_monsterE, SPRITE_SIZE, SPRITE_SIZE);
-    monsterETexture = LoadTextureFromImage(img_monsterE);
+    img_monster1E = LoadImage("../assets/monster1E.png");
+    ImageResize(&img_monster1E, SPRITE_SIZE, SPRITE_SIZE);
+    monster1ETexture = LoadTextureFromImage(img_monster1E);
     //sul
-    img_monsterS = LoadImage("../assets/monsterS.png");
-    ImageResize(&img_monsterS, SPRITE_SIZE, SPRITE_SIZE);
-    monsterSTexture = LoadTextureFromImage(img_monsterS);
+    img_monster1S = LoadImage("../assets/monster1S.png");
+    ImageResize(&img_monster1S, SPRITE_SIZE, SPRITE_SIZE);
+    monster1STexture = LoadTextureFromImage(img_monster1S);
     //oeste
-    img_monsterW = LoadImage("../assets/monsterW.png");
-    ImageResize(&img_monsterW, SPRITE_SIZE, SPRITE_SIZE);
-    monsterWTexture = LoadTextureFromImage(img_monsterW);
-    arrayTexturesMonster[0] = monsterETexture;
-    arrayTexturesMonster[1] = monsterWTexture;
-    arrayTexturesMonster[2] = monsterSTexture;
-    arrayTexturesMonster[3] = monsterNTexture;
+    img_monster1W = LoadImage("../assets/monster1W.png");
+    ImageResize(&img_monster1W, SPRITE_SIZE, SPRITE_SIZE);
+    monster1WTexture = LoadTextureFromImage(img_monster1W);
+    arrayTexturesMonster[0][0] = monster1ETexture;
+    arrayTexturesMonster[0][1] = monster1WTexture;
+    arrayTexturesMonster[0][2] = monster1STexture;
+    arrayTexturesMonster[0][3] = monster1NTexture;
+    //norte
+    img_monster2N = LoadImage("../assets/monster2N.png");
+    ImageResize(&img_monster2N, SPRITE_SIZE, SPRITE_SIZE);
+    monster2NTexture = LoadTextureFromImage(img_monster2N);
+    //leste
+    img_monster2E = LoadImage("../assets/monster2E.png");
+    ImageResize(&img_monster2E, SPRITE_SIZE, SPRITE_SIZE);
+    monster2ETexture = LoadTextureFromImage(img_monster2E);
+    //sul
+    img_monster2S = LoadImage("../assets/monster2S.png");
+    ImageResize(&img_monster2S, SPRITE_SIZE, SPRITE_SIZE);
+    monster2STexture = LoadTextureFromImage(img_monster2S);
+    //oeste
+    img_monster2W = LoadImage("../assets/monster2W.png");
+    ImageResize(&img_monster2W, SPRITE_SIZE, SPRITE_SIZE);
+    monster2WTexture = LoadTextureFromImage(img_monster2W);
+    arrayTexturesMonster[1][0] = monster2ETexture;
+    arrayTexturesMonster[1][1] = monster2WTexture;
+    arrayTexturesMonster[1][2] = monster2STexture;
+    arrayTexturesMonster[1][3] = monster2NTexture;
     //confetes
     img_conf1 = LoadImage("../assets/confete1.png");
     img_conf2 = LoadImage("../assets/confete2.png");
@@ -263,13 +282,21 @@ void generateTextures()
     img_fireBall = LoadImage("../assets/fireBall.png");
     ImageResize(&img_fireBall, 2*SPRITE_SIZE, 2*SPRITE_SIZE); // o tamanho do boss é 2x3 sprites
     fireBallTexture = LoadTextureFromImage(img_fireBall);
+    //bola de fogo azul
+    img_fireBallBlue = LoadImage("../assets/fireBallAzul.png");
+    ImageResize(&img_fireBallBlue, 2*SPRITE_SIZE, 2*SPRITE_SIZE); // o tamanho do boss é 2x3 sprites
+    fireBallBlueTexture = LoadTextureFromImage(img_fireBallBlue);
     //fontes
     //fontBm = LoadFont("resources/pixantiqua.fnt");
     //fontTtf = LoadFontEx("resources/pixantiqua.ttf", 32, 0, 2SPRITE_SIZE);
     //SetTextLineSpacing(16);
+    //Fundos
     BackGround = LoadImage("../assets/background.png");
     ImageResize(&BackGround, LARGURA, ALTURA);
     BackGroundTexture = LoadTextureFromImage(BackGround);
+    BackGroundGameOver = LoadImage("../assets/background_gameOver.png");
+    ImageResize(&BackGroundGameOver, LARGURA, ALTURA);
+    BackGroundGameOverTexture = LoadTextureFromImage(BackGroundGameOver);
 }
 void unloadTextures()
 {
@@ -280,12 +307,18 @@ void unloadTextures()
     UnloadImage(img_playerS);
     UnloadImage(img_playerW);*/
     UnloadImage(img_wall);
-    UnloadImage(img_monsterE);
-    UnloadImage(img_monsterN);
-    UnloadImage(img_monsterS);
-    UnloadImage(img_monsterW);
+    UnloadImage(img_monster1E);
+    UnloadImage(img_monster1N);
+    UnloadImage(img_monster1S);
+    UnloadImage(img_monster1W);
+    UnloadImage(img_monster2E);
+    UnloadImage(img_monster2N);
+    UnloadImage(img_monster2S);
+    UnloadImage(img_monster2W);
     UnloadImage(img_conf1);
     UnloadImage(img_conf2);
+    UnloadImage(BackGround);
+    UnloadImage(BackGroundGameOver);
     //Fontes
     //UnloadFont(fontBm);
     //UnloadFont(fontTtf);
@@ -296,11 +329,16 @@ void unloadTextures()
     UnloadTexture(playerNTexture);
     UnloadTexture(playerSTexture);
     UnloadTexture(playerWTexture);*/
-    UnloadTexture(monsterETexture);
-    UnloadTexture(monsterNTexture);
-    UnloadTexture(monsterSTexture);
-    UnloadTexture(monsterWTexture);
+    UnloadTexture(monster1ETexture);
+    UnloadTexture(monster1NTexture);
+    UnloadTexture(monster1STexture);
+    UnloadTexture(monster1WTexture);
+    UnloadTexture(monster2ETexture);
+    UnloadTexture(monster2NTexture);
+    UnloadTexture(monster2STexture);
+    UnloadTexture(monster2WTexture);
     UnloadTexture(BackGroundTexture);
+    UnloadTexture(BackGroundGameOverTexture);
     UnloadTexture(wallTexture);
     UnloadTexture(confettis[0]);
     UnloadTexture(confettis[1]);
@@ -369,6 +407,7 @@ void generateMap(char path[20], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game 
                         InGame->monsters[monsters].score = rand()%(100 + 1);
                         InGame->monsters[monsters].alive = 1;
                         InGame->monsters[monsters].orientation = 1;
+                        InGame->monsters[monsters].sprite = rand()%(2);
                         monsters++;
                         break;
                     case 'E':
@@ -471,18 +510,26 @@ int gameOver()
     optionsText[2] = "Sair";
     InitWindow(LARGURA, ALTURA, "Game Over");
     generateTextures();
+    ImageResize(&img_boss, 4.5*SPRITE_SIZE, 6*SPRITE_SIZE);// o tamanho do boss é 3x4 sprites
+    bossTexture = LoadTextureFromImage(img_boss);
     SetTargetFPS(60);
     while(draw){
+        DrawTexture(BackGroundGameOverTexture, 0, 0, WHITE);
         DrawText("VOCE PERDEU", 100, 20, 100, WHITE);
         for(i = 0; i < 3; i++){
             if(optionSelected == i){
+                DrawText(optionsText[i], 100 - 3, i*110 + 200, SPRITE_SIZE, BLACK);
+                DrawText(optionsText[i], 100, i*110 + 200 - 3, SPRITE_SIZE, BLACK);
+                DrawText(optionsText[i], 100, i*110 + 200 + 3, SPRITE_SIZE, BLACK);
+                DrawText(optionsText[i], 100 + 3, i*110 + 200, SPRITE_SIZE, BLACK);
+                DrawCircle(90, i*110 + 220, 5 + 3, BLACK);
                 DrawCircle(90, i*110 + 220, 5, RED);
                 DrawText(optionsText[i], 100, i*110 + 200, SPRITE_SIZE, RED);
             } else {
                 DrawText(optionsText[i], 100, i*110 + 200, SPRITE_SIZE, WHITE);
             }
         }
-        DrawTexture(bossTexture, 800, 330, WHITE);
+        DrawTexture(bossTexture, 600, 330, WHITE);
         if(IsKeyPressed(KEY_DOWN)){
             if(optionSelected == 2){
                 optionSelected = 0;
@@ -505,9 +552,10 @@ int gameOver()
             CloseWindow();
 	    }
     }
+    ImageResize(&img_boss, 3*SPRITE_SIZE, 4*SPRITE_SIZE);// o tamanho do boss é 3x4 sprites
     return optionSelected;
 }
-void restartStatus(int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame, fireBall fireBalls[5])
+void restartStatus(int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame, fireBall fireBalls[5], int *imune_muahaha)
 {
     InGame->atualStatus.lifes = 3;
     InGame->atualStatus.level = 1;
@@ -515,6 +563,7 @@ void restartStatus(int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame, fire
     InGame-> atualStatus.sword = 0;
     generateMap("../assets/mapa01.txt", MapArray, InGame, fireBalls);
     InGame->bossBill.lifes = 0;
+    *imune_muahaha = 0;
 }
 void killMonster(game *InGame,  int monster)
 {
@@ -522,52 +571,6 @@ void killMonster(game *InGame,  int monster)
     monsterScore = InGame->monsters[monster].score;
     InGame->atualStatus.score += monsterScore;
     InGame->monsters[monster].alive = 0;
-}
-int existMonster(game *InGame)
-{
-    int i, x, y, x_monster, y_monster, y_max, y_min, x_max, x_min, orientation;
-    orientation =InGame->atualPlayer.orientation;
-    x = InGame->atualPlayer.x;
-    y = InGame->atualPlayer.y;
-    x_max = InGame->atualPlayer.x + 3*SPRITE_SIZE;
-    x_min = InGame->atualPlayer.x - 3*SPRITE_SIZE;
-    y_max = InGame->atualPlayer.y + 3*SPRITE_SIZE;
-    y_min = InGame->atualPlayer.y - 3*SPRITE_SIZE;
-    for(i = 0; i < MAX_MONSTERS; i++){
-        if(InGame->monsters[i].alive){
-            x_monster = InGame->monsters[i].x;
-            y_monster = InGame->monsters[i].y;
-            // switch(orientation){
-            //     case 1:
-            //         x += 3*SPRITE_SIZE;//tres blocos de ataque
-            //         if(((x_monster <= x)&&(x_monster >= x_player))&&(y == y_monster)){
-            //             return i;
-            //         }
-            //         break;
-            //     case 2:
-            //         x -= 3*SPRITE_SIZE;
-            //         if(((x_monster >= x)&&(x_monster <= x_player))&&(y == y_monster)){
-            //             return i;
-            //         }
-            //         break;
-            //     case 3:
-            //         y -= 2*SPRITE_SIZE;
-            //         if(((y_monster >= y)&&(y_monster <= y_player))&&(x == x_monster)){
-            //             return i;
-            //         }
-            //         break;
-            //     default:
-            //         y += 2*SPRITE_SIZE;
-            //         if(((y_monster <= y)&&(y_monster >= y_player))&&(x == x_monster)){
-            //             return i;
-            //         }
-            // }
-            if((y_monster <= y_max)&&(y_monster >= y_min)&&(x_monster >= x_min)&&(x_monster <= x_max)){
-                return i;
-            }
-        }
-    }
-    return -1;
 }
 void drawPlayer(player atualPlayer, int counter)
 {
@@ -596,8 +599,9 @@ int allMonstersKilled(monster monsters[MAX_MONSTERS])
     }
     return 1;
 }
-int nextLevel(status *atualStatus, char file[20])
+int nextLevel(status *atualStatus, char file[20], int *muahaha, char test[8])
 {
+    int i;
     atualStatus->level += 1;
     if(atualStatus->level <= 9){
         sprintf(file, "../assets/mapa0%d.txt", atualStatus->level);
@@ -605,15 +609,65 @@ int nextLevel(status *atualStatus, char file[20])
         sprintf(file, "../assets/mapa%d.txt", atualStatus->level);
     }
     atualStatus->sword = 0;
+    *muahaha = 0;
+    for(i=0;i<8;i++){
+        test[i] = 0;
+    }
     return FileExists(file);
 }
-int conferePosicao(int x, int y, int matriz[SPRITE_HEIGHT][SPRITE_WIDHT])
+int checkPosition(int x, int y, int matriz[SPRITE_HEIGHT][SPRITE_WIDHT])
 {
-    if((!matriz[(int) floor((y- 60)/SPRITE_SIZE)][(int) floor((x)/SPRITE_SIZE)])&&(x < 1200)&&(x > -SPRITE_SIZE)&&(y < 920)&&(y > 10)){
+    if((!matriz[(int) floor((y- 60)/SPRITE_SIZE)][(int) floor((x)/SPRITE_SIZE)])&&(x < 1200)&&(x > -SPRITE_SIZE)&&(y < 860)&&(y > 10)){
         return 1;
 	} else {
         return 0;
 	}
+}
+int existMonster(game *InGame, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT])
+{
+    int i, x, y, x_monster, y_monster, y_max, y_min, x_max, x_min, orientation;
+    orientation =InGame->atualPlayer.orientation;
+    x = InGame->atualPlayer.x;
+    y = InGame->atualPlayer.y;
+    x_max = InGame->atualPlayer.x + 3*SPRITE_SIZE;
+    x_min = InGame->atualPlayer.x - 3*SPRITE_SIZE;
+    y_max = InGame->atualPlayer.y + 3*SPRITE_SIZE;
+    y_min = InGame->atualPlayer.y - 3*SPRITE_SIZE;
+    for(i = 0; i < MAX_MONSTERS; i++){
+        if(InGame->monsters[i].alive){
+            x_monster = InGame->monsters[i].x;
+            y_monster = InGame->monsters[i].y;
+             switch(orientation){
+                 case 1:
+                     if(((x_monster <= x_max)&&(x_monster >= x))&&(y == y_monster)){
+                          if((x_monster - x == SPRITE_SIZE || x == x_monster) || (x_monster - x == 2*SPRITE_SIZE && checkPosition(x + SPRITE_SIZE, y, MapArray)) || (x_monster - x == 3*SPRITE_SIZE && checkPosition(x + SPRITE_SIZE, y, MapArray) && checkPosition(x + 2*SPRITE_SIZE, y, MapArray)))
+                              return i;
+                     }
+                     break;
+                 case 2:
+                     if(((x_monster >= x_min)&&(x_monster <= x))&&(y == y_monster)){
+                          if((x_monster - x == -SPRITE_SIZE || x == x_monster) || (x_monster - x == -2*SPRITE_SIZE && checkPosition(x - SPRITE_SIZE, y, MapArray)) || (x_monster - x == -3*SPRITE_SIZE && checkPosition(x - SPRITE_SIZE, y, MapArray) && checkPosition(x - 2*SPRITE_SIZE, y, MapArray)))
+                              return i;
+                     }
+                     break;
+                 case 3:
+                     if(((y_monster >= y_min)&&(y_monster <= y))&&(x == x_monster)){
+                          if((y_monster - y == -SPRITE_SIZE || y == y_monster) || (y_monster - y == -2*SPRITE_SIZE && checkPosition(x, y - SPRITE_SIZE, MapArray)) || (y_monster - y == -3*SPRITE_SIZE && checkPosition(x, y - SPRITE_SIZE, MapArray) && checkPosition(x, y - 2*SPRITE_SIZE, MapArray)))
+                              return i;
+                     }
+                     break;
+                 default:
+                     if(((y_monster <= y_max)&&(y_monster >= y))&&(x == x_monster)){
+                          if((y_monster - y == SPRITE_SIZE || y == y_monster) || (y_monster - y == 2*SPRITE_SIZE && checkPosition(x, y + SPRITE_SIZE, MapArray)) || (y_monster - y == 3*SPRITE_SIZE && checkPosition(x, y + SPRITE_SIZE, MapArray) && checkPosition(x, y + 2*SPRITE_SIZE, MapArray)))
+                              return i;
+                     }
+             }
+            //if((y_monster <= y_max)&&(y_monster >= y_min)&&(x_monster >= x_min)&&(x_monster <= x_max)){
+            //    return i;
+            //}
+        }
+    }
+    return -1;
 }
 void changeLife(status *lifeStatus, int value)
 {
@@ -683,15 +737,14 @@ void killBoss(game *InGame)
             // }
         if((y_monster <= y_max)&&(y_monster >= y_min)&&(x_monster >= x_min)&&(x_monster <= x_max)){
             InGame->bossBill.lifes--;
-            if(InGame->bossBill.lifes == 5){
+            if(InGame->bossBill.lifes == 7){
                 bossDificultMode(&InGame->bossBill);
             }
         }
     }
 
 }
-
-int fireBallsMove(boss *bossBill, fireBall fireBalls[5], int *counter, int mapArray[SPRITE_HEIGHT][SPRITE_WIDHT], player atualPlayer)
+int fireBallsMove(boss *bossBill, fireBall fireBalls[5], int *counter, int mapArray[SPRITE_HEIGHT][SPRITE_WIDHT], player atualPlayer, int imune_muahaha)
 {
     int new_counter, i, x_player, y_player;
     x_player = atualPlayer.x;
@@ -701,19 +754,22 @@ int fireBallsMove(boss *bossBill, fireBall fireBalls[5], int *counter, int mapAr
             //printf("\n\n\n%d", fireBalls[i].exist);
             if(fireBalls[i].exist == 1){
                 //printf("\n\n\n%d %d %d %d", fireBalls[i].x, fireBalls[i].y, i, fireBalls[i].exist);
-                DrawTexture(fireBallTexture, fireBalls[i].x, fireBalls[i].y, WHITE);
+                if(bossBill->attack == 3)
+                    DrawTexture(fireBallTexture, fireBalls[i].x, fireBalls[i].y +20, WHITE);
+                else
+                    DrawTexture(fireBallBlueTexture, fireBalls[i].x, fireBalls[i].y +20, WHITE);
             }
         }
         if(*counter == 8 - bossBill->attack){ //8 - 3(bolas de fogo pro vez) para quando ele esta no modo normal e 8 - 5 quando esta no modo difcil diminuindo o tempo do contador para o boss fazer a acao ele fica mais rapido e as bolas de fogo sao geradas mais rapidamente
             new_counter = 0;
             for(i = 0; i < bossBill->attack; i++){
                 if(fireBalls[i].exist == 1){
-                    if(conferePosicao(fireBalls[i].x -50, fireBalls[i].y, mapArray)){
+                    if(checkPosition(fireBalls[i].x -50, fireBalls[i].y, mapArray)){
                         fireBalls[i].x -= 50;
                     } else {
                         fireBalls[i].exist = 0;
                     }
-                    if(!atualPlayer.imune){
+                    if(!atualPlayer.imune && !imune_muahaha){
                         if(((fireBalls[i].x + 100 >= x_player)&&(fireBalls[i].x <= x_player))&&((fireBalls[i].y + 50 >= y_player)&&(fireBalls[i].y <= y_player))){
                             fireBalls[i].exist = 0;
                             return 1;
@@ -727,7 +783,19 @@ int fireBallsMove(boss *bossBill, fireBall fireBalls[5], int *counter, int mapAr
     }
     return 0;
 }
-
+int attackContactBoss(game *InGame)
+{
+    if((InGame->atualPlayer.x >= InGame->bossBill.x)&&((InGame->atualPlayer.y == InGame->bossBill.y) || (InGame->atualPlayer.y == InGame->bossBill.y + SPRITE_SIZE) || (InGame->atualPlayer.y == InGame->bossBill.y + 2*SPRITE_SIZE))&&(InGame->bossBill.lifes > 0)){
+        if(InGame->bossBill.attack == 3)
+           changeLife(&InGame->atualStatus, -2);
+        else
+           changeLife(&InGame->atualStatus, -3);
+        return 1;
+    }
+    else{
+    return 0;
+    }
+}
 void attackBoss(boss *bossBill, int *counter, fireBall fireBalls[5])
 {
     int new_counter, i;
@@ -787,14 +855,14 @@ void drawMonsters(monster monsters[MAX_MONSTERS], int MapArray[SPRITE_HEIGHT][SP
         if(monsters[i].alive){
             x = monsters[i].x;
             y = monsters[i].y;
-            DrawTexture(arrayTexturesMonster[monsters[i].orientation - 1], x, y, WHITE);
+            DrawTexture(arrayTexturesMonster[monsters[i].sprite][monsters[i].orientation - 1], x, y, WHITE);
             randow = rand()%(2);
             if(randow == 1){
                 move = monsters[i].orientation;
             } else{
                 move = rand()%(4) + 1;
             }
-            randow = rand()%(6 + 1);
+            randow = rand()%(8 + 1);
             if(randow == 1){
                 monsters[i].orientation = move;
                 switch(move){
@@ -811,7 +879,7 @@ void drawMonsters(monster monsters[MAX_MONSTERS], int MapArray[SPRITE_HEIGHT][SP
                     y -= SPRITE_SIZE;
                 }
             }
-            if(conferePosicao(x, y, MapArray)){
+            if(checkPosition(x, y, MapArray)){
                 monsters[i].x = x;
                 monsters[i].y = y;
             }
@@ -855,11 +923,11 @@ void drawMonsters(monster monsters[MAX_MONSTERS], int MapArray[SPRITE_HEIGHT][SP
                 case 4:
                     y -= SPRITE_SIZE;
                 }
-                if(conferePosicao(x, y, MapArray)){
+                if(checkPosition(x, y, MapArray)){
                     monsters[i].x = x;
                     monsters[i].y = y;
                 }
-            }while(!conferePosicao(x, y, MapArray));
+            }while(!checkPosition(x, y, MapArray));
         }
     }
 }
@@ -1098,6 +1166,7 @@ void readHighscores(score highscores[5])
         generateScore.score = score;
         highscores[i] = generateScore;
     }
+    fclose(FHighscores);
 }
 int updateScores(score highscores[5], score new_score)
 {
@@ -1213,9 +1282,24 @@ void newScore(score highscores[5], int playerScore)
     }
 
 }
-int muahaha()
+void muahaha(int *imune_muahaha, char test[8])
 {
-
+    int i = 0;
+    char muahaha[8] = {'M','U','A','H','A','H','A','\0'}, current, read;
+    current = GetKeyPressed();
+    if(current != 0){
+        for(i=0;i<7;i++){
+            if(i==6){
+                test[6] = current;
+            }
+            else{
+                test[i] = test [i+1];
+            }
+        }
+    }
+    if(strcmp(test, muahaha) == 0){
+        *imune_muahaha = 1;
+    }
 }
 void StartGame()
 {
@@ -1228,8 +1312,8 @@ void StartGame()
     player atualPlayer;
     sword atualSword;
     life lifes[MAX_LIFES];
-    int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], i, j, gameOption, continueGame = 1, MenuAnswer, contador = 0, x_player, y_player, orientation = 1, monsterKilled, respostaMenu, bossCounter = 0;
-    char atualFile[20];
+    int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], i, j, gameOption, continueGame = 1, MenuAnswer, contador = 0, x_player, y_player, orientation = 1, monsterKilled, respostaMenu, bossCounter = 0, imune_muahaha = 0;
+    char atualFile[20], test[8] = {0,0,0,0,0,0,0,'\0'};
 
     InGame.atualPlayer = atualPlayer;
     InGame.atualStatus = InGameStatus;
@@ -1242,7 +1326,7 @@ void StartGame()
 
     InGame.atualPlayer.person = 0;
     readHighscores(Highscores);
-    restartStatus(MapArray, &InGame, fireBalls);
+    restartStatus(MapArray, &InGame, fireBalls, &imune_muahaha);
     callMenu(0, &continueGame, Highscores, MapArray, &InGame);
     while(continueGame){
         readHighscores(Highscores);
@@ -1256,25 +1340,25 @@ void StartGame()
             y_player = InGame.atualPlayer.y;
             if (IsKeyPressed(KEY_RIGHT)||IsKeyDown(KEY_RIGHT)||IsKeyPressed(KEY_D)||IsKeyDown(KEY_D)) {
                 orientation = 1;
-                if(conferePosicao((x_player + SPRITE_SIZE), y_player, MapArray)){
+                if(checkPosition((x_player + SPRITE_SIZE), y_player, MapArray)){
                     x_player += SPRITE_SIZE;
                 }
             }
             if (IsKeyPressed(KEY_LEFT)||IsKeyDown(KEY_LEFT)||IsKeyPressed(KEY_A)||IsKeyDown(KEY_A)) {
                 orientation = 2;
-                if(conferePosicao((x_player -SPRITE_SIZE), y_player, MapArray)){
+                if(checkPosition((x_player -SPRITE_SIZE), y_player, MapArray)){
                     x_player -= SPRITE_SIZE;
                 }
             }
             if (IsKeyPressed(KEY_UP)||IsKeyDown(KEY_UP)||IsKeyPressed(KEY_W)||IsKeyDown(KEY_W)) {
                 orientation = 3;
-                if(conferePosicao(x_player, (y_player -SPRITE_SIZE), MapArray)){
+                if(checkPosition(x_player, (y_player -SPRITE_SIZE), MapArray)){
                     y_player -= SPRITE_SIZE;
                 }
             }
             if (IsKeyPressed(KEY_DOWN)||IsKeyDown(KEY_DOWN)||IsKeyPressed(KEY_S)||IsKeyDown(KEY_S)) {
                 orientation = 4;
-                if(conferePosicao(x_player, (y_player + SPRITE_SIZE), MapArray)){
+                if(checkPosition(x_player, (y_player + SPRITE_SIZE), MapArray)){
                     y_player += SPRITE_SIZE;
                 }
             }
@@ -1290,7 +1374,7 @@ void StartGame()
             }
             if(InGame.atualStatus.sword){
                 if(IsKeyPressed(KEY_J)){
-                    monsterKilled = existMonster(&InGame);
+                    monsterKilled = existMonster(&InGame, MapArray);
                     if(monsterKilled > -1){
                         killMonster(&InGame, monsterKilled);
                     }
@@ -1304,7 +1388,7 @@ void StartGame()
                 }
             }
             if((allMonstersKilled(InGame.monsters))&&(InGame.bossBill.lifes == 0)){
-                if(nextLevel(&InGame.atualStatus, atualFile)){
+                if(nextLevel(&InGame.atualStatus, atualFile, &imune_muahaha, test)){
                     generateMap(atualFile, MapArray, &InGame, fireBalls);
                 } else{
                     gameOption = 2;
@@ -1315,19 +1399,23 @@ void StartGame()
                 gameOption = 1;
                 break;
             }
-            if(!InGame.atualPlayer.imune){
-                if(attackMonster(&InGame)){
+            muahaha(&imune_muahaha, test);
+            if(!InGame.atualPlayer.imune && !imune_muahaha){
+                if(attackMonster(&InGame) || attackContactBoss(&InGame)){
                     InGame.atualPlayer.imune = 1;
                     contador = 0;
                 }
             }
             else contador++;
-            if(contador > 29)
+            if(contador > 39)
                 InGame.atualPlayer.imune = 0;
-            if(fireBallsMove(&InGame.bossBill, fireBalls, &bossCounter, MapArray, InGame.atualPlayer)){
+            if(fireBallsMove(&InGame.bossBill, fireBalls, &bossCounter, MapArray, InGame.atualPlayer, imune_muahaha)){
                 InGame.atualPlayer.imune = 1;
                 contador = 0;
+                if(InGame.bossBill.attack == 3)
                 changeLife(&InGame.atualStatus, -2);
+                else
+                changeLife(&InGame.atualStatus, -3);
             }
             drawPlayer(InGame.atualPlayer, contador);
             genarateWall(MapArray);
@@ -1347,10 +1435,10 @@ void StartGame()
             case 1:
                 MenuAnswer = gameOver();
                 if(MenuAnswer == 0){
-                    restartStatus(MapArray, &InGame, fireBalls);
+                    restartStatus(MapArray, &InGame, fireBalls, &imune_muahaha);
                 } else if(MenuAnswer == 1){
                     if(callMenu(0, &continueGame, Highscores, MapArray, &InGame)){
-                        restartStatus(MapArray, &InGame, fireBalls);
+                        restartStatus(MapArray, &InGame, fireBalls, &imune_muahaha);
                     }
                 } else {
                     continueGame = 0;
@@ -1360,11 +1448,11 @@ void StartGame()
                 MenuAnswer = winGame();
                 if(MenuAnswer == 0){
                     newScore(Highscores, InGame.atualStatus.score);
-                    restartStatus(MapArray, &InGame, fireBalls);
+                    restartStatus(MapArray, &InGame, fireBalls, &imune_muahaha);
                 } else if(MenuAnswer == 1){
                     newScore(Highscores, InGame.atualStatus.score);
                     if(callMenu(0, &continueGame, Highscores, MapArray, &InGame)){
-                        restartStatus(MapArray, &InGame, fireBalls);
+                        restartStatus(MapArray, &InGame, fireBalls, &imune_muahaha);
                     }
                 } else {
                     continueGame = 0;
@@ -1373,9 +1461,8 @@ void StartGame()
                 break;
             case 3:
                 if(callMenu(1, &continueGame, Highscores, MapArray, &InGame)){
-                    restartStatus(MapArray, &InGame, fireBalls);
+                    restartStatus(MapArray, &InGame, fireBalls, &imune_muahaha);
                 }
-
         }
     }
     unloadTextures();
