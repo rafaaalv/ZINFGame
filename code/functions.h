@@ -26,13 +26,13 @@ void restartStatus(int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame, fire
 
 void killMonster(game *InGame,  int monster);
 
-int existMonster(game *InGame);
-
 void drawPlayer(player atualPlayer, int counter);
 
 void genarateWall(int matriz[SPRITE_HEIGHT][SPRITE_WIDHT]);
 
 int conferePosicao(int x, int y, int matriz[SPRITE_HEIGHT][SPRITE_WIDHT]);
+
+int existMonster(game *InGame,  int matriz[SPRITE_HEIGHT][SPRITE_WIDHT]);
 
 int allMonstersKilled(monster monsters[MAX_MONSTERS]);
 

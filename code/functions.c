@@ -11,7 +11,6 @@
 #define SPRITE_HEIGHT 16
 #define SPRITE_SIZE 50
 #define SPRITE_SIZE2 55
-#define SPRITE_SIZE3 100
 #define MAX_MONSTERS 10
 #define MAX_LIFES 5
 #define MONSTERS_COLLUM 5
@@ -525,52 +524,6 @@ void killMonster(game *InGame,  int monster)
     InGame->atualStatus.score += monsterScore;
     InGame->monsters[monster].alive = 0;
 }
-int existMonster(game *InGame)
-{
-    int i, x, y, x_monster, y_monster, y_max, y_min, x_max, x_min, orientation;
-    orientation =InGame->atualPlayer.orientation;
-    x = InGame->atualPlayer.x;
-    y = InGame->atualPlayer.y;
-    x_max = InGame->atualPlayer.x + 3*SPRITE_SIZE;
-    x_min = InGame->atualPlayer.x - 3*SPRITE_SIZE;
-    y_max = InGame->atualPlayer.y + 3*SPRITE_SIZE;
-    y_min = InGame->atualPlayer.y - 3*SPRITE_SIZE;
-    for(i = 0; i < MAX_MONSTERS; i++){
-        if(InGame->monsters[i].alive){
-            x_monster = InGame->monsters[i].x;
-            y_monster = InGame->monsters[i].y;
-            // switch(orientation){
-            //     case 1:
-            //         x += 3*SPRITE_SIZE;//tres blocos de ataque
-            //         if(((x_monster <= x)&&(x_monster >= x_player))&&(y == y_monster)){
-            //             return i;
-            //         }
-            //         break;
-            //     case 2:
-            //         x -= 3*SPRITE_SIZE;
-            //         if(((x_monster >= x)&&(x_monster <= x_player))&&(y == y_monster)){
-            //             return i;
-            //         }
-            //         break;
-            //     case 3:
-            //         y -= 2*SPRITE_SIZE;
-            //         if(((y_monster >= y)&&(y_monster <= y_player))&&(x == x_monster)){
-            //             return i;
-            //         }
-            //         break;
-            //     default:
-            //         y += 2*SPRITE_SIZE;
-            //         if(((y_monster <= y)&&(y_monster >= y_player))&&(x == x_monster)){
-            //             return i;
-            //         }
-            // }
-            if((y_monster <= y_max)&&(y_monster >= y_min)&&(x_monster >= x_min)&&(x_monster <= x_max)){
-                return i;
-            }
-        }
-    }
-    return -1;
-}
 void drawPlayer(player atualPlayer, int counter)
 {
     if((!atualPlayer.imune)||(counter%4 == 0)){
@@ -621,6 +574,52 @@ int conferePosicao(int x, int y, int matriz[SPRITE_HEIGHT][SPRITE_WIDHT])
 	} else {
         return 0;
 	}
+}
+int existMonster(game *InGame, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT])
+{
+    int i, x, y, x_monster, y_monster, y_max, y_min, x_max, x_min, orientation;
+    orientation =InGame->atualPlayer.orientation;
+    x = InGame->atualPlayer.x;
+    y = InGame->atualPlayer.y;
+    x_max = InGame->atualPlayer.x + 3*SPRITE_SIZE;
+    x_min = InGame->atualPlayer.x - 3*SPRITE_SIZE;
+    y_max = InGame->atualPlayer.y + 3*SPRITE_SIZE;
+    y_min = InGame->atualPlayer.y - 3*SPRITE_SIZE;
+    for(i = 0; i < MAX_MONSTERS; i++){
+        if(InGame->monsters[i].alive){
+            x_monster = InGame->monsters[i].x;
+            y_monster = InGame->monsters[i].y;
+             switch(orientation){
+                 case 1:
+                     if(((x_monster <= x_max)&&(x_monster >= x))&&(y == y_monster)){
+                          if((x_monster - x == SPRITE_SIZE || x == x_monster) || (x_monster - x == 2*SPRITE_SIZE && conferePosicao(x + SPRITE_SIZE, y, MapArray)) || (x_monster - x == 3*SPRITE_SIZE && conferePosicao(x + SPRITE_SIZE, y, MapArray) && conferePosicao(x + 2*SPRITE_SIZE, y, MapArray)))
+                              return i;
+                     }
+                     break;
+                 case 2:
+                     if(((x_monster >= x_min)&&(x_monster <= x))&&(y == y_monster)){
+                          if((x_monster - x == -SPRITE_SIZE || x == x_monster) || (x_monster - x == -2*SPRITE_SIZE && conferePosicao(x - SPRITE_SIZE, y, MapArray)) || (x_monster - x == -3*SPRITE_SIZE && conferePosicao(x - SPRITE_SIZE, y, MapArray) && conferePosicao(x - 2*SPRITE_SIZE, y, MapArray)))
+                              return i;
+                     }
+                     break;
+                 case 3:
+                     if(((y_monster >= y_min)&&(y_monster <= y))&&(x == x_monster)){
+                          if((y_monster - y == -SPRITE_SIZE || y == y_monster) || (y_monster - y == -2*SPRITE_SIZE && conferePosicao(x, y - SPRITE_SIZE, MapArray)) || (y_monster - y == -3*SPRITE_SIZE && conferePosicao(x, y - SPRITE_SIZE, MapArray) && conferePosicao(x, y - 2*SPRITE_SIZE, MapArray)))
+                              return i;
+                     }
+                     break;
+                 default:
+                     if(((y_monster <= y_max)&&(y_monster >= y))&&(x == x_monster)){
+                          if((y_monster - y == SPRITE_SIZE || y == y_monster) || (y_monster - y == 2*SPRITE_SIZE && conferePosicao(x, y + SPRITE_SIZE, MapArray)) || (y_monster - y == 3*SPRITE_SIZE && conferePosicao(x, y + SPRITE_SIZE, MapArray) && conferePosicao(x, y + 2*SPRITE_SIZE, MapArray)))
+                              return i;
+                     }
+             }
+            //if((y_monster <= y_max)&&(y_monster >= y_min)&&(x_monster >= x_min)&&(x_monster <= x_max)){
+            //    return i;
+            //}
+        }
+    }
+    return -1;
 }
 void changeLife(status *lifeStatus, int value)
 {
@@ -707,7 +706,7 @@ int fireBallsMove(boss *bossBill, fireBall fireBalls[5], int *counter, int mapAr
             //printf("\n\n\n%d", fireBalls[i].exist);
             if(fireBalls[i].exist == 1){
                 //printf("\n\n\n%d %d %d %d", fireBalls[i].x, fireBalls[i].y, i, fireBalls[i].exist);
-                DrawTexture(fireBallTexture, fireBalls[i].x, fireBalls[i].y, WHITE);
+                DrawTexture(fireBallTexture, fireBalls[i].x, fireBalls[i].y +20, WHITE);
             }
         }
         if(*counter == 8 - bossBill->attack){ //8 - 3(bolas de fogo pro vez) para quando ele esta no modo normal e 8 - 5 quando esta no modo difcil diminuindo o tempo do contador para o boss fazer a acao ele fica mais rapido e as bolas de fogo sao geradas mais rapidamente
@@ -1312,7 +1311,7 @@ void StartGame()
             }
             if(InGame.atualStatus.sword){
                 if(IsKeyPressed(KEY_J)){
-                    monsterKilled = existMonster(&InGame);
+                    monsterKilled = existMonster(&InGame, MapArray);
                     if(monsterKilled > -1){
                         killMonster(&InGame, monsterKilled);
                     }
@@ -1345,7 +1344,7 @@ void StartGame()
                 }
             }
             else contador++;
-            if(contador > 29)
+            if(contador > 39)
                 InGame.atualPlayer.imune = 0;
             if(fireBallsMove(&InGame.bossBill, fireBalls, &bossCounter, MapArray, InGame.atualPlayer, imune_muahaha)){
                 InGame.atualPlayer.imune = 1;
