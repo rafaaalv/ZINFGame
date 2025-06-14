@@ -6,9 +6,6 @@
 #include <time.h>
 #include <math.h>
 
-#define LARGURA 1200
-#define ALTURA 860
-
 
 int main()
 {

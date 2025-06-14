@@ -1,10 +1,19 @@
+Eu
+53833
 Rafa
 2013
 Rafa
 1867
+<<<<<<< HEAD
 bruno
 1629
 gabrel
 1608
 Flopado
 1553
+=======
+Rafa(teste
+1802
+gabrel
+1608
+>>>>>>> 5343e9da7638f2c4b3c587d09c3849237b40ee71
