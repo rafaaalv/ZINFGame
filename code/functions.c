@@ -571,7 +571,7 @@ int existMonster(game *InGame)
 }
 void drawPlayer(player atualPlayer, int counter)
 {
-    if((!atualPlayer.imune)||(counter%4 == 0)){
+    if((!atualPlayer.imune)||(counter%4 == 0)){ //exibe a sprite normal se não estiver imune, se estiver, exibe apenas a cada 4 frames, para dar a impressão de piscando!
         DrawTexture(arrayTexturesPlayer[atualPlayer.person][atualPlayer.orientation - 1], atualPlayer.x, atualPlayer.y, WHITE);
     }
 }
