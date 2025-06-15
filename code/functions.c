@@ -636,7 +636,7 @@ void genarateWall(int matriz[SPRITE_HEIGHT][SPRITE_WIDHT])
     for(i = 0; i < 16; i++){
         for(j = 0; j < SPRITE_WIDHT; j++){
             if(matriz[i][j]){
-                DrawTexture(wallTexture, j*SPRITE_SIZE - 20, i*SPRITE_SIZE + 60 - 20, WHITE);
+                DrawTexture(wallTexture, j*SPRITE_SIZE -22, i*SPRITE_SIZE + 60 -22, WHITE);
             }
         }
     }
@@ -1328,7 +1328,7 @@ void newScore(score highscores[5], int playerScore)
             }
             drawConfetti(indconf);
         } else{
-            underlineText("Puxa! Voce não conseguiu nenhum novo recorde", 100, 200, 50, RED, BLACK);
+            underlineText("Puxa! Voce não conseguiu nenhum novo recorde", 100, 200, 40, RED, BLACK);
         }
         DrawCircle(90, 300, 5 + 3, BLACK);
         DrawCircle(90, 300, 5, RED);
