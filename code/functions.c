@@ -633,7 +633,7 @@ void genarateWall(int matriz[SPRITE_HEIGHT][SPRITE_WIDHT])
     for(i = 0; i < 16; i++){
         for(j = 0; j < SPRITE_WIDHT; j++){
             if(matriz[i][j]){
-                DrawTexture(wallTexture, j*SPRITE_SIZE - 20, i*SPRITE_SIZE + 60 - 20, WHITE);
+                DrawTexture(wallTexture, j*SPRITE_SIZE -22, i*SPRITE_SIZE + 60 -22, WHITE);
             }
         }
     }
@@ -1344,11 +1344,11 @@ void newScore(score highscores[5], int playerScore)
             }
             drawConfetti(indconf);
         } else{
-            DrawText("Puxa! Voce não conseguiu nenhum novo recorde", 100 - 3, 200, 50, BLACK);
-            DrawText("Puxa! Voce não conseguiu nenhum novo recorde", 100, 200 - 3, 50, BLACK);
-            DrawText("Puxa! Voce não conseguiu nenhum novo recorde", 100, 200 + 3, 50, BLACK);
-            DrawText("Puxa! Voce não conseguiu nenhum novo recorde", 100 + 3, 200, 50, BLACK);
-            DrawText("Puxa! Voce não conseguiu nenhum novo recorde", 100, 200, 50, RED);
+            DrawText("Puxa! Voce não conseguiu nenhum novo recorde", 100 - 3, 200, 40, BLACK);
+            DrawText("Puxa! Voce não conseguiu nenhum novo recorde", 100, 200 - 3, 40, BLACK);
+            DrawText("Puxa! Voce não conseguiu nenhum novo recorde", 100, 200 + 3, 40, BLACK);
+            DrawText("Puxa! Voce não conseguiu nenhum novo recorde", 100 + 3, 200, 40, BLACK);
+            DrawText("Puxa! Voce não conseguiu nenhum novo recorde", 100, 200, 40, RED);
         }
         DrawText("Voltar", 100 - 3, 300, 50, BLACK);
         DrawText("Voltar", 100, 300 - 3, 50, BLACK);
