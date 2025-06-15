@@ -64,12 +64,26 @@ Image img_monster2E;
 Texture2D monster2ETexture;
 Image img_monster2W;
 Texture2D monster2WTexture;
-Texture2D arrayTexturesMonster[2][4];
+Image img_monster3N;
+Texture2D monster3NTexture;
+Image img_monster3S;
+Texture2D monster3STexture;
+Image img_monster3E;
+Texture2D monster3ETexture;
+Image img_monster3W;
+Texture2D monster3WTexture;
+Texture2D arrayTexturesMonster[3][4];
 //Fundos
 Image BackGround;
 Texture2D BackGroundTexture;
 Image BackGroundGameOver;
 Texture2D BackGroundGameOverTexture;
+Image BackGroundMenu;
+Texture2D BackGroundMenuTexture;
+Image BackGroundWinGame;
+Texture2D BackGroundWinGameTexture;
+Image BackGroundScore;
+Texture2D BackGroundScoreTexture;
 Image img_wall;
 Texture2D wallTexture;
 //Confetes
@@ -263,6 +277,27 @@ void generateTextures()
     arrayTexturesMonster[1][1] = monster2WTexture;
     arrayTexturesMonster[1][2] = monster2STexture;
     arrayTexturesMonster[1][3] = monster2NTexture;
+    //monstro 3
+    //norte
+    img_monster3N = LoadImage("../assets/monster3N.png");
+    ImageResize(&img_monster3N, 1.2*SPRITE_SIZE, 1.2*SPRITE_SIZE);
+    monster3NTexture = LoadTextureFromImage(img_monster3N);
+    //leste
+    img_monster3E = LoadImage("../assets/monster3E.png");
+    ImageResize(&img_monster3E, 1.2*SPRITE_SIZE, 1.2*SPRITE_SIZE);
+    monster3ETexture = LoadTextureFromImage(img_monster3E);
+    //sul
+    img_monster3S = LoadImage("../assets/monster3S.png");
+    ImageResize(&img_monster3S, 1.2*SPRITE_SIZE, 1.2*SPRITE_SIZE);
+    monster3STexture = LoadTextureFromImage(img_monster3S);
+    //oeste
+    img_monster3W = LoadImage("../assets/monster3W.png");
+    ImageResize(&img_monster3W, 1.2*SPRITE_SIZE, 1.2*SPRITE_SIZE);
+    monster3WTexture = LoadTextureFromImage(img_monster3W);
+    arrayTexturesMonster[2][0] = monster3ETexture;
+    arrayTexturesMonster[2][1] = monster3WTexture;
+    arrayTexturesMonster[2][2] = monster3STexture;
+    arrayTexturesMonster[2][3] = monster3NTexture;
     //confetes
     img_conf1 = LoadImage("../assets/confete1.png");
     img_conf2 = LoadImage("../assets/confete2.png");
@@ -297,6 +332,15 @@ void generateTextures()
     BackGroundGameOver = LoadImage("../assets/background_gameOver.png");
     ImageResize(&BackGroundGameOver, LARGURA, ALTURA);
     BackGroundGameOverTexture = LoadTextureFromImage(BackGroundGameOver);
+    BackGroundMenu = LoadImage("../assets/background_menu.png");
+    ImageResize(&BackGroundMenu, LARGURA, ALTURA);
+    BackGroundMenuTexture = LoadTextureFromImage(BackGroundMenu);
+    BackGroundWinGame = LoadImage("../assets/background_wingame.png");
+    ImageResize(&BackGroundWinGame, LARGURA, ALTURA);
+    BackGroundWinGameTexture = LoadTextureFromImage(BackGroundWinGame);
+    BackGroundScore = LoadImage("../assets/background_score.png");
+    ImageResize(&BackGroundScore, LARGURA, ALTURA);
+    BackGroundScoreTexture = LoadTextureFromImage(BackGroundScore);
 }
 void unloadTextures()
 {
@@ -319,6 +363,8 @@ void unloadTextures()
     UnloadImage(img_conf2);
     UnloadImage(BackGround);
     UnloadImage(BackGroundGameOver);
+    UnloadImage(BackGroundMenu);
+    UnloadImage(BackGroundWinGame);
     //Fontes
     //UnloadFont(fontBm);
     //UnloadFont(fontTtf);
@@ -339,6 +385,8 @@ void unloadTextures()
     UnloadTexture(monster2WTexture);
     UnloadTexture(BackGroundTexture);
     UnloadTexture(BackGroundGameOverTexture);
+    UnloadTexture(BackGroundMenuTexture);
+    UnloadTexture(BackGroundWinGameTexture);
     UnloadTexture(wallTexture);
     UnloadTexture(confettis[0]);
     UnloadTexture(confettis[1]);
@@ -407,7 +455,7 @@ void generateMap(char path[20], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game 
                         InGame->monsters[monsters].score = rand()%(100 + 1);
                         InGame->monsters[monsters].alive = 1;
                         InGame->monsters[monsters].orientation = 1;
-                        InGame->monsters[monsters].sprite = rand()%(2);
+                        InGame->monsters[monsters].sprite = rand()%(3);
                         monsters++;
                         break;
                     case 'E':
@@ -458,6 +506,7 @@ int menu(int gameInProgress, player *gamePlayer)
     generateTextures();
     SetTargetFPS(60);
     while(draw){
+        DrawTexture(BackGroundMenuTexture, 0, 0, WHITE);
         DrawText("ZINF", 100, 20, 100, WHITE);
         for(i = 0; i < 5; i++){
             if(optionSelected == i){
@@ -467,7 +516,7 @@ int menu(int gameInProgress, player *gamePlayer)
                 DrawText(optionsText[i], 100, i*110 + 200, SPRITE_SIZE, WHITE);
             }
         }
-        DrawTexture(arrayTexturesPlayer[gamePlayer->person][0], 800, 440, WHITE);
+        DrawTexture(arrayTexturesPlayer[gamePlayer->person][0], 420, 440 - 25, WHITE);
         if((IsKeyPressed(KEY_LEFT)||IsKeyPressed(KEY_RIGHT))&&(optionSelected == 2)&&!gameInProgress){
             if(gamePlayer->person == 1){
                 gamePlayer->person = 0;
@@ -960,6 +1009,11 @@ int winGame()
     indconf = 0;
     randow = 0;
     while(draw){
+        DrawTexture(BackGroundWinGameTexture, 0, 0, WHITE);
+        DrawText("VOCE GANHOUU!!!!", 100 - 3, 20, 100, BLACK);
+        DrawText("VOCE GANHOUU!!!!", 100, 20 - 3, 100, BLACK);
+        DrawText("VOCE GANHOUU!!!!", 100, 20 + 3, 100, BLACK);
+        DrawText("VOCE GANHOUU!!!!", 100 + 3, 20, 100, BLACK);
         DrawText("VOCE GANHOUU!!!!", 100, 20, 100, WHITE);
         if(randow == 60){
             if(indconf == 0){
@@ -976,9 +1030,19 @@ int winGame()
         drawConfetti(indconf);
         for(i = 0; i < 3; i++){
             if(optionSelected == i){
+                DrawText(optionsText[i], 100 - 3, i*110 + 200, SPRITE_SIZE, BLACK);
+                DrawText(optionsText[i], 100, i*110 + 200 - 3, SPRITE_SIZE, BLACK);
+                DrawText(optionsText[i], 100, i*110 + 200 + 3, SPRITE_SIZE, BLACK);
+                DrawText(optionsText[i], 100 + 3, i*110 + 200, SPRITE_SIZE, BLACK);
+                DrawCircle(90, i*110 + 220, 5 + 3, BLACK);
                 DrawCircle(90, i*110 + 220, 5, RED);
                 DrawText(optionsText[i], 100, i*110 + 200, SPRITE_SIZE, RED);
             } else {
+                DrawText(optionsText[i], 100 - 3, i*110 + 200, SPRITE_SIZE, BLACK);
+                DrawText(optionsText[i], 100, i*110 + 200 - 3, SPRITE_SIZE, BLACK);
+                DrawText(optionsText[i], 100, i*110 + 200 + 3, SPRITE_SIZE, BLACK);
+                DrawText(optionsText[i], 100 + 3, i*110 + 200, SPRITE_SIZE, BLACK);
+                DrawCircle(90, i*110 + 220, 5 + 3, BLACK);
                 DrawText(optionsText[i], 100, i*110 + 200, SPRITE_SIZE, WHITE);
             }
         }
@@ -1015,6 +1079,7 @@ void showHighScores(score highscores[5])
     generateTextures();
     SetTargetFPS(60);
     while(draw){
+        DrawTexture(BackGroundScoreTexture, 0, 0, WHITE);
         DrawText("Lista dos highscores:", 100, 20, 80, WHITE);
         for(i = 0; i < 5; i++){
             sprintf(scoreString, "%d", highscores[i].score);
@@ -1253,8 +1318,18 @@ void newScore(score highscores[5], int playerScore)
     generateTextures();
     SetTargetFPS(60);
     while(draw&&!WindowShouldClose()){
+        DrawTexture(BackGroundScoreTexture, 0, 0, WHITE);
+        DrawText("ESCORE ATUALIZADO!", 100 - 3, 20, 80, BLACK);
+        DrawText("ESCORE ATUALIZADO!", 100, 20 - 3, 80, BLACK);
+        DrawText("ESCORE ATUALIZADO!", 100, 20 + 3, 80, BLACK);
+        DrawText("ESCORE ATUALIZADO!", 100 + 3, 20, 80, BLACK);
+        DrawText("ESCORE ATUALIZADO!", 100, 20, 80, WHITE);
         if(updated){
-            DrawText("Voce conseguiu um novo recorde!!", 100, 40, 50, GREEN);
+            DrawText("Voce conseguiu um novo recorde!!", 100 - 3, 200, 50, BLACK);
+            DrawText("Voce conseguiu um novo recorde!!", 100, 200 - 3, 50, BLACK);
+            DrawText("Voce conseguiu um novo recorde!!", 100, 200 + 3, 50, BLACK);
+            DrawText("Voce conseguiu um novo recorde!!", 100 + 3, 200, 50, BLACK);
+            DrawText("Voce conseguiu um novo recorde!!", 100, 200, 50, GREEN);
             if(randow == 60){
                 if(indconf == 0){
                     indconf = 1;
@@ -1269,8 +1344,18 @@ void newScore(score highscores[5], int playerScore)
             }
             drawConfetti(indconf);
         } else{
-            DrawText("Puxa! Voce não conseguiu nenhum novo recorde", 100, 40, 50, RED);
+            DrawText("Puxa! Voce não conseguiu nenhum novo recorde", 100 - 3, 200, 50, BLACK);
+            DrawText("Puxa! Voce não conseguiu nenhum novo recorde", 100, 200 - 3, 50, BLACK);
+            DrawText("Puxa! Voce não conseguiu nenhum novo recorde", 100, 200 + 3, 50, BLACK);
+            DrawText("Puxa! Voce não conseguiu nenhum novo recorde", 100 + 3, 200, 50, BLACK);
+            DrawText("Puxa! Voce não conseguiu nenhum novo recorde", 100, 200, 50, RED);
         }
+        DrawText("Voltar", 100 - 3, 300, 50, BLACK);
+        DrawText("Voltar", 100, 300 - 3, 50, BLACK);
+        DrawText("Voltar", 100, 300 + 3, 50, BLACK);
+        DrawText("Voltar", 100 + 3, 300, 50, BLACK);
+        DrawCircle(90, 300, 5 + 3, BLACK);
+        DrawCircle(90, 300, 5, RED);
         DrawText("Voltar", 100, 300, 50, RED);
         BeginDrawing();
         EndDrawing();
