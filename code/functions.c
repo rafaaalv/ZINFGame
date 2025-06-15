@@ -72,7 +72,15 @@ Image img_monster3E;
 Texture2D monster3ETexture;
 Image img_monster3W;
 Texture2D monster3WTexture;
-Texture2D arrayTexturesMonster[3][4];
+Image img_monster4N;
+Texture2D monster4NTexture;
+Image img_monster4S;
+Texture2D monster4STexture;
+Image img_monster4E;
+Texture2D monster4ETexture;
+Image img_monster4W;
+Texture2D monster4WTexture;
+Texture2D arrayTexturesMonster[4][4];
 //Fundos
 Image BackGround;
 Texture2D BackGroundTexture;
@@ -298,6 +306,27 @@ void generateTextures()
     arrayTexturesMonster[2][1] = monster3WTexture;
     arrayTexturesMonster[2][2] = monster3STexture;
     arrayTexturesMonster[2][3] = monster3NTexture;
+    //monstro 4
+    //norte
+    img_monster4N = LoadImage("../assets/monster4N.png");
+    ImageResize(&img_monster4N, 1.2*SPRITE_SIZE, 1.2*SPRITE_SIZE);
+    monster4NTexture = LoadTextureFromImage(img_monster4N);
+    //leste
+    img_monster4E = LoadImage("../assets/monster4E.png");
+    ImageResize(&img_monster4E, 1.2*SPRITE_SIZE, 1.2*SPRITE_SIZE);
+    monster4ETexture = LoadTextureFromImage(img_monster4E);
+    //sul
+    img_monster4S = LoadImage("../assets/monster4S.png");
+    ImageResize(&img_monster4S, 1.2*SPRITE_SIZE, 1.2*SPRITE_SIZE);
+    monster4STexture = LoadTextureFromImage(img_monster4S);
+    //oeste
+    img_monster4W = LoadImage("../assets/monster4W.png");
+    ImageResize(&img_monster4W, 1.2*SPRITE_SIZE, 1.2*SPRITE_SIZE);
+    monster4WTexture = LoadTextureFromImage(img_monster4W);
+    arrayTexturesMonster[3][0] = monster4NTexture;
+    arrayTexturesMonster[3][1] = monster4ETexture;
+    arrayTexturesMonster[3][2] = monster4STexture;
+    arrayTexturesMonster[3][3] = monster4WTexture;
     //confetes
     img_conf1 = LoadImage("../assets/confete1.png");
     img_conf2 = LoadImage("../assets/confete2.png");
@@ -359,6 +388,14 @@ void unloadTextures()
     UnloadImage(img_monster2N);
     UnloadImage(img_monster2S);
     UnloadImage(img_monster2W);
+    UnloadImage(img_monster3E);
+    UnloadImage(img_monster3N);
+    UnloadImage(img_monster3S);
+    UnloadImage(img_monster3W);
+    UnloadImage(img_monster4E);
+    UnloadImage(img_monster4N);
+    UnloadImage(img_monster4S);
+    UnloadImage(img_monster4W);
     UnloadImage(img_conf1);
     UnloadImage(img_conf2);
     UnloadImage(BackGround);
@@ -383,6 +420,14 @@ void unloadTextures()
     UnloadTexture(monster2NTexture);
     UnloadTexture(monster2STexture);
     UnloadTexture(monster2WTexture);
+    UnloadTexture(monster3ETexture);
+    UnloadTexture(monster3NTexture);
+    UnloadTexture(monster3STexture);
+    UnloadTexture(monster3WTexture);
+    UnloadTexture(monster4ETexture);
+    UnloadTexture(monster4NTexture);
+    UnloadTexture(monster4STexture);
+    UnloadTexture(monster4WTexture);
     UnloadTexture(BackGroundTexture);
     UnloadTexture(BackGroundGameOverTexture);
     UnloadTexture(BackGroundMenuTexture);
@@ -391,7 +436,7 @@ void unloadTextures()
     UnloadTexture(confettis[0]);
     UnloadTexture(confettis[1]);
 }
-void underlineText(char string[50], int x, int y, int size, Color inSideColor, Color outColor)
+void underlineText(char *string, int x, int y, int size, Color inSideColor, Color outColor)
 {
     DrawText(string, x - 3, y, size, outColor);
     DrawText(string, x, y - 3, size, outColor);
@@ -462,7 +507,7 @@ void generateMap(char path[20], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game 
                         InGame->monsters[monsters].score = rand()%(100 + 1);
                         InGame->monsters[monsters].alive = 1;
                         InGame->monsters[monsters].orientation = 1;
-                        InGame->monsters[monsters].sprite = rand()%(3);
+                        InGame->monsters[monsters].sprite = rand()%(4);
                         monsters++;
                         break;
                     case 'E':
