@@ -42,7 +42,7 @@ void changeLife(status *lifeStatus, int value);
 
 void chatchSword(game *InGame);
 
-void killBoss(game *InGame);
+void killBoss(game *InGame, int *counter);
 
 int fireBallsMove(boss *bossBill, fireBall fireBalls[5], int *counter, int mapArray[SPRITE_HEIGHT][SPRITE_WIDHT], player atualPlayer, int imune_muahaha);
 

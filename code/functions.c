@@ -748,11 +748,12 @@ void drawSword(sword *atualSword)
     }
 }
 
-void bossDificultMode(boss *bossBill)
+void bossDificultMode(boss *bossBill, int *counter)
 {
     bossBill->attack = 5;
+    *counter = 0;
 }
-void killBoss(game *InGame)
+void killBoss(game *InGame, int *counter)
 {
     int x_max, x_min, y_max, y_min, y_monster, x_monster;
     if(InGame->bossBill.lifes != 0){
@@ -790,7 +791,7 @@ void killBoss(game *InGame)
         if((y_monster <= y_max)&&(y_monster >= y_min)&&(x_monster >= x_min)&&(x_monster <= x_max)){
             InGame->bossBill.lifes--;
             if(InGame->bossBill.lifes == 7){
-                bossDificultMode(&InGame->bossBill);
+                bossDificultMode(&InGame->bossBill, counter);
             }
         }
     }
@@ -1438,7 +1439,7 @@ void StartGame()
                     if(monsterKilled > -1){
                         killMonster(&InGame, monsterKilled);
                     }
-                    killBoss(&InGame);
+                    killBoss(&InGame, &bossCounter);
                 }
             }
             for(i = 0; i < 5; i++){
