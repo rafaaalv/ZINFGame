@@ -245,19 +245,19 @@ void generateTextures()
     arrayTexturesMonster[0][3] = monster1NTexture;
     //norte
     img_monster2N = LoadImage("../assets/monster2N.png");
-    ImageResize(&img_monster2N, SPRITE_SIZE, SPRITE_SIZE);
+    ImageResize(&img_monster2N, 1.2*SPRITE_SIZE, 1.2*SPRITE_SIZE);
     monster2NTexture = LoadTextureFromImage(img_monster2N);
     //leste
     img_monster2E = LoadImage("../assets/monster2E.png");
-    ImageResize(&img_monster2E, SPRITE_SIZE, SPRITE_SIZE);
+    ImageResize(&img_monster2E, 1.2*SPRITE_SIZE, 1.2*SPRITE_SIZE);
     monster2ETexture = LoadTextureFromImage(img_monster2E);
     //sul
     img_monster2S = LoadImage("../assets/monster2S.png");
-    ImageResize(&img_monster2S, SPRITE_SIZE, SPRITE_SIZE);
+    ImageResize(&img_monster2S, 1.2*SPRITE_SIZE, 1.2*SPRITE_SIZE);
     monster2STexture = LoadTextureFromImage(img_monster2S);
     //oeste
     img_monster2W = LoadImage("../assets/monster2W.png");
-    ImageResize(&img_monster2W, SPRITE_SIZE, SPRITE_SIZE);
+    ImageResize(&img_monster2W, 1.2*SPRITE_SIZE, 1.2*SPRITE_SIZE);
     monster2WTexture = LoadTextureFromImage(img_monster2W);
     arrayTexturesMonster[1][0] = monster2ETexture;
     arrayTexturesMonster[1][1] = monster2WTexture;
