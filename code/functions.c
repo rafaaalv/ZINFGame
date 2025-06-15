@@ -391,7 +391,14 @@ void unloadTextures()
     UnloadTexture(confettis[0]);
     UnloadTexture(confettis[1]);
 }
-
+void underlineText(char string[50], int x, int y, int size, Color inSideColor, Color outColor)
+{
+    DrawText(string, x - 3, y, size, outColor);
+    DrawText(string, x, y - 3, size, outColor);
+    DrawText(string, x, y + 3, size, outColor);
+    DrawText(string, x + 3, y, size, outColor);
+    DrawText(string, x, y, size, inSideColor);
+}
 void ShowTopBar(status TopBarStatus)
 {
     char l[10], lev[12], sc[15];
@@ -567,15 +574,11 @@ int gameOver()
         DrawText("VOCE PERDEU", 100, 20, 100, WHITE);
         for(i = 0; i < 3; i++){
             if(optionSelected == i){
-                DrawText(optionsText[i], 100 - 3, i*110 + 200, SPRITE_SIZE, BLACK);
-                DrawText(optionsText[i], 100, i*110 + 200 - 3, SPRITE_SIZE, BLACK);
-                DrawText(optionsText[i], 100, i*110 + 200 + 3, SPRITE_SIZE, BLACK);
-                DrawText(optionsText[i], 100 + 3, i*110 + 200, SPRITE_SIZE, BLACK);
                 DrawCircle(90, i*110 + 220, 5 + 3, BLACK);
                 DrawCircle(90, i*110 + 220, 5, RED);
-                DrawText(optionsText[i], 100, i*110 + 200, SPRITE_SIZE, RED);
+                underlineText(optionsText[i], 100, i*110 + 200, SPRITE_SIZE, RED, BLACK);
             } else {
-                DrawText(optionsText[i], 100, i*110 + 200, SPRITE_SIZE, WHITE);
+                underlineText(optionsText[i], 100, i*110 + 200, SPRITE_SIZE, WHITE, BLACK);
             }
         }
         DrawTexture(bossTexture, 600, 330, WHITE);
@@ -1010,11 +1013,7 @@ int winGame()
     randow = 0;
     while(draw){
         DrawTexture(BackGroundWinGameTexture, 0, 0, WHITE);
-        DrawText("VOCE GANHOUU!!!!", 100 - 3, 20, 100, BLACK);
-        DrawText("VOCE GANHOUU!!!!", 100, 20 - 3, 100, BLACK);
-        DrawText("VOCE GANHOUU!!!!", 100, 20 + 3, 100, BLACK);
-        DrawText("VOCE GANHOUU!!!!", 100 + 3, 20, 100, BLACK);
-        DrawText("VOCE GANHOUU!!!!", 100, 20, 100, WHITE);
+        underlineText("VOCE GANHOUU!!!!", 100, 20, 100, WHITE, BLACK);
         if(randow == 60){
             if(indconf == 0){
                 indconf = 1;
@@ -1030,20 +1029,12 @@ int winGame()
         drawConfetti(indconf);
         for(i = 0; i < 3; i++){
             if(optionSelected == i){
-                DrawText(optionsText[i], 100 - 3, i*110 + 200, SPRITE_SIZE, BLACK);
-                DrawText(optionsText[i], 100, i*110 + 200 - 3, SPRITE_SIZE, BLACK);
-                DrawText(optionsText[i], 100, i*110 + 200 + 3, SPRITE_SIZE, BLACK);
-                DrawText(optionsText[i], 100 + 3, i*110 + 200, SPRITE_SIZE, BLACK);
                 DrawCircle(90, i*110 + 220, 5 + 3, BLACK);
                 DrawCircle(90, i*110 + 220, 5, RED);
-                DrawText(optionsText[i], 100, i*110 + 200, SPRITE_SIZE, RED);
+                underlineText(optionsText[i], 100, i*110 + 200, SPRITE_SIZE, RED, BLACK);
             } else {
-                DrawText(optionsText[i], 100 - 3, i*110 + 200, SPRITE_SIZE, BLACK);
-                DrawText(optionsText[i], 100, i*110 + 200 - 3, SPRITE_SIZE, BLACK);
-                DrawText(optionsText[i], 100, i*110 + 200 + 3, SPRITE_SIZE, BLACK);
-                DrawText(optionsText[i], 100 + 3, i*110 + 200, SPRITE_SIZE, BLACK);
                 DrawCircle(90, i*110 + 220, 5 + 3, BLACK);
-                DrawText(optionsText[i], 100, i*110 + 200, SPRITE_SIZE, WHITE);
+                underlineText(optionsText[i], 100, i*110 + 200, SPRITE_SIZE, WHITE, BLACK);
             }
         }
         if(IsKeyPressed(KEY_DOWN)){
@@ -1080,14 +1071,14 @@ void showHighScores(score highscores[5])
     SetTargetFPS(60);
     while(draw){
         DrawTexture(BackGroundScoreTexture, 0, 0, WHITE);
-        DrawText("Lista dos highscores:", 100, 20, 80, WHITE);
+        underlineText("Lista dos highscores:", 100, 20, 80, WHITE, BLACK);
         for(i = 0; i < 5; i++){
             sprintf(scoreString, "%d", highscores[i].score);
-            DrawText(highscores[i].name, 100, i*80 + 200, SPRITE_SIZE, WHITE);
-            DrawText(scoreString, 500, i*80 + 200, SPRITE_SIZE, WHITE);
+            underlineText(highscores[i].name, 100, i*80 + 200, SPRITE_SIZE, WHITE, BLACK);
+            underlineText(scoreString, 500, i*80 + 200, SPRITE_SIZE, WHITE, BLACK);
         }
         DrawCircle(90, 625, 5, RED);
-        DrawText("Voltar", 100, 600, SPRITE_SIZE, RED);
+        underlineText("Voltar", 100, 600, SPRITE_SIZE, RED, BLACK);
         BeginDrawing();
 	    EndDrawing();
 	    ClearBackground(BLACK);
@@ -1319,17 +1310,9 @@ void newScore(score highscores[5], int playerScore)
     SetTargetFPS(60);
     while(draw&&!WindowShouldClose()){
         DrawTexture(BackGroundScoreTexture, 0, 0, WHITE);
-        DrawText("ESCORE ATUALIZADO!", 100 - 3, 20, 80, BLACK);
-        DrawText("ESCORE ATUALIZADO!", 100, 20 - 3, 80, BLACK);
-        DrawText("ESCORE ATUALIZADO!", 100, 20 + 3, 80, BLACK);
-        DrawText("ESCORE ATUALIZADO!", 100 + 3, 20, 80, BLACK);
-        DrawText("ESCORE ATUALIZADO!", 100, 20, 80, WHITE);
+        underlineText("ESCORE ATUALIZADO!", 100, 20, 80, WHITE, BLACK);
         if(updated){
-            DrawText("Voce conseguiu um novo recorde!!", 100 - 3, 200, 50, BLACK);
-            DrawText("Voce conseguiu um novo recorde!!", 100, 200 - 3, 50, BLACK);
-            DrawText("Voce conseguiu um novo recorde!!", 100, 200 + 3, 50, BLACK);
-            DrawText("Voce conseguiu um novo recorde!!", 100 + 3, 200, 50, BLACK);
-            DrawText("Voce conseguiu um novo recorde!!", 100, 200, 50, GREEN);
+            underlineText("Voce conseguiu um novo recorde!!", 100, 200, 50, GREEN, BLACK);
             if(randow == 60){
                 if(indconf == 0){
                     indconf = 1;
@@ -1344,19 +1327,11 @@ void newScore(score highscores[5], int playerScore)
             }
             drawConfetti(indconf);
         } else{
-            DrawText("Puxa! Voce não conseguiu nenhum novo recorde", 100 - 3, 200, 50, BLACK);
-            DrawText("Puxa! Voce não conseguiu nenhum novo recorde", 100, 200 - 3, 50, BLACK);
-            DrawText("Puxa! Voce não conseguiu nenhum novo recorde", 100, 200 + 3, 50, BLACK);
-            DrawText("Puxa! Voce não conseguiu nenhum novo recorde", 100 + 3, 200, 50, BLACK);
-            DrawText("Puxa! Voce não conseguiu nenhum novo recorde", 100, 200, 50, RED);
+            underlineText("Puxa! Voce não conseguiu nenhum novo recorde", 100, 200, 50, RED, BLACK);
         }
-        DrawText("Voltar", 100 - 3, 300, 50, BLACK);
-        DrawText("Voltar", 100, 300 - 3, 50, BLACK);
-        DrawText("Voltar", 100, 300 + 3, 50, BLACK);
-        DrawText("Voltar", 100 + 3, 300, 50, BLACK);
         DrawCircle(90, 300, 5 + 3, BLACK);
         DrawCircle(90, 300, 5, RED);
-        DrawText("Voltar", 100, 300, 50, RED);
+        underlineText("Voltar", 100, 300, 50, RED, BLACK);
         BeginDrawing();
         EndDrawing();
         ClearBackground(BLACK);

@@ -16,6 +16,8 @@ void generateTextures();
 
 void unloadTextures();
 
+void underlineText(char string[50], int x, int y, int size, Color inSideColor, Color outColor);
+
 void ShowTopBar(status TopBarStatus);
 
 int menu(int gameInProgress, player *gamePlayer);
