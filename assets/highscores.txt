@@ -1,20 +1,10 @@
-<<<<<<< HEAD
-abc
-1801
-=======
 Rafa
-1746
->>>>>>> fc6b91f85daf4dabd4501e84a100778ca934ef0b
-teste
-1545
-teste
-591
-fhs
-590
-<<<<<<< HEAD
+2013
+Rafa
+1867
+bruno
+1629
 gabrel
-577
-=======
-Teste
-575
->>>>>>> fc6b91f85daf4dabd4501e84a100778ca934ef0b
+1608
+Flopado
+1553                                                                   

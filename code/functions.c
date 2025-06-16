@@ -323,10 +323,10 @@ void generateTextures()
     img_monster4W = LoadImage("../assets/monster4W.png");
     ImageResize(&img_monster4W, 1.2*SPRITE_SIZE, 1.2*SPRITE_SIZE);
     monster4WTexture = LoadTextureFromImage(img_monster4W);
-    arrayTexturesMonster[3][0] = monster4NTexture;
-    arrayTexturesMonster[3][1] = monster4ETexture;
+    arrayTexturesMonster[3][0] = monster4ETexture;
+    arrayTexturesMonster[3][1] = monster4WTexture;
     arrayTexturesMonster[3][2] = monster4STexture;
-    arrayTexturesMonster[3][3] = monster4WTexture;
+    arrayTexturesMonster[3][3] = monster4NTexture;
     //confetes
     img_conf1 = LoadImage("../assets/confete1.png");
     img_conf2 = LoadImage("../assets/confete2.png");
@@ -1256,17 +1256,11 @@ int callMenu(int gameInProgress, int *continueGame, score highscores[5], int Map
 }
 void readHighscores(score highscores[5])
 {
-    score generateScore;
-    int i, score;
+    int i;
     char line[20];
-    FILE *FHighscores = fopen("../assets/highscores.txt", "r");
+    FILE *FHighscores = fopen("../assets/highscores.bin", "rb");
     for(i = 0; i < 5; i++){
-        fgets(line, 20, FHighscores);
-        strcpy(generateScore.name, line);
-        fgets(line, 20, FHighscores);
-        score = atoi(line);
-        generateScore.score = score;
-        highscores[i] = generateScore;
+        fread(&highscores[i], sizeof(score), 1, FHighscores);
     }
     fclose(FHighscores);
 }
@@ -1274,7 +1268,7 @@ int updateScores(score highscores[5], score new_score)
 {
     int i, removedI, changed;
     char strScore[20];
-    FILE *FHighscores = fopen("../assets/highscores.txt", "w");
+    FILE *FHighscores = fopen("../assets/highscores.bin", "wb");
     score removed_score, med_score;
     removedI = 5;
     changed = 0;
@@ -1301,11 +1295,7 @@ int updateScores(score highscores[5], score new_score)
     }
     for(i = 0; i < 5; i++){
         highscores[i].name[strcspn(highscores[i].name, "\n")] = '\0';
-        fprintf(FHighscores, highscores[i].name);
-        fprintf(FHighscores, "\n");
-        sprintf(strScore, "%d", highscores[i].score);
-        fprintf(FHighscores, strScore);
-        fprintf(FHighscores, "\n");
+        fwrite(&highscores[i], sizeof(score), 1, FHighscores);
     }
     fclose(FHighscores);
     return changed;
