@@ -54,7 +54,7 @@ void drawBoss(boss *bossBill, int *counter);
 
 void drawSword(sword *atualSword);
 
-void drawMonsters(monster monsters[MAX_MONSTERS], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT]);
+void drawMonsters(monster monsters[MAX_MONSTERS], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int *monsterCounter);
 
 void drawLifes(life lifes[MAX_LIFES]);
 

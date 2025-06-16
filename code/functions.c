@@ -835,7 +835,7 @@ void killBoss(game *InGame, int *counter)
             // }
         if((y_monster <= y_max)&&(y_monster >= y_min)&&(x_monster >= x_min)&&(x_monster <= x_max)){
             InGame->bossBill.lifes--;
-            if(InGame->bossBill.lifes == 7){
+            if(InGame->bossBill.lifes == 10){
                 bossDificultMode(&InGame->bossBill, counter);
             }
         }
@@ -946,9 +946,10 @@ void drawBoss(boss *bossBill, int *counter)
         *counter = new_counter;
     }
 }
-void drawMonsters(monster monsters[MAX_MONSTERS], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT])
+void drawMonsters(monster monsters[MAX_MONSTERS], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int *monsterCounter)
 {
     int i, randow, move, x, y;
+    *monsterCounter += 1;
     for(i = 0; i < monsters[0].qnt; i++){
         if(monsters[i].alive){
             x = monsters[i].x;
@@ -960,8 +961,8 @@ void drawMonsters(monster monsters[MAX_MONSTERS], int MapArray[SPRITE_HEIGHT][SP
             } else{
                 move = rand()%(4) + 1;
             }
-            randow = rand()%(6 + 1);
-            if(randow == 1){
+            randow = rand()%(3 + 1);
+            if((*monsterCounter % 4 == 0 && randow == 1) || (*monsterCounter % 10 == 0 && randow == 2)){
                 monsters[i].orientation = move;
                 switch(move){
                 case 1:
@@ -1408,7 +1409,8 @@ void StartGame()
     player atualPlayer;
     sword atualSword;
     life lifes[MAX_LIFES];
-    int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], i, j, gameOption, continueGame = 1, MenuAnswer, contador = 0, x_player, y_player, orientation = 1, monsterKilled, respostaMenu, bossCounter = 0, imune_muahaha = 0;
+    int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], i, j, gameOption, continueGame = 1, MenuAnswer, contador = 0, x_player, y_player;
+    int orientation = 1, monsterKilled, respostaMenu, bossCounter = 0, imune_muahaha = 0, monsterCounter = 0;
     char atualFile[20], test[8] = {0,0,0,0,0,0,0,'\0'};
 
     InGame.atualPlayer = atualPlayer;
@@ -1517,7 +1519,7 @@ void StartGame()
             genarateWall(MapArray);
             drawBoss(&InGame.bossBill, &bossCounter);
             attackBoss(&InGame.bossBill, &bossCounter, fireBalls);
-            drawMonsters(InGame.monsters, MapArray);
+            drawMonsters(InGame.monsters, MapArray, &monsterCounter);
             drawLifes(InGame.lifes);
             drawSword(&InGame.atualSword);
             ShowTopBar(InGame.atualStatus);
