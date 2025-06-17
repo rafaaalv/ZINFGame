@@ -32,7 +32,7 @@ void drawPlayer(player atualPlayer, int counter);
 
 void genarateWall(int matriz[SPRITE_HEIGHT][SPRITE_WIDHT]);
 
-int checkPosition(int x, int y, int matriz[SPRITE_HEIGHT][SPRITE_WIDHT]);
+int checkPosition(int x, int y, int matriz[SPRITE_HEIGHT][SPRITE_WIDHT], boss *bossBill);
 
 int existMonster(game *InGame,  int matriz[SPRITE_HEIGHT][SPRITE_WIDHT]);
 
@@ -54,7 +54,7 @@ void drawBoss(boss *bossBill, int *counter);
 
 void drawSword(sword *atualSword);
 
-void drawMonsters(monster monsters[MAX_MONSTERS], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int *monsterCounter);
+void drawMonsters(monster monsters[MAX_MONSTERS], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int *monsterCounter, boss bossBill);
 
 void drawLifes(life lifes[MAX_LIFES]);
 
