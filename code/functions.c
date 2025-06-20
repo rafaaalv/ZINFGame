@@ -115,6 +115,17 @@ Texture2D fireBallTexture;
 Image img_fireBallBlue;
 Texture2D fireBallBlueTexture;
 Image iconImage;
+//sounds
+Music gameMusic;
+Music winGameMusic;
+Sound lifeSound;
+Sound menuSound;
+Sound killMonsterSound;
+Sound gameOverSound;
+Sound damageSound;
+Sound nextLevelSound;
+
+
 
 typedef struct score
 {
@@ -189,9 +200,58 @@ typedef struct game
     boss bossBill;
 } game;
 
+void loadSoundsAndMusics()
+{
+    gameMusic = LoadMusicStream("../assets/sounds/weirdmageddonTheme.mp3");
+    winGameMusic = LoadMusicStream("../assets/sounds/themeSong.mp3");
+    SetMusicVolume(gameMusic, 0.3);
+    lifeSound = LoadSound("../assets/sounds/life.mp3");
+    damageSound = LoadSound("../assets/sounds/damage.mp3");
+    menuSound = LoadSound("../assets/sounds/menu.wav");
+    killMonsterSound = LoadSound("../assets/sounds/killMonster.wav");
+    gameOverSound = LoadSound("../assets/sounds/gameOver.mp3");
+    nextLevelSound = LoadSound("../assets/sounds/levelPassed.mp3");
+}
+void unloadSoundsAndMusics()
+{
+    UnloadMusicStream(gameMusic);
+    UnloadMusicStream(winGameMusic);
+    UnloadSound(lifeSound);
+    UnloadSound(damageSound);
+    UnloadSound(menuSound);
+    UnloadSound(killMonsterSound);
+    UnloadSound(gameOverSound);
+    UnloadSound(nextLevelSound);
+}
 
+void loadTexturesMenus()
+{
+    loadSoundsAndMusics();
+    iconImage = LoadImage("../assets/icon.png");
+    BackGroundGameOver = LoadImage("../assets/background_gameOver.png");
+    ImageResize(&BackGroundGameOver, LARGURA, ALTURA);
+    BackGroundGameOverTexture = LoadTextureFromImage(BackGroundGameOver);
+    BackGroundMenu = LoadImage("../assets/background_menu.png");
+    ImageResize(&BackGroundMenu, LARGURA, ALTURA);
+    BackGroundMenuTexture = LoadTextureFromImage(BackGroundMenu);
+    BackGroundWinGame = LoadImage("../assets/background_wingame.png");
+    ImageResize(&BackGroundWinGame, LARGURA, ALTURA);
+    BackGroundWinGameTexture = LoadTextureFromImage(BackGroundWinGame);
+    BackGroundScore = LoadImage("../assets/background_score.png");
+    ImageResize(&BackGroundScore, LARGURA, ALTURA);
+    BackGroundScoreTexture = LoadTextureFromImage(BackGroundScore);
+    //confetes
+    img_conf1 = LoadImage("../assets/confete1.png");
+    img_conf2 = LoadImage("../assets/confete2.png");
+    ImageResize(&img_conf1, 3*SPRITE_SIZE, 3*SPRITE_SIZE);
+    ImageResize(&img_conf2, 3*SPRITE_SIZE, 3*SPRITE_SIZE);
+    confettis[0] = LoadTextureFromImage(img_conf1);
+    confettis[1] = LoadTextureFromImage(img_conf2);
+}
 void generateTextures()
 {
+    loadTexturesMenus();
+    loadSoundsAndMusics();
     img_sword_mabel = LoadImage("../assets/swordMabel.png");
     ImageResize(&img_sword_mabel, SPRITE_SIZE, SPRITE_SIZE);
     swordMabelTexture = LoadTextureFromImage(img_sword_mabel);
@@ -330,7 +390,7 @@ void generateTextures()
     arrayTexturesMonster[3][0] = monster4ETexture;
     arrayTexturesMonster[3][1] = monster4WTexture;
     arrayTexturesMonster[3][2] = monster4STexture;
-    arrayTexturesMonster[3][3] = monster4WTexture;
+    arrayTexturesMonster[3][3] = monster4NTexture;
     //boss
     img_boss = LoadImage("../assets/boss.png");
     ImageResize(&img_boss, 3*SPRITE_SIZE, 4*SPRITE_SIZE);// o tamanho do boss é 3x4 sprites
@@ -353,76 +413,10 @@ void generateTextures()
     BackGroundTexture = LoadTextureFromImage(BackGround);
     iconImage = LoadImage("../assets/icon.png");
 }
-void loadTexturesMenus()
-{
-    iconImage = LoadImage("../assets/icon.png");
-    BackGroundGameOver = LoadImage("../assets/background_gameOver.png");
-    ImageResize(&BackGroundGameOver, LARGURA, ALTURA);
-    BackGroundGameOverTexture = LoadTextureFromImage(BackGroundGameOver);
-    BackGroundMenu = LoadImage("../assets/background_menu.png");
-    ImageResize(&BackGroundMenu, LARGURA, ALTURA);
-    BackGroundMenuTexture = LoadTextureFromImage(BackGroundMenu);
-    BackGroundWinGame = LoadImage("../assets/background_wingame.png");
-    ImageResize(&BackGroundWinGame, LARGURA, ALTURA);
-    BackGroundWinGameTexture = LoadTextureFromImage(BackGroundWinGame);
-    BackGroundScore = LoadImage("../assets/background_score.png");
-    ImageResize(&BackGroundScore, LARGURA, ALTURA);
-    BackGroundScoreTexture = LoadTextureFromImage(BackGroundScore);
-    //texturas do player
-    //Dipper
-    img_playerNDip = LoadImage("../assets/sprite_dipper03.png");
-    ImageResize(&img_playerNDip, SPRITE_SIZE2, SPRITE_SIZE2);
-    playerNDipTexture = LoadTextureFromImage(img_playerNDip);
-    //leste
-    img_playerEDip = LoadImage("../assets/sprite_dipper00.png");
-    ImageResize(&img_playerEDip, SPRITE_SIZE2, SPRITE_SIZE2);
-    playerEDipTexture = LoadTextureFromImage(img_playerEDip);
-    //sul
-    img_playerSDip = LoadImage("../assets/sprite_dipper02.png");
-    ImageResize(&img_playerSDip, SPRITE_SIZE2, SPRITE_SIZE2);
-    playerSDipTexture = LoadTextureFromImage(img_playerSDip);
-    //oeste
-    img_playerWDip = LoadImage("../assets/sprite_dipper01.png");
-    ImageResize(&img_playerWDip, SPRITE_SIZE2, SPRITE_SIZE2);
-    playerWDipTexture = LoadTextureFromImage(img_playerWDip);
-    arrayTexturesPlayer[0][0] = playerEDipTexture;
-    arrayTexturesPlayer[0][1] = playerWDipTexture;
-    arrayTexturesPlayer[0][2] = playerNDipTexture;
-    arrayTexturesPlayer[0][3] = playerSDipTexture;
-    //Mabel
-    img_playerNMab = LoadImage("../assets/sprite_mabel03.png");
-    ImageResize(&img_playerNMab, SPRITE_SIZE2, SPRITE_SIZE2);
-    playerNMabTexture = LoadTextureFromImage(img_playerNMab);
-    //leste
-    img_playerEMab = LoadImage("../assets/sprite_mabel00.png");
-    ImageResize(&img_playerEMab, SPRITE_SIZE2, SPRITE_SIZE2);
-    playerEMabTexture = LoadTextureFromImage(img_playerEMab);
-    //sul
-    img_playerSMab = LoadImage("../assets/sprite_mabel02.png");
-    ImageResize(&img_playerSMab, SPRITE_SIZE2, SPRITE_SIZE2);
-    playerSMabTexture = LoadTextureFromImage(img_playerSMab);
-    //oeste
-    img_playerWMab = LoadImage("../assets/sprite_mabel01.png");
-    ImageResize(&img_playerWMab, SPRITE_SIZE2, SPRITE_SIZE2);
-    playerWMabTexture = LoadTextureFromImage(img_playerWMab);
-    arrayTexturesPlayer[1][0] = playerEMabTexture;
-    arrayTexturesPlayer[1][1] = playerWMabTexture;
-    arrayTexturesPlayer[1][2] = playerNMabTexture;
-    arrayTexturesPlayer[1][3] = playerSMabTexture;
-    //boss
-    img_boss = LoadImage("../assets/boss.png");
-    ImageResize(&img_boss, 4.5*SPRITE_SIZE, 6*SPRITE_SIZE);
-    bossTexture = LoadTextureFromImage(img_boss);
-    //confetes
-    img_conf1 = LoadImage("../assets/confete1.png");
-    img_conf2 = LoadImage("../assets/confete2.png");
-    ImageResize(&img_conf1, 3*SPRITE_SIZE, 3*SPRITE_SIZE);
-    ImageResize(&img_conf2, 3*SPRITE_SIZE, 3*SPRITE_SIZE);
-    confettis[0] = LoadTextureFromImage(img_conf1);
-    confettis[1] = LoadTextureFromImage(img_conf2);
-}
 void unloadTexturesMenus()
 {
+    unloadTexturesMenus();
+    unloadSoundsAndMusics();
     UnloadImage(iconImage);
     UnloadImage(BackGroundGameOver);
     UnloadImage(BackGroundMenu);
@@ -454,6 +448,7 @@ void unloadTexturesMenus()
 }
 void unloadTextures()
 {
+    unloadSoundsAndMusics();
     //Imagens
     UnloadImage(img_sword_mabel);
     UnloadImage(img_sword_dipper);
@@ -635,11 +630,6 @@ int menu(int gameInProgress, player *gamePlayer)
         optionsText[3] = "Carregar jogo";
         optionsText[4] = "Sair";
     }
-
-    InitWindow(LARGURA, ALTURA, "Menu");
-    loadTexturesMenus();
-    SetWindowIcon(iconImage);
-    SetTargetFPS(60);
     while(draw){
         DrawTexture(BackGroundMenuTexture, 0, 0, WHITE);
         DrawText("ZINF", 100, 20, 100, WHITE);
@@ -653,6 +643,7 @@ int menu(int gameInProgress, player *gamePlayer)
         }
         DrawTexture(arrayTexturesPlayer[gamePlayer->person][0], 420, 440 - 25, WHITE);
         if((IsKeyPressed(KEY_LEFT)||IsKeyPressed(KEY_RIGHT))&&(optionSelected == 2)&&!gameInProgress){
+            PlaySound(menuSound);
             if(gamePlayer->person == 1){
                 gamePlayer->person = 0;
             } else {
@@ -660,6 +651,7 @@ int menu(int gameInProgress, player *gamePlayer)
             }
         }
         if(IsKeyPressed(KEY_DOWN)){
+            PlaySound(menuSound);
             if(optionSelected == 4){
                 optionSelected = 0;
             } else {
@@ -667,6 +659,7 @@ int menu(int gameInProgress, player *gamePlayer)
             }
         }
         if(IsKeyPressed(KEY_UP)){
+            PlaySound(menuSound);
             if(optionSelected == 0){
                 optionSelected = 4;
             } else {
@@ -677,9 +670,8 @@ int menu(int gameInProgress, player *gamePlayer)
 	    EndDrawing();
 	    ClearBackground(BLACK);
 	    if(IsKeyPressed(KEY_ENTER)&&optionSelected!=2){
+            PlaySound(menuSound);
             draw = 0;
-            CloseWindow();
-            unloadTexturesMenus();
 	    }
     }
     return optionSelected;
@@ -694,10 +686,6 @@ int gameOver()
     optionsText[1] = "Carregar jogo";
     optionsText[2] = "Voltar ao menu";
     optionsText[3] = "Sair";
-    InitWindow(LARGURA, ALTURA, "Game Over");
-    loadTexturesMenus();
-    SetWindowIcon(iconImage);
-    SetTargetFPS(60);
     while(draw){
         DrawTexture(BackGroundGameOverTexture, 0, 0, WHITE);
         DrawText("VOCE PERDEU", 100, 20, 100, WHITE);
@@ -712,6 +700,7 @@ int gameOver()
         }
         DrawTexture(bossTexture, 600, 330, WHITE);
         if(IsKeyPressed(KEY_DOWN)){
+            PlaySound(menuSound);
             if(optionSelected == 3){
                 optionSelected = 0;
             } else {
@@ -719,6 +708,7 @@ int gameOver()
             }
         }
         if(IsKeyPressed(KEY_UP)){
+            PlaySound(menuSound);
             if(optionSelected == 0){
                 optionSelected = 3;
             } else {
@@ -729,12 +719,10 @@ int gameOver()
 	    EndDrawing();
 	    ClearBackground(BLACK);
 	    if(IsKeyPressed(KEY_ENTER)){
+            PlaySound(menuSound);
             draw = 0;
-            CloseWindow();
-            unloadTexturesMenus();
 	    }
     }
-    ImageResize(&img_boss, 3*SPRITE_SIZE, 4*SPRITE_SIZE);// o tamanho do boss é 3x4 sprites
     return optionSelected;
 }
 void restartStatus(int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame, fireBall fireBalls[5], int *imune_muahaha)
@@ -750,13 +738,14 @@ void restartStatus(int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame, fire
 void killMonster(game *InGame,  int monster)
 {
     int monsterScore;
+    PlaySound(killMonsterSound);
     monsterScore = InGame->monsters[monster].score;
     InGame->atualStatus.score += monsterScore;
     InGame->monsters[monster].alive = 0;
 }
 void drawPlayer(player atualPlayer, int counter)
 {
-    if((!atualPlayer.imune)||(counter%4 == 0)){ //exibe a sprite normal se não estiver imune, se estiver, exibe apenas a cada 4 frames, para dar a impressão de piscando!
+    if((!atualPlayer.imune)||(counter%8 == 0)){ //exibe a sprite normal se não estiver imune, se estiver, exibe apenas a cada 8 frames, para dar a impressão de piscando!
         DrawTexture(arrayTexturesPlayer[atualPlayer.person][atualPlayer.orientation - 1], atualPlayer.x, atualPlayer.y, WHITE);
     }
 }
@@ -784,6 +773,7 @@ int allMonstersKilled(monster monsters[MAX_MONSTERS])
 int nextLevel(status *atualStatus, char file[20], int *muahaha, char test[8])
 {
     int i;
+    PlaySound(nextLevelSound);
     atualStatus->level += 1;
     if(atualStatus->level <= 9){
         sprintf(file, "../assets/mapa0%d.txt", atualStatus->level);
@@ -866,6 +856,9 @@ int existMonster(game *InGame, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT])
 }
 void changeLife(status *lifeStatus, int value)
 {
+    if(value < 0){
+        PlaySound(damageSound);
+    }
     lifeStatus->lifes += value;
 }
 int attackMonster(game *InGame)
@@ -881,6 +874,7 @@ int attackMonster(game *InGame)
 }
 void chatchSword(game *InGame)
 {
+    PlaySound(lifeSound);
     InGame->atualStatus.sword = 1;
     InGame->atualSword.alive = 0;
 }
@@ -942,7 +936,7 @@ int fireBallsMove(boss *bossBill, fireBall fireBalls[5], int *counter, int mapAr
                     DrawTexture(fireBallBlueTexture, fireBalls[i].x, fireBalls[i].y +20, WHITE);
             }
         }
-        if(*counter == 8 - bossBill->attack){ //8 - 3(bolas de fogo pro vez) para quando ele esta no modo normal e 8 - 5 quando esta no modo difcil diminuindo o tempo do contador para o boss fazer a acao ele fica mais rapido e as bolas de fogo sao geradas mais rapidamente
+        if(*counter == 12 - bossBill->attack){ //12 - 3(bolas de fogo pro vez) para quando ele esta no modo normal e 12 - 5 quando esta no modo difcil diminuindo o tempo do contador para o boss fazer a acao ele fica mais rapido e as bolas de fogo sao geradas mais rapidamente
             new_counter = 0;
             for(i = 0; i < bossBill->attack; i++){
                 if(fireBalls[i].exist == 1){
@@ -982,7 +976,7 @@ void attackBoss(boss *bossBill, int *counter, fireBall fireBalls[5])
 {
     int new_counter, i;
     if(bossBill->lifes != 0){
-        if(*counter == 8 - bossBill->attack){ //8 - 3(bolas de fogo pro vez) para quando ele esta no modo normal e 8 - 5 quando esta no modo difcil diminuindo o tempo do contador para o boss fazer a acao ele fica mais rapido e as bolas de fogo sao geradas mais rapidamente
+        if(*counter == 12 - bossBill->attack){ //12 - 3(bolas de fogo pro vez) para quando ele esta no modo normal e 12 - 5 quando esta no modo difcil diminuindo o tempo do contador para o boss fazer a acao ele fica mais rapido e as bolas de fogo sao geradas mais rapidamente
             for(i = 0; i < bossBill->attack; i++){
                 if(fireBalls[i].exist != 1){
                     fireBalls[i].exist = 1;
@@ -1012,7 +1006,7 @@ void drawBoss(boss *bossBill, int *counter)
         }
 
         //movimentacao
-        if(*counter == 8 - bossBill->attack){//8 - 3(bolas de fogo pro vez) para quando ele esta no modo normal e 8 - 5 quando esta no modo difcil diminuindo o tempo do contador para o boss fazer a acao ele fica mais rapido e as bolas de fogo sao geradas mais rapidamente
+        if(*counter == 12 - bossBill->attack){//12 - 3(bolas de fogo pro vez) para quando ele esta no modo normal e 12 - 5 quando esta no modo difcil diminuindo o tempo do contador para o boss fazer a acao ele fica mais rapido e as bolas de fogo sao geradas mais rapidamente
             if(bossBill->orientation){
                 bossBill->y += 50;
             } else {
@@ -1046,7 +1040,7 @@ void drawMonsters(monster monsters[MAX_MONSTERS], int MapArray[SPRITE_HEIGHT][SP
                 move = rand()%(4) + 1;
             }
             randow = rand()%(3 + 1);
-            if((*monsterCounter % 4 == 0 && randow == 1) || (*monsterCounter % 10 == 0 && randow == 2)){
+            if((*monsterCounter % 8 == 0 && randow == 1) || (*monsterCounter % 14 == 0 && randow == 2)){
                 monsters[i].orientation = move;
                 switch(move){
                 case 1:
@@ -1137,13 +1131,11 @@ int winGame()
     optionsText[0] = "Jogar Novamente";
     optionsText[1] = "Voltar ao menu";
     optionsText[2] = "Sair";
-    InitWindow(LARGURA, ALTURA, "PARABEEENS");
-    SetWindowIcon(iconImage);
-    loadTexturesMenus();
-    SetTargetFPS(60);
     indconf = 0;
     randow = 0;
+    PlayMusicStream(winGameMusic);
     while(draw){
+        UpdateMusicStream(winGameMusic);
         DrawTexture(BackGroundWinGameTexture, 0, 0, WHITE);
         underlineText("VOCE GANHOUU!!!!", 100, 20, 100, WHITE, BLACK);
         if(randow == 60){
@@ -1170,6 +1162,7 @@ int winGame()
             }
         }
         if(IsKeyPressed(KEY_DOWN)){
+            PlaySound(menuSound);
             if(optionSelected == 2){
                 optionSelected = 0;
             } else {
@@ -1177,6 +1170,7 @@ int winGame()
             }
         }
         if(IsKeyPressed(KEY_UP)){
+            PlaySound(menuSound);
             if(optionSelected == 0){
                 optionSelected = 2;
             } else {
@@ -1187,9 +1181,8 @@ int winGame()
 	    EndDrawing();
 	    ClearBackground(BLACK);
 	    if(IsKeyPressed(KEY_ENTER)||IsKeyPressed(KEY_LEFT)){
+            PlaySound(menuSound);
             draw = 0;
-            CloseWindow();
-            unloadTexturesMenus();
 	    }
     }
     return optionSelected;
@@ -1199,10 +1192,6 @@ void showHighScores(score highscores[5])
     char scoreString[20];
     int i, draw;
     draw = 1;
-    InitWindow(LARGURA, ALTURA, "HIGHSCORES");
-    loadTexturesMenus();
-    SetWindowIcon(iconImage);
-    SetTargetFPS(60);
     while(draw){
         DrawTexture(BackGroundScoreTexture, 0, 0, WHITE);
         underlineText("Lista dos highscores:", 100, 20, 80, WHITE, BLACK);
@@ -1218,8 +1207,6 @@ void showHighScores(score highscores[5])
 	    ClearBackground(BLACK);
 	    if(IsKeyPressed(KEY_ENTER)){
             draw = 0;
-            CloseWindow();
-            unloadTexturesMenus();
 	    }
     }
 }
@@ -1256,10 +1243,10 @@ void saves(int option, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame)/
     }
     fclose(file_saves);
     strcpy(optionsText[3], "Voltar");
-    InitWindow(LARGURA, ALTURA, text);
-    loadTexturesMenus();
-    SetWindowIcon(iconImage);
-    SetTargetFPS(60);
+    //InitWindow(LARGURA, ALTURA, text);
+    //loadTexturesMenus();
+    //SetWindowIcon(iconImage);
+    //SetTargetFPS(60);
     while(draw){
         DrawText(text, 100, 20, 80, WHITE);
         for(i = 0; i < 4; i++){
@@ -1313,8 +1300,8 @@ void saves(int option, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame)/
                 }
             }
             draw = 0;
-            CloseWindow();
-            unloadTexturesMenus();
+            //CloseWindow();
+            //unloadTexturesMenus();
 	    }
     }
 }
@@ -1520,15 +1507,18 @@ void StartGame()
     InGame.atualPlayer.person = 0;
     readHighscores(Highscores);
     restartStatus(MapArray, &InGame, fireBalls, &imune_muahaha);
-    callMenu(0, &continueGame, Highscores, MapArray, &InGame);
-    while(continueGame){
-        readHighscores(Highscores);
+    readHighscores(Highscores);
         InitWindow(LARGURA, ALTURA, "ZINF"); //Inicializa janela, com certo tamanho e titulo
+        InitAudioDevice();
         generateTextures();
+        PlayMusicStream(gameMusic);
         SetWindowIcon(iconImage);
-        SetTargetFPS(20);// Ajusta a janela para 20 frames por segundo
+        SetTargetFPS(60);// Ajusta a janela para 60 frames por segundo
+        callMenu(0, &continueGame, Highscores, MapArray, &InGame);
+    while(continueGame){
         while (!WindowShouldClose())
         {
+            UpdateMusicStream(gameMusic);
             DrawTexture(BackGroundTexture, 0, 0, WHITE);
             x_player = InGame.atualPlayer.x;
             y_player = InGame.atualPlayer.y;
@@ -1556,9 +1546,11 @@ void StartGame()
                     y_player += SPRITE_SIZE;
                 }
             }
-            InGame.atualPlayer.x = x_player;
-            InGame.atualPlayer.y = y_player;
-            InGame.atualPlayer.orientation = orientation;
+            if(monsterCounter%3 == 0){
+                InGame.atualPlayer.x = x_player;
+                InGame.atualPlayer.y = y_player;
+                InGame.atualPlayer.orientation = orientation;
+            }
             if(IsKeyPressed(KEY_TAB)){
                 gameOption = 3;
                 break;
@@ -1578,6 +1570,7 @@ void StartGame()
             for(i = 0; i < 5; i++){
                 if((InGame.lifes[i].alive)&&(InGame.lifes[i].x == InGame.atualPlayer.x)&&(InGame.lifes[i].y== InGame.atualPlayer.y)){
                     InGame.lifes[i].alive = 0;
+                    PlaySound(lifeSound);
                     changeLife(&InGame.atualStatus, 1);
                 }
             }
@@ -1601,7 +1594,7 @@ void StartGame()
                 }
             }
             else contador++;
-            if(contador > 39)
+            if(contador > 119)
                 InGame.atualPlayer.imune = 0;
             if(fireBallsMove(&InGame.bossBill, fireBalls, &bossCounter, MapArray, InGame.atualPlayer, imune_muahaha)){
                 InGame.atualPlayer.imune = 1;
@@ -1622,10 +1615,7 @@ void StartGame()
             BeginDrawing(); //Inicia o ambiente de desenho na tela
             EndDrawing(); //Finaliza o ambiente de desenho na tela
             ClearBackground(WHITE);
-            //ImageClearBackground(&BackGround, WHITE); //n�o consegui utilizar essa fun��o
         }
-        CloseWindow();
-        unloadTextures();
         switch(gameOption){// 1 -> game over, 2 -> ganhou, 3 -> menu de pause
             case 1:
                 MenuAnswer = gameOver();
@@ -1663,4 +1653,5 @@ void StartGame()
         }
     }
     CloseWindow(); // Fecha a janela
+    unloadTextures();
 }
