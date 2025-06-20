@@ -22,8 +22,11 @@
 
 
 
-Image img_sword;
-Texture2D swordTexture;
+Image img_sword_mabel;
+Texture2D swordMabelTexture;
+Image img_sword_dipper;
+Texture2D swordDipperTexture;
+Texture swords[2];
 Image img_life;
 Texture2D lifeTexture;
 //Texturas do player com cada uma das orienta��es
@@ -111,11 +114,7 @@ Texture2D fireBallTexture;
 //Textura da bola de fogo azul
 Image img_fireBallBlue;
 Texture2D fireBallBlueTexture;
-//Fontes
-//Font fontBm;
-//Font fontTtf;
-//Personagem escolhido
-// player.person 0 para dipper, 1 para mabel
+Image iconImage;
 
 typedef struct score
 {
@@ -177,7 +176,7 @@ typedef struct player
     int x;
     int y;
     int orientation;
-    int person;
+    int person; // player.person 0 para dipper, 1 para mabel
     int imune;
 } player;
 typedef struct game
@@ -193,9 +192,14 @@ typedef struct game
 
 void generateTextures()
 {
-    img_sword = LoadImage("../assets/sword.png");
-    ImageResize(&img_sword, SPRITE_SIZE, SPRITE_SIZE);
-    swordTexture = LoadTextureFromImage(img_sword);
+    img_sword_mabel = LoadImage("../assets/swordMabel.png");
+    ImageResize(&img_sword_mabel, SPRITE_SIZE, SPRITE_SIZE);
+    swordMabelTexture = LoadTextureFromImage(img_sword_mabel);
+    img_sword_dipper = LoadImage("../assets/swordDipper1.png");
+    ImageResize(&img_sword_dipper, SPRITE_SIZE, SPRITE_SIZE);
+    swordDipperTexture = LoadTextureFromImage(img_sword_dipper);
+    swords[0] = swordDipperTexture;
+    swords[1] = swordMabelTexture;
     img_life = LoadImage("../assets/life.png");
     ImageResize(&img_life, SPRITE_SIZE, SPRITE_SIZE);
     lifeTexture = LoadTextureFromImage(img_life);
@@ -326,14 +330,7 @@ void generateTextures()
     arrayTexturesMonster[3][0] = monster4ETexture;
     arrayTexturesMonster[3][1] = monster4WTexture;
     arrayTexturesMonster[3][2] = monster4STexture;
-    arrayTexturesMonster[3][3] = monster4NTexture;
-    //confetes
-    img_conf1 = LoadImage("../assets/confete1.png");
-    img_conf2 = LoadImage("../assets/confete2.png");
-    ImageResize(&img_conf1, 3*SPRITE_SIZE, 3*SPRITE_SIZE);
-    ImageResize(&img_conf2, 3*SPRITE_SIZE, 3*SPRITE_SIZE);
-    confettis[0] = LoadTextureFromImage(img_conf1);
-    confettis[1] = LoadTextureFromImage(img_conf2);
+    arrayTexturesMonster[3][3] = monster4WTexture;
     //boss
     img_boss = LoadImage("../assets/boss.png");
     ImageResize(&img_boss, 3*SPRITE_SIZE, 4*SPRITE_SIZE);// o tamanho do boss é 3x4 sprites
@@ -350,14 +347,15 @@ void generateTextures()
     img_fireBallBlue = LoadImage("../assets/fireBallAzul.png");
     ImageResize(&img_fireBallBlue, 2*SPRITE_SIZE, 2*SPRITE_SIZE); // o tamanho do boss é 2x3 sprites
     fireBallBlueTexture = LoadTextureFromImage(img_fireBallBlue);
-    //fontes
-    //fontBm = LoadFont("resources/pixantiqua.fnt");
-    //fontTtf = LoadFontEx("resources/pixantiqua.ttf", 32, 0, 2SPRITE_SIZE);
-    //SetTextLineSpacing(16);
     //Fundos
     BackGround = LoadImage("../assets/background.png");
     ImageResize(&BackGround, LARGURA, ALTURA);
     BackGroundTexture = LoadTextureFromImage(BackGround);
+    iconImage = LoadImage("../assets/icon.png");
+}
+void loadTexturesMenus()
+{
+    iconImage = LoadImage("../assets/icon.png");
     BackGroundGameOver = LoadImage("../assets/background_gameOver.png");
     ImageResize(&BackGroundGameOver, LARGURA, ALTURA);
     BackGroundGameOverTexture = LoadTextureFromImage(BackGroundGameOver);
@@ -370,15 +368,96 @@ void generateTextures()
     BackGroundScore = LoadImage("../assets/background_score.png");
     ImageResize(&BackGroundScore, LARGURA, ALTURA);
     BackGroundScoreTexture = LoadTextureFromImage(BackGroundScore);
+    //texturas do player
+    //Dipper
+    img_playerNDip = LoadImage("../assets/sprite_dipper03.png");
+    ImageResize(&img_playerNDip, SPRITE_SIZE2, SPRITE_SIZE2);
+    playerNDipTexture = LoadTextureFromImage(img_playerNDip);
+    //leste
+    img_playerEDip = LoadImage("../assets/sprite_dipper00.png");
+    ImageResize(&img_playerEDip, SPRITE_SIZE2, SPRITE_SIZE2);
+    playerEDipTexture = LoadTextureFromImage(img_playerEDip);
+    //sul
+    img_playerSDip = LoadImage("../assets/sprite_dipper02.png");
+    ImageResize(&img_playerSDip, SPRITE_SIZE2, SPRITE_SIZE2);
+    playerSDipTexture = LoadTextureFromImage(img_playerSDip);
+    //oeste
+    img_playerWDip = LoadImage("../assets/sprite_dipper01.png");
+    ImageResize(&img_playerWDip, SPRITE_SIZE2, SPRITE_SIZE2);
+    playerWDipTexture = LoadTextureFromImage(img_playerWDip);
+    arrayTexturesPlayer[0][0] = playerEDipTexture;
+    arrayTexturesPlayer[0][1] = playerWDipTexture;
+    arrayTexturesPlayer[0][2] = playerNDipTexture;
+    arrayTexturesPlayer[0][3] = playerSDipTexture;
+    //Mabel
+    img_playerNMab = LoadImage("../assets/sprite_mabel03.png");
+    ImageResize(&img_playerNMab, SPRITE_SIZE2, SPRITE_SIZE2);
+    playerNMabTexture = LoadTextureFromImage(img_playerNMab);
+    //leste
+    img_playerEMab = LoadImage("../assets/sprite_mabel00.png");
+    ImageResize(&img_playerEMab, SPRITE_SIZE2, SPRITE_SIZE2);
+    playerEMabTexture = LoadTextureFromImage(img_playerEMab);
+    //sul
+    img_playerSMab = LoadImage("../assets/sprite_mabel02.png");
+    ImageResize(&img_playerSMab, SPRITE_SIZE2, SPRITE_SIZE2);
+    playerSMabTexture = LoadTextureFromImage(img_playerSMab);
+    //oeste
+    img_playerWMab = LoadImage("../assets/sprite_mabel01.png");
+    ImageResize(&img_playerWMab, SPRITE_SIZE2, SPRITE_SIZE2);
+    playerWMabTexture = LoadTextureFromImage(img_playerWMab);
+    arrayTexturesPlayer[1][0] = playerEMabTexture;
+    arrayTexturesPlayer[1][1] = playerWMabTexture;
+    arrayTexturesPlayer[1][2] = playerNMabTexture;
+    arrayTexturesPlayer[1][3] = playerSMabTexture;
+    //boss
+    img_boss = LoadImage("../assets/boss.png");
+    ImageResize(&img_boss, 4.5*SPRITE_SIZE, 6*SPRITE_SIZE);
+    bossTexture = LoadTextureFromImage(img_boss);
+    //confetes
+    img_conf1 = LoadImage("../assets/confete1.png");
+    img_conf2 = LoadImage("../assets/confete2.png");
+    ImageResize(&img_conf1, 3*SPRITE_SIZE, 3*SPRITE_SIZE);
+    ImageResize(&img_conf2, 3*SPRITE_SIZE, 3*SPRITE_SIZE);
+    confettis[0] = LoadTextureFromImage(img_conf1);
+    confettis[1] = LoadTextureFromImage(img_conf2);
+}
+void unloadTexturesMenus()
+{
+    UnloadImage(iconImage);
+    UnloadImage(BackGroundGameOver);
+    UnloadImage(BackGroundMenu);
+    UnloadImage(BackGroundWinGame);
+    UnloadImage(img_playerEDip);
+    UnloadImage(img_playerWDip);
+    UnloadImage(img_playerNDip);
+    UnloadImage(img_playerSDip);
+    UnloadImage(img_playerEMab);
+    UnloadImage(img_playerWMab);
+    UnloadImage(img_playerNMab);
+    UnloadImage(img_playerSMab);
+    UnloadImage(img_boss);
+    UnloadImage(img_conf1);
+    UnloadImage(img_conf2);
+    //
+    UnloadTexture(BackGroundGameOverTexture);
+    UnloadTexture(BackGroundMenuTexture);
+    UnloadTexture(BackGroundWinGameTexture);
+    UnloadTexture(playerEDipTexture);
+    UnloadTexture(playerWDipTexture);
+    UnloadTexture(playerNDipTexture);
+    UnloadTexture(playerSDipTexture);
+    UnloadTexture(playerEMabTexture);
+    UnloadTexture(playerWMabTexture);
+    UnloadTexture(playerNMabTexture);
+    UnloadTexture(playerSMabTexture);
+    UnloadTexture(bossTexture);
 }
 void unloadTextures()
 {
-    UnloadImage(img_sword);
+    //Imagens
+    UnloadImage(img_sword_mabel);
+    UnloadImage(img_sword_dipper);
     UnloadImage(img_life);
-    /*UnloadImage(img_playerE);
-    UnloadImage(img_playerN);
-    UnloadImage(img_playerS);
-    UnloadImage(img_playerW);*/
     UnloadImage(img_wall);
     UnloadImage(img_monster1E);
     UnloadImage(img_monster1N);
@@ -396,22 +475,30 @@ void unloadTextures()
     UnloadImage(img_monster4N);
     UnloadImage(img_monster4S);
     UnloadImage(img_monster4W);
-    UnloadImage(img_conf1);
-    UnloadImage(img_conf2);
     UnloadImage(BackGround);
-    UnloadImage(BackGroundGameOver);
-    UnloadImage(BackGroundMenu);
-    UnloadImage(BackGroundWinGame);
-    //Fontes
-    //UnloadFont(fontBm);
-    //UnloadFont(fontTtf);
+    UnloadImage(iconImage);
+    UnloadImage(img_playerEDip);
+    UnloadImage(img_playerWDip);
+    UnloadImage(img_playerNDip);
+    UnloadImage(img_playerSDip);
+    UnloadImage(img_playerEMab);
+    UnloadImage(img_playerWMab);
+    UnloadImage(img_playerNMab);
+    UnloadImage(img_playerSMab);
+    UnloadImage(img_boss);
     //Texturas
-    UnloadTexture(swordTexture);
+    UnloadTexture(swordMabelTexture);
+    UnloadTexture(swordDipperTexture);
     UnloadTexture(lifeTexture);
-    /*UnloadTexture(playerETexture);
-    UnloadTexture(playerNTexture);
-    UnloadTexture(playerSTexture);
-    UnloadTexture(playerWTexture);*/
+    UnloadTexture(playerEDipTexture);
+    UnloadTexture(playerWDipTexture);
+    UnloadTexture(playerNDipTexture);
+    UnloadTexture(playerSDipTexture);
+    UnloadTexture(playerEMabTexture);
+    UnloadTexture(playerWMabTexture);
+    UnloadTexture(playerNMabTexture);
+    UnloadTexture(playerSMabTexture);
+    UnloadTexture(bossTexture);
     UnloadTexture(monster1ETexture);
     UnloadTexture(monster1NTexture);
     UnloadTexture(monster1STexture);
@@ -429,12 +516,7 @@ void unloadTextures()
     UnloadTexture(monster4STexture);
     UnloadTexture(monster4WTexture);
     UnloadTexture(BackGroundTexture);
-    UnloadTexture(BackGroundGameOverTexture);
-    UnloadTexture(BackGroundMenuTexture);
-    UnloadTexture(BackGroundWinGameTexture);
     UnloadTexture(wallTexture);
-    UnloadTexture(confettis[0]);
-    UnloadTexture(confettis[1]);
 }
 void underlineText(char *string, int x, int y, int size, Color inSideColor, Color outColor)
 {
@@ -444,18 +526,18 @@ void underlineText(char *string, int x, int y, int size, Color inSideColor, Colo
     DrawText(string, x + 3, y, size, outColor);
     DrawText(string, x, y, size, inSideColor);
 }
-void ShowTopBar(status TopBarStatus)
+void ShowTopBar(game gameTopBarStatus)
 {
     char l[10], lev[12], sc[15];
-    sprintf(l, "Vidas: %d", TopBarStatus.lifes);
-    sprintf(lev, "Nivel: %d", TopBarStatus.level);
-    sprintf(sc, "Escores: %d", TopBarStatus.score);
+    sprintf(l, "Vidas: %d", gameTopBarStatus.atualStatus.lifes);
+    sprintf(lev, "Nivel: %d", gameTopBarStatus.atualStatus.level);
+    sprintf(sc, "Escores: %d", gameTopBarStatus.atualStatus.score);
     DrawRectangle(0, 0, 1200, 60, BLACK);
     DrawText(l, 40, 5, SPRITE_SIZE, WHITE);
     DrawText(lev, 280, 5, SPRITE_SIZE, WHITE);
     DrawText(sc, 480, 5, SPRITE_SIZE, WHITE);
-    if(TopBarStatus.sword){
-        DrawTexture(swordTexture, 1100 , 5, WHITE);
+    if(gameTopBarStatus.atualStatus.sword){
+        DrawTexture(swords[gameTopBarStatus.atualPlayer.person], 1100 , 5, WHITE);
     }
 }
 void generateArrayMap(char path[20], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT])
@@ -555,7 +637,8 @@ int menu(int gameInProgress, player *gamePlayer)
     }
 
     InitWindow(LARGURA, ALTURA, "Menu");
-    generateTextures();
+    loadTexturesMenus();
+    SetWindowIcon(iconImage);
     SetTargetFPS(60);
     while(draw){
         DrawTexture(BackGroundMenuTexture, 0, 0, WHITE);
@@ -596,6 +679,7 @@ int menu(int gameInProgress, player *gamePlayer)
 	    if(IsKeyPressed(KEY_ENTER)&&optionSelected!=2){
             draw = 0;
             CloseWindow();
+            unloadTexturesMenus();
 	    }
     }
     return optionSelected;
@@ -611,9 +695,8 @@ int gameOver()
     optionsText[2] = "Voltar ao menu";
     optionsText[3] = "Sair";
     InitWindow(LARGURA, ALTURA, "Game Over");
-    generateTextures();
-    ImageResize(&img_boss, 4.5*SPRITE_SIZE, 6*SPRITE_SIZE);// o tamanho do boss é 3x4 sprites
-    bossTexture = LoadTextureFromImage(img_boss);
+    loadTexturesMenus();
+    SetWindowIcon(iconImage);
     SetTargetFPS(60);
     while(draw){
         DrawTexture(BackGroundGameOverTexture, 0, 0, WHITE);
@@ -648,6 +731,7 @@ int gameOver()
 	    if(IsKeyPressed(KEY_ENTER)){
             draw = 0;
             CloseWindow();
+            unloadTexturesMenus();
 	    }
     }
     ImageResize(&img_boss, 3*SPRITE_SIZE, 4*SPRITE_SIZE);// o tamanho do boss é 3x4 sprites
@@ -800,10 +884,10 @@ void chatchSword(game *InGame)
     InGame->atualStatus.sword = 1;
     InGame->atualSword.alive = 0;
 }
-void drawSword(sword *atualSword)
+void drawSword(game *InGame)
 {
-    if(atualSword->alive){
-        DrawTexture(swordTexture, atualSword->x, atualSword->y, WHITE);
+    if(InGame->atualSword.alive){
+        DrawTexture(swords[InGame->atualPlayer.person], InGame->atualSword.x, InGame->atualSword.y, WHITE);
     }
 }
 
@@ -1054,7 +1138,8 @@ int winGame()
     optionsText[1] = "Voltar ao menu";
     optionsText[2] = "Sair";
     InitWindow(LARGURA, ALTURA, "PARABEEENS");
-    generateTextures();
+    SetWindowIcon(iconImage);
+    loadTexturesMenus();
     SetTargetFPS(60);
     indconf = 0;
     randow = 0;
@@ -1104,6 +1189,7 @@ int winGame()
 	    if(IsKeyPressed(KEY_ENTER)||IsKeyPressed(KEY_LEFT)){
             draw = 0;
             CloseWindow();
+            unloadTexturesMenus();
 	    }
     }
     return optionSelected;
@@ -1114,7 +1200,8 @@ void showHighScores(score highscores[5])
     int i, draw;
     draw = 1;
     InitWindow(LARGURA, ALTURA, "HIGHSCORES");
-    generateTextures();
+    loadTexturesMenus();
+    SetWindowIcon(iconImage);
     SetTargetFPS(60);
     while(draw){
         DrawTexture(BackGroundScoreTexture, 0, 0, WHITE);
@@ -1132,6 +1219,7 @@ void showHighScores(score highscores[5])
 	    if(IsKeyPressed(KEY_ENTER)){
             draw = 0;
             CloseWindow();
+            unloadTexturesMenus();
 	    }
     }
 }
@@ -1169,7 +1257,8 @@ void saves(int option, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame)/
     fclose(file_saves);
     strcpy(optionsText[3], "Voltar");
     InitWindow(LARGURA, ALTURA, text);
-    generateTextures();
+    loadTexturesMenus();
+    SetWindowIcon(iconImage);
     SetTargetFPS(60);
     while(draw){
         DrawText(text, 100, 20, 80, WHITE);
@@ -1225,6 +1314,7 @@ void saves(int option, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame)/
             }
             draw = 0;
             CloseWindow();
+            unloadTexturesMenus();
 	    }
     }
 }
@@ -1308,6 +1398,8 @@ void newScore(score highscores[5], int playerScore)
     int i, draw, letterCount = 0, key, nameEntered = 0, updated, randow = 0, indconf = 0;
     draw = 1;
     InitWindow(LARGURA, ALTURA, "Digite seu nome");
+    loadTexturesMenus();
+    SetWindowIcon(iconImage);
     SetTargetFPS(60);
     while(!nameEntered){
         DrawText("Digite seu nome:", 100, 20, 100, WHITE);
@@ -1336,6 +1428,7 @@ void newScore(score highscores[5], int playerScore)
         if(IsKeyPressed(KEY_ENTER)){
             nameEntered = 1;
             CloseWindow();
+            unloadTexturesMenus();
         }
     }
     strcpy(new_score.name, name);
@@ -1343,7 +1436,8 @@ void newScore(score highscores[5], int playerScore)
     updated = updateScores(highscores, new_score);
 
     InitWindow(LARGURA, ALTURA, "Escore atulizado");
-    generateTextures();
+    loadTexturesMenus();
+    SetWindowIcon(iconImage);
     SetTargetFPS(60);
     while(draw&&!WindowShouldClose()){
         DrawTexture(BackGroundScoreTexture, 0, 0, WHITE);
@@ -1375,6 +1469,7 @@ void newScore(score highscores[5], int playerScore)
         if(IsKeyPressed(KEY_ENTER)){
             draw = 0;
             CloseWindow();
+            unloadTexturesMenus();
         }
     }
 
@@ -1431,6 +1526,7 @@ void StartGame()
         readHighscores(Highscores);
         InitWindow(LARGURA, ALTURA, "ZINF"); //Inicializa janela, com certo tamanho e titulo
         generateTextures();
+        SetWindowIcon(iconImage);
         SetTargetFPS(20);// Ajusta a janela para 20 frames por segundo
         while (!WindowShouldClose())
         {
@@ -1522,14 +1618,15 @@ void StartGame()
             attackBoss(&InGame.bossBill, &bossCounter, fireBalls);
             drawMonsters(InGame.monsters, MapArray, &monsterCounter, bossBill);
             drawLifes(InGame.lifes);
-            drawSword(&InGame.atualSword);
-            ShowTopBar(InGame.atualStatus);
+            drawSword(&InGame);
+            ShowTopBar(InGame);
             BeginDrawing(); //Inicia o ambiente de desenho na tela
             EndDrawing(); //Finaliza o ambiente de desenho na tela
             ClearBackground(WHITE);
             //ImageClearBackground(&BackGround, WHITE); //n�o consegui utilizar essa fun��o
         }
         CloseWindow();
+        unloadTextures();
         switch(gameOption){// 1 -> game over, 2 -> ganhou, 3 -> menu de pause
             case 1:
                 MenuAnswer = gameOver();
@@ -1566,6 +1663,5 @@ void StartGame()
                 }
         }
     }
-    unloadTextures();
     CloseWindow(); // Fecha a janela
 }
