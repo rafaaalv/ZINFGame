@@ -18,7 +18,7 @@ void unloadTextures();
 
 void underlineText(char string[50], int x, int y, int size, Color inSideColor, Color outColor);
 
-void ShowTopBar(status TopBarStatus);
+void ShowTopBar(game gameTopBarStatus);
 
 int menu(int gameInProgress, player *gamePlayer);
 
@@ -52,7 +52,7 @@ int attackContactBoss(game *InGame);
 
 void drawBoss(boss *bossBill, int *counter);
 
-void drawSword(sword *atualSword);
+void drawSword(game *InGame);
 
 void drawMonsters(monster monsters[MAX_MONSTERS], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT]);
 
