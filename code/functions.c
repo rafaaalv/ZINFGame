@@ -997,8 +997,8 @@ void drawBoss(boss *bossBill, int *counter)
 {
     int new_counter;
     if(bossBill->lifes != 0){
-        DrawRectangleLines(bossBill->x - 5 - 2, bossBill->y - 5 - 2, MAX_LIFES_BOSS*10 +2,  20 + 2, RED);
-        DrawRectangle(bossBill->x - 5, bossBill->y - 5, bossBill->lifes*10, 20, RED);
+        DrawRectangleLines(bossBill->x - 5 - 2, bossBill->y - 5 - 2, MAX_LIFES_BOSS*8 +2,  20 + 2, RED);
+        DrawRectangle(bossBill->x - 5, bossBill->y - 5, bossBill->lifes*8, 20, RED);
         if(bossBill->attack == 5){
             DrawTexture(bossDificultTexture, bossBill->x, bossBill->y, WHITE);
         } else {
