@@ -1397,6 +1397,7 @@ void muahaha(int *imune_muahaha, char test[8])
     if(strcmp(test, muahaha) == 0){
         *imune_muahaha = 1;
     }
+    printf("%s\n\n\n", test);
 }
 void StartGame()
 {
