@@ -32,7 +32,9 @@ void drawPlayer(player atualPlayer, int counter);
 
 void genarateWall(int matriz[SPRITE_HEIGHT][SPRITE_WIDHT]);
 
-int checkPosition(int x, int y, int matriz[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame);
+int checkBossArea(int x, int y, int matriz[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame);
+
+int checkPosition(int x, int y, int matriz[SPRITE_HEIGHT][SPRITE_WIDHT]);
 
 int existMonster(game *InGame,  int matriz[SPRITE_HEIGHT][SPRITE_WIDHT]);
 

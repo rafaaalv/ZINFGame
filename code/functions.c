@@ -794,26 +794,27 @@ void changeLife(status *lifeStatus, int value)
     }
     lifeStatus->lifes += value;
 }
-int checkPosition(int x, int y, int matriz[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame)
+int checkBossArea(int x, int y, int matriz[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame)
 {
-
-   // se o boss estiver vivo
+    // se o boss estiver vivo
     if(InGame->bossBill.lifes > 0){
-            // adiciona x < 1000 para o player não poder invadir a área do boss
-        if((!matriz[(int) floor((y- 60)/SPRITE_SIZE)][(int) floor((x)/SPRITE_SIZE)])&&(x < 1200)&&(x > -SPRITE_SIZE)&&(y < 860)&&(y > 10)&&(x < 1000)){
+            // adiciona x > 950 para o player não poder invadir a área do boss
+        if((!matriz[(int) floor((y- 60)/SPRITE_SIZE)][(int) floor((x)/SPRITE_SIZE)])&&(x < 1200)&&(x > -SPRITE_SIZE)&&(y < 860)&&(y > 10)&&(x > 950)){
             return 1;
-        } else {
-            return 0;
         }
     }
-    else{
+    else
+        return 0;
+}
+int checkPosition(int x, int y, int matriz[SPRITE_HEIGHT][SPRITE_WIDHT])
+{
+
         if((!matriz[(int) floor((y- 60)/SPRITE_SIZE)][(int) floor((x)/SPRITE_SIZE)])&&(x < 1200)&&(x > -SPRITE_SIZE)&&(y < 860)&&(y > 10)){
             return 1;
         }
         else{
             return 0;
         }
-    }
 }
 int existMonster(game *InGame, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT])
 {
@@ -832,25 +833,25 @@ int existMonster(game *InGame, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT])
              switch(orientation){
                  case 1:
                      if(((x_monster <= x_max)&&(x_monster >= x))&&(y == y_monster)){
-                          if((x_monster - x == SPRITE_SIZE || x == x_monster) || (x_monster - x == 2*SPRITE_SIZE && checkPosition(x + SPRITE_SIZE, y, MapArray, InGame)) || (x_monster - x == 3*SPRITE_SIZE && checkPosition(x + SPRITE_SIZE, y, MapArray, InGame) && checkPosition(x + 2*SPRITE_SIZE, y, MapArray, InGame)))
+                          if((x_monster - x == SPRITE_SIZE || x == x_monster) || (x_monster - x == 2*SPRITE_SIZE && checkPosition(x + SPRITE_SIZE, y, MapArray)) || (x_monster - x == 3*SPRITE_SIZE && checkPosition(x + SPRITE_SIZE, y, MapArray) && checkPosition(x + 2*SPRITE_SIZE, y, MapArray)))
                               return i;
                      }
                      break;
                  case 2:
                      if(((x_monster >= x_min)&&(x_monster <= x))&&(y == y_monster)){
-                          if((x_monster - x == -SPRITE_SIZE || x == x_monster) || (x_monster - x == -2*SPRITE_SIZE && checkPosition(x - SPRITE_SIZE, y, MapArray, InGame)) || (x_monster - x == -3*SPRITE_SIZE && checkPosition(x - SPRITE_SIZE, y, MapArray, InGame) && checkPosition(x - 2*SPRITE_SIZE, y, MapArray, InGame)))
+                          if((x_monster - x == -SPRITE_SIZE || x == x_monster) || (x_monster - x == -2*SPRITE_SIZE && checkPosition(x - SPRITE_SIZE, y, MapArray)) || (x_monster - x == -3*SPRITE_SIZE && checkPosition(x - SPRITE_SIZE, y, MapArray) && checkPosition(x - 2*SPRITE_SIZE, y, MapArray)))
                               return i;
                      }
                      break;
                  case 3:
                      if(((y_monster >= y_min)&&(y_monster <= y))&&(x == x_monster)){
-                          if((y_monster - y == -SPRITE_SIZE || y == y_monster) || (y_monster - y == -2*SPRITE_SIZE && checkPosition(x, y - SPRITE_SIZE, MapArray, InGame)) || (y_monster - y == -3*SPRITE_SIZE && checkPosition(x, y - SPRITE_SIZE, MapArray, InGame) && checkPosition(x, y - 2*SPRITE_SIZE, MapArray, InGame)))
+                          if((y_monster - y == -SPRITE_SIZE || y == y_monster) || (y_monster - y == -2*SPRITE_SIZE && checkPosition(x, y - SPRITE_SIZE, MapArray)) || (y_monster - y == -3*SPRITE_SIZE && checkPosition(x, y - SPRITE_SIZE, MapArray) && checkPosition(x, y - 2*SPRITE_SIZE, MapArray)))
                               return i;
                      }
                      break;
                  default:
                      if(((y_monster <= y_max)&&(y_monster >= y))&&(x == x_monster)){
-                          if((y_monster - y == SPRITE_SIZE || y == y_monster) || (y_monster - y == 2*SPRITE_SIZE && checkPosition(x, y + SPRITE_SIZE, MapArray, InGame)) || (y_monster - y == 3*SPRITE_SIZE && checkPosition(x, y + SPRITE_SIZE, MapArray, InGame) && checkPosition(x, y + 2*SPRITE_SIZE, MapArray, InGame)))
+                          if((y_monster - y == SPRITE_SIZE || y == y_monster) || (y_monster - y == 2*SPRITE_SIZE && checkPosition(x, y + SPRITE_SIZE, MapArray)) || (y_monster - y == 3*SPRITE_SIZE && checkPosition(x, y + SPRITE_SIZE, MapArray) && checkPosition(x, y + 2*SPRITE_SIZE, MapArray)))
                               return i;
                      }
              }
@@ -940,13 +941,13 @@ int fireBallsMove(game *InGame, fireBall fireBalls[5], int *counter, int mapArra
             new_counter = 0;
             for(i = 0; i < InGame->bossBill.attack; i++){
                 if(fireBalls[i].exist == 1){
-                    if(checkPosition(fireBalls[i].x -50, fireBalls[i].y, mapArray, InGame)){
+                    if(checkPosition(fireBalls[i].x - SPRITE_SIZE, fireBalls[i].y + SPRITE_SIZE, mapArray)){
                         fireBalls[i].x -= 50;
                     } else {
                         fireBalls[i].exist = 0;
                     }
                     if(!atualPlayer.imune && !imune_muahaha){
-                        if(((fireBalls[i].x + 100 >= x_player)&&(fireBalls[i].x <= x_player))&&((fireBalls[i].y + 50 >= y_player)&&(fireBalls[i].y <= y_player))){
+                        if(((fireBalls[i].x + 2*SPRITE_SIZE >= x_player)&&(fireBalls[i].x <= x_player))&&((fireBalls[i].y + SPRITE_SIZE == y_player))){
                             fireBalls[i].exist = 0;
                             return 1;
                         }
@@ -1056,7 +1057,7 @@ void drawMonsters(monster monsters[MAX_MONSTERS], int MapArray[SPRITE_HEIGHT][SP
                     y -= SPRITE_SIZE;
                 }
             }
-            if(checkPosition(x, y, MapArray, InGame)){
+            if(checkPosition(x, y, MapArray)){
                 monsters[i].x = x;
                 monsters[i].y = y;
             }
@@ -1100,11 +1101,11 @@ void drawMonsters(monster monsters[MAX_MONSTERS], int MapArray[SPRITE_HEIGHT][SP
                 case 4:
                     y -= SPRITE_SIZE;
                 }
-                if(checkPosition(x, y, MapArray, InGame)){
+                if(checkPosition(x, y, MapArray)){
                     monsters[i].x = x;
                     monsters[i].y = y;
                 }
-            }while(!checkPosition(x, y, MapArray, InGame));
+            }while(!checkPosition(x, y, MapArray));
         }
     }
 }
@@ -1362,8 +1363,6 @@ int updateScores(score highscores[5], score new_score)
     while(removedI < 4){
         for(i = removedI + 1; i < 5; i++){
             if(removed_score.score > highscores[i].score){
-                printf("\nNome: %s\n", highscores[i].name);
-                printf("\nScore: %d\n", highscores[i].score);
                 med_score = highscores[i];
                 highscores[i] = removed_score;
                 removed_score = med_score;
@@ -1384,10 +1383,6 @@ void newScore(score highscores[5], int playerScore)
     char scoreString[20], name[20] = "\0";
     int i, draw, letterCount = 0, key, nameEntered = 0, updated, randow = 0, indconf = 0;
     draw = 1;
-    InitWindow(LARGURA, ALTURA, "Digite seu nome");
-    loadTexturesMenus();
-    SetWindowIcon(iconImage);
-    SetTargetFPS(60);
     while(!nameEntered){
         DrawText("Digite seu nome:", 100, 20, 100, WHITE);
         key = GetCharPressed();
@@ -1414,19 +1409,12 @@ void newScore(score highscores[5], int playerScore)
         ClearBackground(BLACK);
         if(IsKeyPressed(KEY_ENTER)){
             nameEntered = 1;
-            CloseWindow();
-            unloadTexturesMenus();
         }
     }
     strcpy(new_score.name, name);
     new_score.score = playerScore;
     updated = updateScores(highscores, new_score);
-
-    InitWindow(LARGURA, ALTURA, "Escore atulizado");
-    loadTexturesMenus();
-    SetWindowIcon(iconImage);
-    SetTargetFPS(60);
-    while(draw&&!WindowShouldClose()){
+    while(draw){
         DrawTexture(BackGroundScoreTexture, 0, 0, WHITE);
         underlineText("ESCORE ATUALIZADO!", 100, 20, 80, WHITE, BLACK);
         if(updated){
@@ -1455,8 +1443,6 @@ void newScore(score highscores[5], int playerScore)
         ClearBackground(BLACK);
         if(IsKeyPressed(KEY_ENTER)){
             draw = 0;
-            CloseWindow();
-            unloadTexturesMenus();
         }
     }
 
@@ -1524,25 +1510,25 @@ void StartGame()
             y_player = InGame.atualPlayer.y;
             if (IsKeyPressed(KEY_RIGHT)||IsKeyDown(KEY_RIGHT)||IsKeyPressed(KEY_D)||IsKeyDown(KEY_D)) {
                 orientation = 1;
-                if(checkPosition((x_player + SPRITE_SIZE), y_player, MapArray, &InGame)){
+                if(checkPosition((x_player + SPRITE_SIZE), y_player, MapArray)){
                     x_player += SPRITE_SIZE;
                 }
             }
             if (IsKeyPressed(KEY_LEFT)||IsKeyDown(KEY_LEFT)||IsKeyPressed(KEY_A)||IsKeyDown(KEY_A)) {
                 orientation = 2;
-                if(checkPosition((x_player -SPRITE_SIZE), y_player, MapArray, &InGame)){
+                if(checkPosition((x_player -SPRITE_SIZE), y_player, MapArray)){
                     x_player -= SPRITE_SIZE;
                 }
             }
             if (IsKeyPressed(KEY_UP)||IsKeyDown(KEY_UP)||IsKeyPressed(KEY_W)||IsKeyDown(KEY_W)) {
                 orientation = 3;
-                if(checkPosition(x_player, (y_player -SPRITE_SIZE), MapArray, &InGame)){
+                if(checkPosition(x_player, (y_player -SPRITE_SIZE), MapArray)){
                     y_player -= SPRITE_SIZE;
                 }
             }
             if (IsKeyPressed(KEY_DOWN)||IsKeyDown(KEY_DOWN)||IsKeyPressed(KEY_S)||IsKeyDown(KEY_S)) {
                 orientation = 4;
-                if(checkPosition(x_player, (y_player + SPRITE_SIZE), MapArray, &InGame)){
+                if(checkPosition(x_player, (y_player + SPRITE_SIZE), MapArray)){
                     y_player += SPRITE_SIZE;
                 }
             }
@@ -1599,10 +1585,24 @@ void StartGame()
             if(fireBallsMove(&InGame, fireBalls, &bossCounter, MapArray, InGame.atualPlayer, imune_muahaha)){
                 InGame.atualPlayer.imune = 1;
                 contador = 0;
-                if(InGame.bossBill.attack == 3)
-                changeLife(&InGame.atualStatus, -2);
-                else
-                changeLife(&InGame.atualStatus, -3);
+                if(InGame.bossBill.attack == 3){
+                    changeLife(&InGame.atualStatus, -2);
+                    if(InGame.atualPlayer.x >= 2*SPRITE_SIZE)
+                    InGame.atualPlayer.x -= 2*SPRITE_SIZE;
+                    else if(InGame.atualPlayer.x >= SPRITE_SIZE)
+                    InGame.atualPlayer.x -= SPRITE_SIZE;
+                }
+                else{
+                    changeLife(&InGame.atualStatus, -3);
+                    if(InGame.atualPlayer.x >= 2*SPRITE_SIZE)
+                    InGame.atualPlayer.x -= 2*SPRITE_SIZE;
+                    else if(InGame.atualPlayer.x >= SPRITE_SIZE)
+                    InGame.atualPlayer.x -= SPRITE_SIZE;
+                }
+            }
+            if(checkBossArea(x_player, y_player, MapArray, &InGame)){
+                InGame.atualPlayer.x -= 4*SPRITE_SIZE;
+                changeLife(&InGame.atualStatus, -1);
             }
             drawPlayer(InGame.atualPlayer, contador);
             genarateWall(MapArray);
@@ -1642,8 +1642,8 @@ void StartGame()
                         restartStatus(MapArray, &InGame, fireBalls, &imune_muahaha);
                     }
                 } else {
-                    continueGame = 0;
                     newScore(Highscores, InGame.atualStatus.score);
+                    continueGame = 0;
                 }
                 break;
             case 3:
