@@ -1205,7 +1205,7 @@ void saveGame(save saveSave, game *InGame)
 void loadGame(save loadSave, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame)
 {
     FILE *loadFileSave = fopen(loadSave.path, "rb");
-    char atualFile[20];
+    char atualFile[30];
     fread(InGame, sizeof(game), 1, loadFileSave);
     if(InGame->atualStatus.level <= 9){
         sprintf(atualFile, "../assets/maps/mapa0%d.txt", InGame->atualStatus.level);
