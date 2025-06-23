@@ -17,6 +17,7 @@
 #define SWORD_COLLUM 3
 #define LIFES_COLLUM 4
 #define MAX_LIFES_BOSS 30
+#define MUSIC_VOLUME 0.3
 //DEFINIDO AT� AQUI
 
 
@@ -204,7 +205,7 @@ void loadSoundsAndMusics()
 {
     gameMusic = LoadMusicStream("../assets/sounds/weirdmageddonTheme.mp3");
     winGameMusic = LoadMusicStream("../assets/sounds/themeSong.mp3");
-    SetMusicVolume(gameMusic, 0.3);
+    SetMusicVolume(gameMusic, MUSIC_VOLUME);
     lifeSound = LoadSound("../assets/sounds/life.mp3");
     damageSound = LoadSound("../assets/sounds/damage.mp3");
     menuSound = LoadSound("../assets/sounds/menu.wav");
@@ -243,7 +244,7 @@ void loadTexturesMenus()
     //confetes
     img_conf1 = LoadImage("../assets/confete1.png");
     img_conf2 = LoadImage("../assets/confete2.png");
-    ImageResize(&img_conf1, 3*SPRITE_SIZE, 3*SPRITE_SIZE);
+    ImageResize(&img_conf1, 3*SPRITE_SIZE, 3*SPRITE_SIZE); //o tamanho do confete eh 3x3 sprites
     ImageResize(&img_conf2, 3*SPRITE_SIZE, 3*SPRITE_SIZE);
     confettis[0] = LoadTextureFromImage(img_conf1);
     confettis[1] = LoadTextureFromImage(img_conf2);
@@ -331,19 +332,19 @@ void generateTextures()
     arrayTexturesMonster[0][3] = monster1NTexture;
     //norte
     img_monster2N = LoadImage("../assets/monster2N.png");
-    ImageResize(&img_monster2N, 1.2*SPRITE_SIZE, 1.2*SPRITE_SIZE);
+    ImageResize(&img_monster2N, SPRITE_SIZE, SPRITE_SIZE);
     monster2NTexture = LoadTextureFromImage(img_monster2N);
     //leste
     img_monster2E = LoadImage("../assets/monster2E.png");
-    ImageResize(&img_monster2E, 1.2*SPRITE_SIZE, 1.2*SPRITE_SIZE);
+    ImageResize(&img_monster2E, SPRITE_SIZE, SPRITE_SIZE);
     monster2ETexture = LoadTextureFromImage(img_monster2E);
     //sul
     img_monster2S = LoadImage("../assets/monster2S.png");
-    ImageResize(&img_monster2S, 1.2*SPRITE_SIZE, 1.2*SPRITE_SIZE);
+    ImageResize(&img_monster2S, SPRITE_SIZE, SPRITE_SIZE);
     monster2STexture = LoadTextureFromImage(img_monster2S);
     //oeste
     img_monster2W = LoadImage("../assets/monster2W.png");
-    ImageResize(&img_monster2W, 1.2*SPRITE_SIZE, 1.2*SPRITE_SIZE);
+    ImageResize(&img_monster2W, SPRITE_SIZE, SPRITE_SIZE);
     monster2WTexture = LoadTextureFromImage(img_monster2W);
     arrayTexturesMonster[1][0] = monster2ETexture;
     arrayTexturesMonster[1][1] = monster2WTexture;
@@ -352,19 +353,19 @@ void generateTextures()
     //monstro 3
     //norte
     img_monster3N = LoadImage("../assets/monster3N.png");
-    ImageResize(&img_monster3N, 1.2*SPRITE_SIZE, 1.2*SPRITE_SIZE);
+    ImageResize(&img_monster3N, SPRITE_SIZE, SPRITE_SIZE);
     monster3NTexture = LoadTextureFromImage(img_monster3N);
     //leste
     img_monster3E = LoadImage("../assets/monster3E.png");
-    ImageResize(&img_monster3E, 1.2*SPRITE_SIZE, 1.2*SPRITE_SIZE);
+    ImageResize(&img_monster3E, SPRITE_SIZE, SPRITE_SIZE);
     monster3ETexture = LoadTextureFromImage(img_monster3E);
     //sul
     img_monster3S = LoadImage("../assets/monster3S.png");
-    ImageResize(&img_monster3S, 1.2*SPRITE_SIZE, 1.2*SPRITE_SIZE);
+    ImageResize(&img_monster3S, SPRITE_SIZE, SPRITE_SIZE);
     monster3STexture = LoadTextureFromImage(img_monster3S);
     //oeste
     img_monster3W = LoadImage("../assets/monster3W.png");
-    ImageResize(&img_monster3W, 1.2*SPRITE_SIZE, 1.2*SPRITE_SIZE);
+    ImageResize(&img_monster3W, SPRITE_SIZE, SPRITE_SIZE);
     monster3WTexture = LoadTextureFromImage(img_monster3W);
     arrayTexturesMonster[2][0] = monster3ETexture;
     arrayTexturesMonster[2][1] = monster3WTexture;
@@ -373,19 +374,19 @@ void generateTextures()
     //monstro 4
     //norte
     img_monster4N = LoadImage("../assets/monster4N.png");
-    ImageResize(&img_monster4N, 1.2*SPRITE_SIZE, 1.2*SPRITE_SIZE);
+    ImageResize(&img_monster4N, SPRITE_SIZE, SPRITE_SIZE);
     monster4NTexture = LoadTextureFromImage(img_monster4N);
     //leste
     img_monster4E = LoadImage("../assets/monster4E.png");
-    ImageResize(&img_monster4E, 1.2*SPRITE_SIZE, 1.2*SPRITE_SIZE);
+    ImageResize(&img_monster4E, SPRITE_SIZE, SPRITE_SIZE);
     monster4ETexture = LoadTextureFromImage(img_monster4E);
     //sul
     img_monster4S = LoadImage("../assets/monster4S.png");
-    ImageResize(&img_monster4S, 1.2*SPRITE_SIZE, 1.2*SPRITE_SIZE);
+    ImageResize(&img_monster4S, SPRITE_SIZE, SPRITE_SIZE);
     monster4STexture = LoadTextureFromImage(img_monster4S);
     //oeste
     img_monster4W = LoadImage("../assets/monster4W.png");
-    ImageResize(&img_monster4W, 1.2*SPRITE_SIZE, 1.2*SPRITE_SIZE);
+    ImageResize(&img_monster4W, SPRITE_SIZE, SPRITE_SIZE);
     monster4WTexture = LoadTextureFromImage(img_monster4W);
     arrayTexturesMonster[3][0] = monster4ETexture;
     arrayTexturesMonster[3][1] = monster4WTexture;
@@ -401,11 +402,11 @@ void generateTextures()
     bossDificultTexture = LoadTextureFromImage(img_bossDificult);
     //bola de fogo
     img_fireBall = LoadImage("../assets/fireBall.png");
-    ImageResize(&img_fireBall, 2*SPRITE_SIZE, 2*SPRITE_SIZE); // o tamanho do boss é 2x3 sprites
+    ImageResize(&img_fireBall, 2*SPRITE_SIZE, 2*SPRITE_SIZE); // o tamanho da bola de fogo do boss é 2x2 sprites
     fireBallTexture = LoadTextureFromImage(img_fireBall);
     //bola de fogo azul
     img_fireBallBlue = LoadImage("../assets/fireBallAzul.png");
-    ImageResize(&img_fireBallBlue, 2*SPRITE_SIZE, 2*SPRITE_SIZE); // o tamanho do boss é 2x3 sprites
+    ImageResize(&img_fireBallBlue, 2*SPRITE_SIZE, 2*SPRITE_SIZE); // o tamanho da bola de fogo do boss é 2x2 sprites
     fireBallBlueTexture = LoadTextureFromImage(img_fireBallBlue);
     //Fundos
     BackGround = LoadImage("../assets/background.png");
@@ -515,6 +516,7 @@ void unloadTextures()
 }
 void underlineText(char *string, int x, int y, int size, Color inSideColor, Color outColor)
 {
+    //para das impressao de contornada o texto, imprimimos dos 4 lados o mesmo texto, em preto, 3 pixels para o respectivo lado
     DrawText(string, x - 3, y, size, outColor);
     DrawText(string, x, y - 3, size, outColor);
     DrawText(string, x, y + 3, size, outColor);
@@ -527,7 +529,7 @@ void ShowTopBar(game gameTopBarStatus)
     sprintf(l, "Vidas: %d", gameTopBarStatus.atualStatus.lifes);
     sprintf(lev, "Nivel: %d", gameTopBarStatus.atualStatus.level);
     sprintf(sc, "Escores: %d", gameTopBarStatus.atualStatus.score);
-    DrawRectangle(0, 0, 1200, 60, BLACK);
+    DrawRectangle(0, 0, 1200, 60, BLACK); //O tamanho da top bar eh 1200x60 pixels
     DrawText(l, 40, 5, SPRITE_SIZE, WHITE);
     DrawText(lev, 280, 5, SPRITE_SIZE, WHITE);
     DrawText(sc, 480, 5, SPRITE_SIZE, WHITE);
@@ -540,7 +542,7 @@ void generateArrayMap(char path[20], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT])
     int i, j;
     char  item;
     FILE *map = fopen(path, "r");
-    for(i = 0; i < 16; i++){
+    for(i = 0; i < SPRITE_HEIGHT; i++){
         for(j = 0; j < SPRITE_WIDHT; j++){
             item = (char)fgetc(map);
             if(item == 'P'){
@@ -554,9 +556,9 @@ void generateArrayMap(char path[20], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT])
 void generateMap(char path[20], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame, fireBall fireBalls[5])
 {
     int i, j, lifes = 0, monsters = 0, x, y, k;
-    char line[16], item;
+    char item;
     FILE *map = fopen(path, "r");
-    for(i = 0; i < 16; i++){
+    for(i = 0; i < SPRITE_HEIGHT; i++){
         for(j = 0; j < SPRITE_WIDHT; j++){
             item = (char)fgetc(map);
             if(item == 'P'){
@@ -598,11 +600,6 @@ void generateMap(char path[20], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game 
                         InGame->bossBill.x = x;
                         InGame->bossBill.y = y;
                         InGame->bossBill.orientation = 0;
-                        /*for(k = 0; k < 5; k++){
-                            fireBalls[i].exist = 0;
-                            fireBalls[i].x = -50;
-                            fireBalls[i].y = -50;
-                        }*/
                 }
             }
             x = 0;
@@ -634,11 +631,11 @@ int menu(int gameInProgress, player *gamePlayer)
         DrawTexture(BackGroundMenuTexture, 0, 0, WHITE);
         DrawText("ZINF", 100, 20, 100, WHITE);
         for(i = 0; i < 5; i++){
-            if(optionSelected == i){
+            if(optionSelected == i){ //Se a opcao estiver selecionada, desenha em vermelho e desenha um circulo vermelho do lado
                 DrawCircle(90, i*110 + 220, 5, RED);
                 DrawText(optionsText[i], 100, i*110 + 200, SPRITE_SIZE, RED);
             } else {
-                DrawText(optionsText[i], 100, i*110 + 200, SPRITE_SIZE, WHITE);
+                DrawText(optionsText[i], 100, i*110 + 200, SPRITE_SIZE, WHITE); //Cada opcao eh 110 pixels abaixo da anterior
             }
         }
         DrawTexture(arrayTexturesPlayer[gamePlayer->person][0], 420, 440 - 25, WHITE);
@@ -727,11 +724,12 @@ int gameOver()
 }
 void restartStatus(int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame, fireBall fireBalls[5], int *imune_muahaha)
 {
+    //Reseta os status para o inicial, nivel 1, vidas 3, score 0 e a espada 0
     InGame->atualStatus.lifes = 3;
     InGame->atualStatus.level = 1;
     InGame->atualStatus.score = 0;
     InGame-> atualStatus.sword = 0;
-    generateMap("../assets/mapa01.txt", MapArray, InGame, fireBalls);
+    generateMap("../assets/maps/mapa01.txt", MapArray, InGame, fireBalls); // Carrega o primeiro mapa
     InGame->bossBill.lifes = 0;
     *imune_muahaha = 0;
 }
@@ -752,10 +750,10 @@ void drawPlayer(player atualPlayer, int counter)
 void genarateWall(int matriz[SPRITE_HEIGHT][SPRITE_WIDHT])
 {
     int i, j;
-    for(i = 0; i < 16; i++){
+    for(i = 0; i < SPRITE_HEIGHT; i++){
         for(j = 0; j < SPRITE_WIDHT; j++){
             if(matriz[i][j]){
-                DrawTexture(wallTexture, j*SPRITE_SIZE -22, i*SPRITE_SIZE + 60 -22, WHITE);
+                DrawTexture(wallTexture, j*SPRITE_SIZE -22, i*SPRITE_SIZE + 60 -22, WHITE); //+60 da top bar
             }
         }
     }
@@ -775,21 +773,18 @@ int nextLevel(status *atualStatus, char file[20], int *muahaha, char test[8])
     int i;
     PlaySound(nextLevelSound);
     atualStatus->level += 1;
-    if(atualStatus->level <= 9){
-        sprintf(file, "../assets/mapa0%d.txt", atualStatus->level);
+    if(atualStatus->level <= 9){ //Se o level tiver apenas uma casa decimal, no caso <= 9, coloca um 0 na frente do caminho do arquivo do proximo mapa
+        sprintf(file, "../assets/maps/mapa0%d.txt", atualStatus->level);
     } else {
-        sprintf(file, "../assets/mapa%d.txt", atualStatus->level);
+        sprintf(file, "../assets/maps/mapa%d.txt", atualStatus->level);
     }
-    atualStatus->sword = 0;
+    atualStatus->sword = 0; //Zera o status da espada e do muahaha
     *muahaha = 0;
-    for(i=0;i<8;i++){
-        test[i] = 0;
-    }
     return FileExists(file);
 }
 void changeLife(status *lifeStatus, int value)
 {
-    if(value < 0){
+    if(value < 0){//Se for negativo, significa que o player levou dano, logo toca o som de dano
         PlaySound(damageSound);
     }
     lifeStatus->lifes += value;
@@ -808,13 +803,12 @@ int checkBossArea(int x, int y, int matriz[SPRITE_HEIGHT][SPRITE_WIDHT], game *I
 }
 int checkPosition(int x, int y, int matriz[SPRITE_HEIGHT][SPRITE_WIDHT])
 {
-
-        if((!matriz[(int) floor((y- 60)/SPRITE_SIZE)][(int) floor((x)/SPRITE_SIZE)])&&(x < 1200)&&(x > -SPRITE_SIZE)&&(y < 860)&&(y > 10)){
-            return 1;
-        }
-        else{
-            return 0;
-        }
+    if((!matriz[(int) floor((y- 60)/SPRITE_SIZE)][(int) floor((x)/SPRITE_SIZE)])&&(x < 1200)&&(x > -SPRITE_SIZE)&&(y < 860)&&(y > 10)){
+        return 1;
+    }
+    else{
+        return 0;
+    }
 }
 int existMonster(game *InGame, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT])
 {
@@ -822,7 +816,7 @@ int existMonster(game *InGame, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT])
     orientation =InGame->atualPlayer.orientation;
     x = InGame->atualPlayer.x;
     y = InGame->atualPlayer.y;
-    x_max = InGame->atualPlayer.x + 3*SPRITE_SIZE;
+    x_max = InGame->atualPlayer.x + 3*SPRITE_SIZE; //O ataque engloba 3 sprites na direcao do player
     x_min = InGame->atualPlayer.x - 3*SPRITE_SIZE;
     y_max = InGame->atualPlayer.y + 3*SPRITE_SIZE;
     y_min = InGame->atualPlayer.y - 3*SPRITE_SIZE;
@@ -885,9 +879,9 @@ void drawSword(game *InGame)
         DrawTexture(swords[InGame->atualPlayer.person], InGame->atualSword.x, InGame->atualSword.y, WHITE);
     }
 }
-
 void bossDificultMode(boss *bossBill, int *counter)
 {
+    //Muda a rapidez e a quantidade do ataque do boss
     bossBill->attack = 5;
     *counter = 0;
 }
@@ -914,11 +908,6 @@ void killBoss(game *InGame, int *counter)
                      }
                      break;
              }
-       // if((y_monster <= y_max)&&((y_monster <= y_min)||(y_monster >= y_min))&&(x_monster >= x_min)&&(x_monster <= x_max)){
-       //     InGame->bossBill.lifes--;
-       //     if(InGame->bossBill.lifes == 15){
-       //         bossDificultMode(&InGame->bossBill, counter);
-       //     }
         }
     }
 int fireBallsMove(game *InGame, fireBall fireBalls[5], int *counter, int mapArray[SPRITE_HEIGHT][SPRITE_WIDHT], player atualPlayer, int imune_muahaha)
@@ -928,9 +917,7 @@ int fireBallsMove(game *InGame, fireBall fireBalls[5], int *counter, int mapArra
     y_player = atualPlayer.y;
     if(InGame->bossBill.lifes > 0){
         for(i = 0; i < InGame->bossBill.attack; i++){
-            //printf("\n\n\n%d", fireBalls[i].exist);
             if(fireBalls[i].exist == 1){
-                //printf("\n\n\n%d %d %d %d", fireBalls[i].x, fireBalls[i].y, i, fireBalls[i].exist);
                 if(InGame->bossBill.attack == 3)
                     DrawTexture(fireBallTexture, fireBalls[i].x, fireBalls[i].y +20, WHITE);
                 else
@@ -991,9 +978,7 @@ void attackBoss(boss *bossBill, int *counter, fireBall fireBalls[5])
             new_counter = *counter + 1;
         }
     }
-    //*counter = new_counter;
 }
-
 void drawBoss(boss *bossBill, int *counter)
 {
     int new_counter;
@@ -1008,6 +993,7 @@ void drawBoss(boss *bossBill, int *counter)
 
         //movimentacao
         if(*counter == 12 - bossBill->attack){//12 - 3(bolas de fogo pro vez) para quando ele esta no modo normal e 12 - 5 quando esta no modo difcil diminuindo o tempo do contador para o boss fazer a acao ele fica mais rapido e as bolas de fogo sao geradas mais rapidamente
+            //Desloca o boss para cima ou para baixo
             if(bossBill->orientation){
                 bossBill->y += 50;
             } else {
@@ -1109,11 +1095,10 @@ void drawMonsters(monster monsters[MAX_MONSTERS], int MapArray[SPRITE_HEIGHT][SP
         }
     }
 }
-
 void drawLifes(life lifes[MAX_LIFES])
 {
     int i;
-    for(i = 0; i < 5; i++){
+    for(i = 0; i < MAX_LIFES; i++){
         if(lifes[i].alive){
             DrawTexture(lifeTexture, lifes[i].x, lifes[i].y, WHITE);
         }
@@ -1223,7 +1208,12 @@ void loadGame(save loadSave, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *In
     FILE *loadFileSave = fopen(loadSave.path, "rb");
     char atualFile[20];
     fread(InGame, sizeof(game), 1, loadFileSave);
-    sprintf(atualFile, "../assets/mapa0%d.txt", InGame->atualStatus.level);
+    if(InGame->atualStatus.level <= 9){
+        sprintf(atualFile, "../assets/maps/mapa0%d.txt", InGame->atualStatus.level);
+    }
+    else {
+        sprintf(atualFile, "../assets/maps/mapa%d.txt", InGame->atualStatus.level);
+    }
     generateArrayMap(atualFile, MapArray);
     fclose(loadFileSave);
 }
@@ -1244,10 +1234,6 @@ void saves(int option, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame)/
     }
     fclose(file_saves);
     strcpy(optionsText[3], "Voltar");
-    //InitWindow(LARGURA, ALTURA, text);
-    //loadTexturesMenus();
-    //SetWindowIcon(iconImage);
-    //SetTargetFPS(60);
     while(draw){
         DrawText(text, 100, 20, 80, WHITE);
         for(i = 0; i < 4; i++){
@@ -1301,8 +1287,6 @@ void saves(int option, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame)/
                 }
             }
             draw = 0;
-            //CloseWindow();
-            //unloadTexturesMenus();
 	    }
     }
 }
@@ -1311,23 +1295,23 @@ int callMenu(int gameInProgress, int *continueGame, score highscores[5], int Map
     int MenuAswer;
     MenuAswer = menu(gameInProgress, &InGame->atualPlayer);
     if(gameInProgress){
-        if(MenuAswer == 1){
+        if(MenuAswer == 1){ //Chamou o menu inicial
             return callMenu(0, continueGame, highscores, MapArray, InGame);
-        } else if(MenuAswer == 4){
+        } else if(MenuAswer == 4){ //Escolheu a opcao de sair
             *continueGame = 0;
-        } else if(MenuAswer == 3){
+        } else if(MenuAswer == 3){ //Escolheu a opcao de salvar jogo
             saves(0, MapArray, InGame);
             return callMenu(1, continueGame, highscores, MapArray, InGame);
         }
     } else {
-        if(MenuAswer == 0){
+        if(MenuAswer == 0){ //Escolheu iniciar ou reiniciar o jogo
             return 1; //precisa (re)comecar o jogo
-        } else if(MenuAswer == 1){
+        } else if(MenuAswer == 1){ //Escolheu a opcao de ver os highscores
             showHighScores(highscores);
             return callMenu(gameInProgress, continueGame, highscores, MapArray, InGame);
-        } else if(MenuAswer == 4){
+        } else if(MenuAswer == 4){ //Escolheu sair do jogo
             *continueGame = 0; // sair do jogo
-        } else if(MenuAswer == 3){
+        } else if(MenuAswer == 3){ //Escolheu carregar um jogo anterior
             saves(1, MapArray, InGame);
         }
     }
@@ -1417,7 +1401,7 @@ void newScore(score highscores[5], int playerScore)
     while(draw){
         DrawTexture(BackGroundScoreTexture, 0, 0, WHITE);
         underlineText("ESCORE ATUALIZADO!", 100, 20, 80, WHITE, BLACK);
-        if(updated){
+        if(updated){ //O jogador teve seu score incluido nos highscores
             underlineText("Voce conseguiu um novo recorde!!", 100, 200, 50, GREEN, BLACK);
             if(randow == 60){
                 if(indconf == 0){
