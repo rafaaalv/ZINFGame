@@ -632,7 +632,7 @@ int menu(int gameInProgress, player *gamePlayer)
     }
     while(draw){
         DrawTexture(BackGroundMenuTexture, 0, 0, WHITE);
-        DrawText("ZINF", 100, 20, 100, WHITE);
+        DrawText("ZINFAGEDON", 100, 20, 100, WHITE);
         for(i = 0; i < 5; i++){
             if(optionSelected == i){
                 DrawCircle(90, i*110 + 220, 5, RED);
@@ -773,7 +773,6 @@ int allMonstersKilled(monster monsters[MAX_MONSTERS])
 int nextLevel(status *atualStatus, char file[20], int *muahaha, char test[8])
 {
     int i;
-    PlaySound(nextLevelSound);
     atualStatus->level += 1;
     if(atualStatus->level <= 9){
         sprintf(file, "../assets/mapa0%d.txt", atualStatus->level);
@@ -782,9 +781,6 @@ int nextLevel(status *atualStatus, char file[20], int *muahaha, char test[8])
     }
     atualStatus->sword = 0;
     *muahaha = 0;
-    for(i=0;i<8;i++){
-        test[i] = 0;
-    }
     return FileExists(file);
 }
 void changeLife(status *lifeStatus, int value)
@@ -1562,6 +1558,7 @@ void StartGame()
             }
             if((allMonstersKilled(InGame.monsters))&&(InGame.bossBill.lifes == 0)){
                 if(nextLevel(&InGame.atualStatus, atualFile, &imune_muahaha, test)){
+                    PlaySound(nextLevelSound);
                     generateMap(atualFile, MapArray, &InGame, fireBalls);
                 } else{
                     gameOption = 2;
