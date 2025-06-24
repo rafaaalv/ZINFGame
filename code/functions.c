@@ -211,7 +211,7 @@ void loadSoundsAndMusics()
     menuSound = LoadSound("../assets/sounds/menu.wav");
     killMonsterSound = LoadSound("../assets/sounds/killMonster.wav");
     gameOverSound = LoadSound("../assets/sounds/gameOver.mp3");
-    nextLevelSound = LoadSound("../assets/sounds/levelPassed.mp3");
+    nextLevelSound = LoadSound("../assets/sounds/levelPassed.wav");
 }
 void unloadSoundsAndMusics()
 {
@@ -683,6 +683,7 @@ int gameOver()
     optionsText[1] = "Carregar jogo";
     optionsText[2] = "Voltar ao menu";
     optionsText[3] = "Sair";
+    PlaySound(gameOverSound);
     while(draw){
         DrawTexture(BackGroundGameOverTexture, 0, 0, WHITE);
         DrawText("VOCE PERDEU", 100, 20, 100, WHITE);
@@ -898,8 +899,9 @@ void killBoss(game *InGame, int *counter)
                  case 1:
                      if(((x_monster <= x_max)&&(x_monster >= x))&&(y == y_monster || y == y_monster + SPRITE_SIZE || y == y_monster + 2*SPRITE_SIZE)){
                             InGame->bossBill.lifes--;
+                            PlaySound(killMonsterSound);
                             if(InGame->bossBill.lifes == 15){
-                            bossDificultMode(&InGame->bossBill, counter);
+                                bossDificultMode(&InGame->bossBill, counter);
                             }
                      }
                      break;
@@ -1474,13 +1476,13 @@ void StartGame()
     readHighscores(Highscores);
     restartStatus(MapArray, &InGame, fireBalls, &imune_muahaha);
     readHighscores(Highscores);
-        InitWindow(LARGURA, ALTURA, "ZINFAGEDON"); //Inicializa janela, com certo tamanho e titulo
-        InitAudioDevice();
-        generateTextures();
-        PlayMusicStream(gameMusic);
-        SetWindowIcon(iconImage);
-        SetTargetFPS(60);// Ajusta a janela para 60 frames por segundo
-        callMenu(0, &continueGame, Highscores, MapArray, &InGame);
+    InitWindow(LARGURA, ALTURA, "ZINFAGEDON"); //Inicializa janela, com certo tamanho e titulo
+    InitAudioDevice();
+    generateTextures();
+    PlayMusicStream(gameMusic);
+    SetWindowIcon(iconImage);
+    SetTargetFPS(60);// Ajusta a janela para 60 frames por segundo
+    callMenu(0, &continueGame, Highscores, MapArray, &InGame);
     while(continueGame){
         while (!WindowShouldClose())
         {
