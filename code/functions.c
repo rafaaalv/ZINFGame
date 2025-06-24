@@ -307,7 +307,7 @@ void generateTextures()
     arrayTexturesPlayer[1][3] = playerSMabTexture;
     //parede
     img_wall = LoadImage("../assets/wall.png");
-    ImageResize(&img_wall, 2*SPRITE_SIZE, 2*SPRITE_SIZE);
+    ImageResize(&img_wall, SPRITE_SIZE, SPRITE_SIZE);
     wallTexture = LoadTextureFromImage(img_wall);
     //texturas dos monstros
     //norte
@@ -754,7 +754,7 @@ void genarateWall(int matriz[SPRITE_HEIGHT][SPRITE_WIDHT])
     for(i = 0; i < SPRITE_HEIGHT; i++){
         for(j = 0; j < SPRITE_WIDHT; j++){
             if(matriz[i][j]){
-                DrawTexture(wallTexture, j*SPRITE_SIZE -22, i*SPRITE_SIZE + 60 -22, WHITE); //+60 da top bar
+                DrawTexture(wallTexture, j*SPRITE_SIZE, i*SPRITE_SIZE + 60, WHITE); //+60 da top bar
             }
         }
     }
