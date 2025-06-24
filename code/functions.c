@@ -96,6 +96,8 @@ Image BackGroundWinGame;
 Texture2D BackGroundWinGameTexture;
 Image BackGroundScore;
 Texture2D BackGroundScoreTexture;
+Image BackGroundScoreNoNew;
+Texture2D BackGroundScoreNoNewTexture;
 Image img_wall;
 Texture2D wallTexture;
 //Confetes
@@ -241,6 +243,9 @@ void loadTexturesMenus()
     BackGroundScore = LoadImage("../assets/background_score.png");
     ImageResize(&BackGroundScore, LARGURA, ALTURA);
     BackGroundScoreTexture = LoadTextureFromImage(BackGroundScore);
+    BackGroundScoreNoNew = LoadImage("../assets/background_no_new_score.png");
+    ImageResize(&BackGroundScoreNoNew, LARGURA, ALTURA);
+    BackGroundScoreNoNewTexture = LoadTextureFromImage(BackGroundScoreNoNew);
     //confetes
     img_conf1 = LoadImage("../assets/confete1.png");
     img_conf2 = LoadImage("../assets/confete2.png");
@@ -422,6 +427,8 @@ void unloadTexturesMenus()
     UnloadImage(BackGroundGameOver);
     UnloadImage(BackGroundMenu);
     UnloadImage(BackGroundWinGame);
+    UnloadImage(BackGroundScore);
+    UnloadImage(BackGroundScoreNoNew);
     UnloadImage(img_playerEDip);
     UnloadImage(img_playerWDip);
     UnloadImage(img_playerNDip);
@@ -437,6 +444,8 @@ void unloadTexturesMenus()
     UnloadTexture(BackGroundGameOverTexture);
     UnloadTexture(BackGroundMenuTexture);
     UnloadTexture(BackGroundWinGameTexture);
+    UnloadTexture(BackGroundScoreTexture);
+    UnloadTexture(BackGroundScoreNoNewTexture);
     UnloadTexture(playerEDipTexture);
     UnloadTexture(playerWDipTexture);
     UnloadTexture(playerNDipTexture);
@@ -1397,7 +1406,11 @@ void newScore(score highscores[5], int playerScore)
     new_score.score = playerScore;
     updated = updateScores(highscores, new_score);
     while(draw){
-        DrawTexture(BackGroundScoreTexture, 0, 0, WHITE);
+        if(updated){
+            DrawTexture(BackGroundScoreTexture, 0, 0, WHITE);
+        } else {
+            DrawTexture(BackGroundScoreNoNewTexture, 0, 0, WHITE);
+        }
         underlineText("ESCORE ATUALIZADO!", 100, 20, 80, WHITE, BLACK);
         if(updated){ //O jogador teve seu score incluido nos highscores
             underlineText("Voce conseguiu um novo recorde!!", 100, 200, 50, GREEN, BLACK);
@@ -1636,5 +1649,5 @@ void StartGame()
         }
     }
     CloseWindow(); // Fecha a janela
-    unloadTextures();
+    unloadTextures(); //Descarrega as texturas para liberar espaco na memoria
 }
