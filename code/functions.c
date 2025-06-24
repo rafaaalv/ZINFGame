@@ -629,7 +629,7 @@ int menu(int gameInProgress, player *gamePlayer)
     }
     while(draw){
         DrawTexture(BackGroundMenuTexture, 0, 0, WHITE);
-        DrawText("ZINF", 100, 20, 100, WHITE);
+        DrawText("ZINFAGEDON", 100, 20, 100, WHITE);
         for(i = 0; i < 5; i++){
             if(optionSelected == i){ //Se a opcao estiver selecionada, desenha em vermelho e desenha um circulo vermelho do lado
                 DrawCircle(90, i*110 + 220, 5, RED);
@@ -771,7 +771,6 @@ int allMonstersKilled(monster monsters[MAX_MONSTERS])
 int nextLevel(status *atualStatus, char file[20], int *muahaha, char test[8])
 {
     int i;
-    PlaySound(nextLevelSound);
     atualStatus->level += 1;
     if(atualStatus->level <= 9){ //Se o level tiver apenas uma casa decimal, no caso <= 9, coloca um 0 na frente do caminho do arquivo do proximo mapa
         sprintf(file, "../assets/maps/mapa0%d.txt", atualStatus->level);
@@ -849,9 +848,6 @@ int existMonster(game *InGame, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT])
                               return i;
                      }
              }
-            //if((y_monster <= y_max)&&(y_monster >= y_min)&&(x_monster >= x_min)&&(x_monster <= x_max)){
-            //    return i;
-            //}
         }
     }
     return -1;
@@ -1206,7 +1202,7 @@ void saveGame(save saveSave, game *InGame)
 void loadGame(save loadSave, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame)
 {
     FILE *loadFileSave = fopen(loadSave.path, "rb");
-    char atualFile[20];
+    char atualFile[30];
     fread(InGame, sizeof(game), 1, loadFileSave);
     if(InGame->atualStatus.level <= 9){
         sprintf(atualFile, "../assets/maps/mapa0%d.txt", InGame->atualStatus.level);
@@ -1478,7 +1474,7 @@ void StartGame()
     readHighscores(Highscores);
     restartStatus(MapArray, &InGame, fireBalls, &imune_muahaha);
     readHighscores(Highscores);
-        InitWindow(LARGURA, ALTURA, "ZINF"); //Inicializa janela, com certo tamanho e titulo
+        InitWindow(LARGURA, ALTURA, "ZINFAGEDON"); //Inicializa janela, com certo tamanho e titulo
         InitAudioDevice();
         generateTextures();
         PlayMusicStream(gameMusic);
@@ -1516,7 +1512,7 @@ void StartGame()
                     y_player += SPRITE_SIZE;
                 }
             }
-            if(monsterCounter%3 == 0){
+            if(monsterCounter%4 == 0){
                 InGame.atualPlayer.x = x_player;
                 InGame.atualPlayer.y = y_player;
                 InGame.atualPlayer.orientation = orientation;
@@ -1546,6 +1542,7 @@ void StartGame()
             }
             if((allMonstersKilled(InGame.monsters))&&(InGame.bossBill.lifes == 0)){
                 if(nextLevel(&InGame.atualStatus, atualFile, &imune_muahaha, test)){
+                    PlaySound(nextLevelSound);
                     generateMap(atualFile, MapArray, &InGame, fireBalls);
                 } else{
                     gameOption = 2;
