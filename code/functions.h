@@ -100,6 +100,4 @@ void newScore(score highscores[5], int playerScore);
 
 void muahaha(int *imune_muahaha, char test[8]);
 
-void StartGame();
-
 #endif
