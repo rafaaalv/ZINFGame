@@ -18,11 +18,9 @@
 #define LIFES_COLLUM 4
 #define MAX_LIFES_BOSS 30
 #define MUSIC_VOLUME 0.2
-//DEFINIDO AT� AQUI
+#define TOP_BAR_HEIGHT 60
 
-
-
-
+//DEFINIÇÕES DAS TEXTURAS, MÚSICAS E SONS
 Image img_sword_mabel;
 Texture2D swordMabelTexture;
 Image img_sword_dipper;
@@ -30,7 +28,7 @@ Texture2D swordDipperTexture;
 Texture swords[2];
 Image img_life;
 Texture2D lifeTexture;
-//Texturas do player com cada uma das orienta��es
+//Texturas do player com cada uma das orientacoes
 Image img_playerNDip;
 Texture2D playerNDipTexture;
 Image img_playerSDip;
@@ -52,6 +50,7 @@ Image BackGround;
 Image img_wall;
 Texture2D wallTexture;
 //Texturas dos monstros com cada uma das orientacoes
+//MONSTRO 1 = MONSTRO ROXO
 Image img_monster1N;
 Texture2D monster1NTexture;
 Image img_monster1S;
@@ -60,6 +59,7 @@ Image img_monster1E;
 Texture2D monster1ETexture;
 Image img_monster1W;
 Texture2D monster1WTexture;
+//MONSTRO 2 = MONSTRO DENTADURA
 Image img_monster2N;
 Texture2D monster2NTexture;
 Image img_monster2S;
@@ -68,6 +68,7 @@ Image img_monster2E;
 Texture2D monster2ETexture;
 Image img_monster2W;
 Texture2D monster2WTexture;
+//MONSTRO 3 = MONSTRO FECHADURA
 Image img_monster3N;
 Texture2D monster3NTexture;
 Image img_monster3S;
@@ -76,6 +77,7 @@ Image img_monster3E;
 Texture2D monster3ETexture;
 Image img_monster3W;
 Texture2D monster3WTexture;
+//MONSTRO 4 = MONSTRO PRETO
 Image img_monster4N;
 Texture2D monster4NTexture;
 Image img_monster4S;
@@ -129,80 +131,98 @@ Sound damageSound;
 Sound nextLevelSound;
 
 
-
+//TIPO SCORE
 typedef struct score
 {
-    char name[20];
-    int score;
+    char name[20]; //REPRESENTA O NOME DO JOGADOR COM O SCORE
+    int score; //REPRESENTA O VALOR NUMERICO DO SCORE
 } score;
 
+//TIPO STATUS
 typedef struct status
 {
-    int lifes;
-    int level;
-    int score;
-    int sword;
+    int lifes; // REPRESENTA A QUANTIDADE DE VIDA ATUAL DO JOGADOR
+    int level; // REPRESENTA O NIVEL ATUAL DO JOGO
+    int score; // REPRESENTA A PONTUAÇÃO ATUAL DO JOGADOR
+    int sword; // REPRESENTA SE O JOGADOR JA PEGOU A ESPADA OU NAO (0 = NAO PEGOU // 1 = PEGOU)
 } status;
+
+//TIPO BOSS
 typedef struct boss
 {
-    int lifes;
-    int x;
-    int y;
-    int attack; //pode ser 3 bolas de fogo por vez ou 5
-    int orientation; //pode ser 0(subindo), ou 1(descendo)
+    int lifes; // REPRESENTA A QUANTIDADE DE VIDA DO BOSS
+    int x; // REPRESENTA A COORDENADA X DO BOSS
+    int y; // REPRESENTA A COORDENADA Y DO BOSS
+    int attack; // REPRESENTA A QUANTIDADE DE BOLAS DE FOGO DO ATAQUE DO BOSS (PODE SER 3 OU 5)
+    int orientation; //PODE SER 0 (BOSS ESTA SUBINDO) OU 1 (BOSS ESTA DESCENDO)
 } boss;
+
+//TIPO FIREBALL
 typedef struct fireBall
 {
-    int exist;
-    int x;
-    int y;
+    int exist; // PODE SER 0 (A BOLA DE FOGO NAO EXISTE) OU 1 (A BOLA DE FOGO EXISTE)
+    int x; // REPRESENTA A COORDENADA X DA BOLA DE FOGO
+    int y; // REPRESENTA A COORDENADA Y DA BOLA DE FOGO
 } fireBall;
+
+//TIPO SAVE
 typedef struct save
 {
-    int index;
-    char date[24];
-    char path[30];
+    int index; // REPRESENTA O INDICE DO SAVE (PODE SER 1, 2 OU 3)
+    char date[24]; // REPRESENTA A DATA EM QUE FOI CRIADO O SAVE
+    char path[30]; // REPRESENTA UMA STRING COM O CAMINHO PARA O ARQUIVO DO SAVE
 } save;
+
+//TIPO MONSTRO
 typedef struct monster
 {
-    int x;
-    int y;
-    int score;
-    int alive;
-    int orientation;
-    int qnt;
-    int sprite; //um numero que representa o monstro sorteado para ele ser
+    int x; // REPRESENTA A COORDENADA X DO MONSTRO
+    int y; // REPRESENTA A COORDENADA Y DO MONSTRO
+    int score; // REPRESENTA A PONTUACAO QUE O MONSTRO DARA QUANDO MORRER (NUMERO ALEATORIO DE 0 A 100)
+    int alive; // PODE SER 0 (O MONSTRO ESTA MORTO) OU 1 (O MONSTRO ESTA VIVO)
+    int orientation; // REPRESENTA A DIRECAO EM QUE O MONSTRO ESTA ORIENTADO (PODE SER 1 = LESTE, 2 = OESTE, 3 = SUL, 4 = NORTE)
+    int qnt; // REPRESENTA A QUANTIDADE TOTAL DE MONSTROS
+    int sprite; // REPRESENTA O INDICE DA SPRITE DO MONSTRO (NUMERO ALEATORIO DE 0 A 3)
 } monster;
+
+//TIPO ESPADA
 typedef struct sword
 {
-    int x;
-    int y;
-    int alive;
+    int x; //REPRESENTA A COORDENADA X DA ESPADA
+    int y; //REPRESENTA A COORDENADA Y DA ESPADA
+    int alive; //PODE SER 0 (PLAYER PEGOU A ESPADA) OU 1 (PLAYER AINDA NAO PEGOU A ESPADA)
 } sword;
+
+//TIPO VIDA
 typedef struct life
 {
-    int x;
-    int y;
-    int alive;
+    int x; //REPRESENTA A COORDENADA X DA VIDA
+    int y; //REPRESENTA A COORDENADA Y DA VIDA
+    int alive; //PODE SER 0 (PLAYER COLETOU A VIDA) OU 1 (PLAYER AINDA NAO COLETOU A VIDA)
 } life;
+
+//TIPO PLAYER
 typedef struct player
 {
-    int x;
-    int y;
-    int orientation;
-    int person; // player.person 0 para dipper, 1 para mabel
-    int imune;
+    int x; //REPRESENTA A COORDENADA X DO PLAYER
+    int y; //REPRESENTA A COORDENADA Y DO PLAYER
+    int orientation; //REPRESENTA A DIRECAO EM QUE O PLAYER ESTA ORIENTADO (PODE SER 1 = LESTE, 2 = OESTE, 3 = NORTE, 4 = SUL)
+    int person; // REPRESENTA O PERSONAGEM ESCOLHIDO PELO JOGADOR (0 PARA DIPPER, 1 PARA MABEL)
+    int imune; // PODE SER 0 (PLAYER NAO ESTA IMUNE) OU 1 (PLAYER ESTA IMUNE)
 } player;
+
+//TIPO JOGO
 typedef struct game
 {
-    player atualPlayer;
-    status atualStatus;
-    monster monsters[MAX_MONSTERS];
-    sword atualSword;
-    life lifes[MAX_LIFES];
-    boss bossBill;
+    player atualPlayer; //REPRESENTA O PLAYER ATUAL DO JOGO
+    status atualStatus; //REPRESENTA O STATUS ATUAL DO JOGO
+    monster monsters[MAX_MONSTERS]; //REPRESENTA OS MONSTROS ATUAIS DO JOGO
+    sword atualSword; //REPRESENTA A ESPADA ATUAL DO JOGO
+    life lifes[MAX_LIFES]; //REPRESENTA AS VIDAS ATUAIS DO JOGO
+    boss bossBill; //REPRESENTA O BOSS ATUAL DO JOGO
 } game;
 
+//FUNCAO QUE CARREGA OS ARQUIVOS DE SOM E MUSICA DO JOGO E CONFIGURA O VOLUME
 void loadSoundsAndMusics()
 {
     gameMusic = LoadMusicStream("../assets/sounds/weirdmageddonTheme.mp3");
@@ -215,6 +235,8 @@ void loadSoundsAndMusics()
     gameOverSound = LoadSound("../assets/sounds/gameOver.mp3");
     nextLevelSound = LoadSound("../assets/sounds/levelPassed.wav");
 }
+
+//FUNCAO QUE DESCARREGA OS ARQUIVOS DE SOM E MUSICA DO JOGO
 void unloadSoundsAndMusics()
 {
     UnloadMusicStream(gameMusic);
@@ -227,6 +249,7 @@ void unloadSoundsAndMusics()
     UnloadSound(nextLevelSound);
 }
 
+// FUNCAO QUE CARREGA E CONFIGURA TODAS AS TEXTURAS UTILIZADAS NOS MENUS DO JOGO
 void loadTexturesMenus()
 {
     loadSoundsAndMusics();
@@ -254,6 +277,8 @@ void loadTexturesMenus()
     confettis[0] = LoadTextureFromImage(img_conf1);
     confettis[1] = LoadTextureFromImage(img_conf2);
 }
+
+//FUNCAO QUE CARREGA E CONFIGURA TODAS AS TEXTURAS UTILIZADAS NA DURACAO DO JOGO
 void generateTextures()
 {
     loadTexturesMenus();
@@ -419,6 +444,8 @@ void generateTextures()
     BackGroundTexture = LoadTextureFromImage(BackGround);
     iconImage = LoadImage("../assets/icon.png");
 }
+
+//FUNCAO QUE DESCARREGA TODAS AS TEXTURAS UTILIZADAS NO MENU DO JOGO
 void unloadTexturesMenus()
 {
     unloadTexturesMenus();
@@ -456,6 +483,8 @@ void unloadTexturesMenus()
     UnloadTexture(playerSMabTexture);
     UnloadTexture(bossTexture);
 }
+
+//FUNCAO QUE DESCARREGA TODAS AS TEXTURAS UTILIZADAS NA DURACAO DO JOGO
 void unloadTextures()
 {
     unloadSoundsAndMusics();
@@ -523,6 +552,9 @@ void unloadTextures()
     UnloadTexture(BackGroundTexture);
     UnloadTexture(wallTexture);
 }
+
+// FUNCAO QUE RECEBE UMA STRING, UMA COOREDANA X, UMA COORDENADA Y, UMA COR1 E UMA COR2
+// ESSA FUNCAO DESENHA A STRING NAS COORDENADAS RECEBIDAS COM A COR1, CONTORNADA PELA COR2
 void underlineText(char *string, int x, int y, int size, Color inSideColor, Color outColor)
 {
     //para das impressao de contornada o texto, imprimimos dos 4 lados o mesmo texto, em preto, 3 pixels para o respectivo lado
@@ -532,20 +564,26 @@ void underlineText(char *string, int x, int y, int size, Color inSideColor, Colo
     DrawText(string, x + 3, y, size, outColor);
     DrawText(string, x, y, size, inSideColor);
 }
+
+//FUNCAO QUE RECEBE O JOGO ATUAL E EXIBE A TOPBAR COM AS INFORMACOES ATUAIS DO JOGO
 void ShowTopBar(game gameTopBarStatus)
 {
-    char l[10], lev[12], sc[15];
+    char l[10], lev[12], sc[15]; //define strings a ser usadas na funcao
     sprintf(l, "Vidas: %d", gameTopBarStatus.atualStatus.lifes);
     sprintf(lev, "Nivel: %d", gameTopBarStatus.atualStatus.level);
     sprintf(sc, "Escores: %d", gameTopBarStatus.atualStatus.score);
-    DrawRectangle(0, 0, 1200, 60, BLACK); //O tamanho da top bar eh 1200x60 pixels
-    DrawText(l, 40, 5, SPRITE_SIZE, WHITE);
-    DrawText(lev, 280, 5, SPRITE_SIZE, WHITE);
-    DrawText(sc, 480, 5, SPRITE_SIZE, WHITE);
-    if(gameTopBarStatus.atualStatus.sword){
+    DrawRectangle(0, 0, LARGURA, TOP_BAR_HEIGHT, BLACK); //O tamanho da top bar eh 1200x60 pixels
+    DrawText(l, 40, 5, SPRITE_SIZE, WHITE); //imprime a quantidade de vidas na posicao (40, 5), dentro da topbar
+    DrawText(lev, 280, 5, SPRITE_SIZE, WHITE); //imprime o nivel atual na posicao (280, 5), dentro da topbar
+    DrawText(sc, 480, 5, SPRITE_SIZE, WHITE); //imprime a pontuaçao atual na posicao (480, 5), dentro da topbar
+    if(gameTopBarStatus.atualStatus.sword){ //se a espada foi coletada,
+        //desenha a arma do personagem do player na posicao (1100, 5), dentro da topbar
         DrawTexture(swords[gameTopBarStatus.atualPlayer.person], 1100 , 5, WHITE);
     }
 }
+
+//FUNCAO QUE RECEBE UMA STRING QUE REPRESENTA O NOME DO ARQUIVO DE UM MAPA E UMA MATRIZ DE INTEIROS QUE REPRESENTA O MAPA
+//A FUNCAO COLOCA 1 NAS POSICOES DA MATRIZ COM PAREDE E 0 NA POSICAO DA MATRIZ SEM PAREDE
 void generateArrayMap(char path[20], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT])
 {
     int i, j;
@@ -562,6 +600,9 @@ void generateArrayMap(char path[20], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT])
         }
     }
 }
+
+//FUNCAO QUE RECEBE UMA STRING QUE REPRESENTA O NOME DO ARQUIVO DE UM MAPA, UMA MATRIZ DE INTEIROS QUE REPRESENTA O MAPA, O JOGO ATUAL, E UM ARRANJO DE FIREBALLS
+//A FUNCAO COLOCA 1 NAS POSICOES DA MATRIZ COM PAREDE E 0 NA POSICAO DA MATRIZ SEM PAREDE, E, ALÉM DISSO, ELA CONFIGURA O JOGO ATUAL BASEADO NAS INFORMACOES DO MAPA
 void generateMap(char path[20], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame, fireBall fireBalls[5])
 {
     int i, j, lifes = 0, monsters = 0, x, y, k;
@@ -617,6 +658,10 @@ void generateMap(char path[20], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game 
     }
     InGame->monsters[0].qnt = monsters;
 }
+
+//FUNCAO QUE RECEBE O PLAYER DO JOGO ATUAL E UMA VARIAVEL QUE REPRESENTA SE O JOGO ESTA EM PROGRESSO OU NAO
+//A FUNCAO DESENHA E RODA O MENU, POSSIBILITANDO QUE O USUARIA ALTERE ENTRE AS OPCOES DO MENU E ESCOLHA O PERSONAGEM DESEJADO
+//A FUNCAO RETORNA A OPCAO DO MENU ESCOLHIDA E CONFIGURA O PERSONAGEM ESCOLHIDO PELO USUARIO
 int menu(int gameInProgress, player *gamePlayer)
 {
     char text[40], *optionsText[5];
@@ -705,6 +750,9 @@ int menu(int gameInProgress, player *gamePlayer)
     SetTargetFPS(60);
     return optionSelected;
 }
+
+//A FUNCAO DESENHA E RODA O MENU DE GAME OVER, POSSIBILITANDO QUE O USUARIO ALTERE ENTRE AS OPCOES DO MENU
+//A FUNCAO RETORNA A OPCAO SELECIONADO PELO USUSARIO
 int gameOver()
 {
     char *optionsText[4];
@@ -755,6 +803,9 @@ int gameOver()
     }
     return optionSelected;
 }
+
+//A FUNCAO RECEBE O ARRANJO QUE REPRESENTA O MAPA, O JOGO ATUAL E A VARIAVEL DO CHEAT MUAHAHA
+//A FUNCAO RECONFIGURA AS INFORMACOES PARA REINICIAR O JOGO
 void restartStatus(int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame, fireBall fireBalls[5], int *imune_muahaha)
 {
     //Reseta os status para o inicial, nivel 1, vidas 3, score 0 e a espada 0
@@ -766,6 +817,9 @@ void restartStatus(int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame, fire
     InGame->bossBill.lifes = 0;
     *imune_muahaha = 0;
 }
+
+//A FUNCAO RECEBE O JOGO ATUAL E O INDICE DE UM MONSTRO
+//A FUNCAO MATA ESSE MONSTRO, TOCANDO O SOM, ATUALIZANDO A PONTUACAO DO JOGADOR E DECLARANDO O MONSTRO DO INDICE RECEBIDO COMO MORTO
 void killMonster(game *InGame,  int monster)
 {
     int monsterScore;
@@ -774,23 +828,29 @@ void killMonster(game *InGame,  int monster)
     InGame->atualStatus.score += monsterScore;
     InGame->monsters[monster].alive = 0;
 }
+
+//A FUNCAO RECEBE O PLAYER E O CONTADOR DA IMUNIDADE E DESENHA O PLAYER
 void drawPlayer(player atualPlayer, int counter)
 {
-    if((!atualPlayer.imune)||(counter%8 == 0)){ //exibe a sprite normal se não estiver imune, se estiver, exibe apenas a cada 8 frames, para dar a impressão de piscando!
+    if((!atualPlayer.imune)||(counter%8 == 0)){ //exibe a sprite normal se não estiver imune, se estiver, exibe apenas a cada 8 frames, para dar a impressão de estar piscando!
         DrawTexture(arrayTexturesPlayer[atualPlayer.person][atualPlayer.orientation - 1], atualPlayer.x, atualPlayer.y, WHITE);
     }
 }
+
+//A FUNCAO RECEBE A MATRIZ QUE REPRESENTA O MAPA E DESENHA AS PARES NAS COORDENADAS DEFINIDAS COMO 1
 void genarateWall(int matriz[SPRITE_HEIGHT][SPRITE_WIDHT])
 {
     int i, j;
     for(i = 0; i < SPRITE_HEIGHT; i++){
         for(j = 0; j < SPRITE_WIDHT; j++){
             if(matriz[i][j]){
-                DrawTexture(wallTexture, j*SPRITE_SIZE, i*SPRITE_SIZE + 60, WHITE); //+60 da top bar
+                DrawTexture(wallTexture, j*SPRITE_SIZE, i*SPRITE_SIZE + TOP_BAR_HEIGHT, WHITE); //+60 da top bar
             }
         }
     }
 }
+
+//A FUNCAO RECEBE O ARRAY DE MONSTROS E RETORNO 0 CASO ALGUM MONSTRO ESTEJA VIVO, SE TODOS ESTIVEREM MORTOS, A FUNCAO RETORNA 1
 int allMonstersKilled(monster monsters[MAX_MONSTERS])
 {
     int i;
@@ -801,7 +861,10 @@ int allMonstersKilled(monster monsters[MAX_MONSTERS])
     }
     return 1;
 }
-int nextLevel(status *atualStatus, char file[20], int *muahaha, char test[8])
+
+//A FUNCAO RECEBE O STATUS ATUAL DO JOGO, UMA STRING DO CAMINHO PARA O ARQUIVO DE UM MAPA E A VARIAVEL DO CHEAT MUAHAHA
+// A FUNCAO PASSA PARA A SEGUINTE FASE E RETORNA 1 SE O ARQUIVO DA PROXIMA FASE EXISTIR, CASO CONTRARIO, RETORNA 0
+int nextLevel(status *atualStatus, char file[20], int *muahaha)
 {
     int i;
     atualStatus->level += 1;
@@ -814,6 +877,9 @@ int nextLevel(status *atualStatus, char file[20], int *muahaha, char test[8])
     *muahaha = 0;
     return FileExists(file);
 }
+
+//A FUNCAO RECEBE O STATUS ATUAL E UM VALOR INTEIRO
+//A FUNCAO ALTERA A VIDA DO JOGADOR BASEADO NO VALOR INTEIRO RECEBIDO (PODE PERDER OU GANHAR VIDA)
 void changeLife(status *lifeStatus, int value)
 {
     if(value < 0){//Se for negativo, significa que o player levou dano, logo toca o som de dano
@@ -821,6 +887,9 @@ void changeLife(status *lifeStatus, int value)
     }
     lifeStatus->lifes += value;
 }
+
+//A FUNCAO RECEBE As COORDENADA X E Y DO JOGADOR, A MATRIZ DO MAPA E O JOGO ATUAL
+//A FUNCAO RETORNA 0 SE O PLAYER INVADIU A AREA DO BOSS, CASO CONTRARIO, RETORNA 1
 int checkBossArea(int x, int y, int matriz[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame)
 {
     // se o boss estiver vivo
@@ -833,15 +902,22 @@ int checkBossArea(int x, int y, int matriz[SPRITE_HEIGHT][SPRITE_WIDHT], game *I
     else
         return 0;
 }
+
+//A FUNCAO RECEBE DUAS COORDENADAS E A MATRIZ DO MAPA
+// A FUNCAO RETORNA 0 CASO AS COORDENADAS RECEBIDAS ESTEJAM DENTRO DE UMA PAREDE NO MAPA, CASO CONTRARIO, RETORNA 1
 int checkPosition(int x, int y, int matriz[SPRITE_HEIGHT][SPRITE_WIDHT])
 {
-    if((!matriz[(int) floor((y- 60)/SPRITE_SIZE)][(int) floor((x)/SPRITE_SIZE)])&&(x < 1200)&&(x > -SPRITE_SIZE)&&(y < 860)&&(y > 10)){
+    if((!matriz[(int) floor((y- TOP_BAR_HEIGHT)/SPRITE_SIZE)][(int) floor((x)/SPRITE_SIZE)])&&(x < 1200)&&(x > -SPRITE_SIZE)&&(y < 860)&&(y > 10)){
         return 1;
     }
     else{
         return 0;
     }
 }
+
+//A FUNCAO RECEBE O JOGO ATUAL E A MATRIZ DO MAPA
+//A FUNCAO RETORNA O INDICE DO MONSTRO NA AREA DE ATAQUE DO JOGADOR, SE EXISTIR ALGUM MONSTRO ALI
+//CASO NAO EXISTA NENHUM MONSTRO NA AREA DE ATAQUE OU EXISTA ALGUMA PAREDE ENTRE O MONSTRO E O JOGADOR, A FUNCAO RETORNA -1
 int existMonster(game *InGame, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT])
 {
     int i, x, y, x_monster, y_monster, y_max, y_min, x_max, x_min, orientation;
@@ -852,39 +928,70 @@ int existMonster(game *InGame, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT])
     x_min = InGame->atualPlayer.x - 3*SPRITE_SIZE;
     y_max = InGame->atualPlayer.y + 3*SPRITE_SIZE;
     y_min = InGame->atualPlayer.y - 3*SPRITE_SIZE;
-    for(i = 0; i < MAX_MONSTERS; i++){
-        if(InGame->monsters[i].alive){
+    for(i = 0; i < MAX_MONSTERS; i++){ //O FOR VARRE OS MONSTROS
+        if(InGame->monsters[i].alive){ //CONSIDERA APENAS OS MONSTROS VIVOS
             x_monster = InGame->monsters[i].x;
             y_monster = InGame->monsters[i].y;
              switch(orientation){
-                 case 1:
-                     if(((x_monster <= x_max)&&(x_monster >= x))&&(y == y_monster)){
-                          if((x_monster - x == SPRITE_SIZE || x == x_monster) || (x_monster - x == 2*SPRITE_SIZE && checkPosition(x + SPRITE_SIZE, y, MapArray)) || (x_monster - x == 3*SPRITE_SIZE && checkPosition(x + SPRITE_SIZE, y, MapArray) && checkPosition(x + 2*SPRITE_SIZE, y, MapArray)))
-                              return i;
+                 case 1: //CASO O PLAYER ESTEJA ORIENTADO AO LESTE
+                     if(((x_monster <= x_max)&&(x_monster >= x))&&(y == y_monster)){ //SE O MONSTRO ESTIVER NA AREA DE 3 SPRITES A DIREITA DO PLAYER
+                          // E SE O MONSTRO ESTIVER APENAS A 1 SPRITE DE DISTANCIA OU NO MESMO LUGAR DO PLAYER
+                          if((x_monster - x == SPRITE_SIZE || x == x_monster))
+                              return i; //RETORNA O INDICE DO MONSTRO
+                          // OU, E SE O MOSNTRO ESTIVER A DOIS SPRITES DE DISTANCIA DO PLAYER E NAO EXISTIR PAREDE ENTRE O PLAYER E O MONSTRO
+                          else if(x_monster - x == 2*SPRITE_SIZE && checkPosition(x + SPRITE_SIZE, y, MapArray))
+                              return i; //RETORNA O INDICE DO MONSTRO
+                          // OU, E SE O MOSNTRO ESTIVER A TRES SPRITES DE DISTANCIA DO PLAYER E NAO EXISTIR PAREDE ENTRE O PLAYER E O MONSTRO
+                          else if(x_monster - x == 3*SPRITE_SIZE && checkPosition(x + SPRITE_SIZE, y, MapArray) && checkPosition(x + 2*SPRITE_SIZE, y, MapArray))
+                              return i; //RETORNA O INDICE DO MONSTRO
                      }
                      break;
-                 case 2:
-                     if(((x_monster >= x_min)&&(x_monster <= x))&&(y == y_monster)){
-                          if((x_monster - x == -SPRITE_SIZE || x == x_monster) || (x_monster - x == -2*SPRITE_SIZE && checkPosition(x - SPRITE_SIZE, y, MapArray)) || (x_monster - x == -3*SPRITE_SIZE && checkPosition(x - SPRITE_SIZE, y, MapArray) && checkPosition(x - 2*SPRITE_SIZE, y, MapArray)))
+                 case 2: //CASO O PLAYER ESTEJA ORIENTADO AO OESTE
+                     if(((x_monster >= x_min)&&(x_monster <= x))&&(y == y_monster)){ //SE O MONSTRO ESTIVER NA AREA DE 3 SPRITES A ESQUERDA DO PLAYER
+                            // E SE O MONSTRO ESTIVER APENAS A 1 SPRITE DE DISTANCIA OU NO MESMO LUGAR DO PLAYER
+                          if(x_monster - x == -SPRITE_SIZE || x == x_monster)
                               return i;
+                          // OU, E SE O MOSNTRO ESTIVER A DOIS SPRITES DE DISTANCIA DO PLAYER E NAO EXISTIR PAREDE ENTRE O PLAYER E O MONSTRO
+                          else if(x_monster - x == -2*SPRITE_SIZE && checkPosition(x - SPRITE_SIZE, y, MapArray))
+                              return i; //RETORNA O INDICE DO MONSTRO
+                          // OU, E SE O MOSNTRO ESTIVER A TRES SPRITES DE DISTANCIA DO PLAYER E NAO EXISTIR PAREDE ENTRE O PLAYER E O MONSTRO
+                          else if(x_monster - x == -3*SPRITE_SIZE && checkPosition(x - SPRITE_SIZE, y, MapArray) && checkPosition(x - 2*SPRITE_SIZE, y, MapArray))
+                              return i; //RETORNA O INDICE DO MONSTRO
                      }
                      break;
-                 case 3:
-                     if(((y_monster >= y_min)&&(y_monster <= y))&&(x == x_monster)){
-                          if((y_monster - y == -SPRITE_SIZE || y == y_monster) || (y_monster - y == -2*SPRITE_SIZE && checkPosition(x, y - SPRITE_SIZE, MapArray)) || (y_monster - y == -3*SPRITE_SIZE && checkPosition(x, y - SPRITE_SIZE, MapArray) && checkPosition(x, y - 2*SPRITE_SIZE, MapArray)))
+                 case 3: //CASO O PLAYER ESTEJA ORIENTADO AO NORTE
+                     if(((y_monster >= y_min)&&(y_monster <= y))&&(x == x_monster)){ //SE O MONSTRO ESTIVER NA AREA DE 3 SPRITES ACIMA DO PLAYER
+                            // E SE O MONSTRO ESTIVER APENAS A 1 SPRITE DE DISTANCIA OU NO MESMO LUGAR DO PLAYER
+                          if(y_monster - y == -SPRITE_SIZE || y == y_monster)
                               return i;
+                          // OU, E SE O MOSNTRO ESTIVER A DOIS SPRITES DE DISTANCIA DO PLAYER E NAO EXISTIR PAREDE ENTRE O PLAYER E O MONSTRO
+                          else if(y_monster - y == -2*SPRITE_SIZE && checkPosition(x, y - SPRITE_SIZE, MapArray))
+                              return i; //RETORNA O INDICE DO MONSTRO
+                          // OU, E SE O MOSNTRO ESTIVER A TRES SPRITES DE DISTANCIA DO PLAYER E NAO EXISTIR PAREDE ENTRE O PLAYER E O MONSTRO
+                          else if(y_monster - y == -3*SPRITE_SIZE && checkPosition(x, y - SPRITE_SIZE, MapArray) && checkPosition(x, y - 2*SPRITE_SIZE, MapArray))
+                              return i; //RETORNA O INDICE DO MONSTRO
                      }
                      break;
-                 default:
-                     if(((y_monster <= y_max)&&(y_monster >= y))&&(x == x_monster)){
-                          if((y_monster - y == SPRITE_SIZE || y == y_monster) || (y_monster - y == 2*SPRITE_SIZE && checkPosition(x, y + SPRITE_SIZE, MapArray)) || (y_monster - y == 3*SPRITE_SIZE && checkPosition(x, y + SPRITE_SIZE, MapArray) && checkPosition(x, y + 2*SPRITE_SIZE, MapArray)))
+                 default: //CASO O PLAYER ESTEJA ORIENTADO AO SUL
+                     if(((y_monster <= y_max)&&(y_monster >= y))&&(x == x_monster)){ //SE O MONSTRO ESTIVER NA AREA DE 3 SPRITES ABAIXO DO PLAYER
+                            // E SE O MONSTRO ESTIVER APENAS A 1 SPRITE DE DISTANCIA OU NO MESMO LUGAR DO PLAYER
+                          if(y_monster - y == SPRITE_SIZE || y == y_monster)
                               return i;
+                          // OU, E SE O MOSNTRO ESTIVER A DOIS SPRITES DE DISTANCIA DO PLAYER E NAO EXISTIR PAREDE ENTRE O PLAYER E O MONSTRO
+                          else if(y_monster - y == 2*SPRITE_SIZE && checkPosition(x, y + SPRITE_SIZE, MapArray))
+                              return i; //RETORNA O INDICE DO MONSTRO
+                          // OU, E SE O MOSNTRO ESTIVER A TRES SPRITES DE DISTANCIA DO PLAYER E NAO EXISTIR PAREDE ENTRE O PLAYER E O MONSTRO
+                          else if(y_monster - y == 3*SPRITE_SIZE && checkPosition(x, y + SPRITE_SIZE, MapArray) && checkPosition(x, y + 2*SPRITE_SIZE, MapArray))
+                              return i; //RETORNA O INDICE DO MONSTRO
                      }
              }
         }
     }
     return -1;
 }
+
+//A FUNCAO RECEBE O JOGO ATUAL
+//A FUNCAO RETORNA 1 E REMOVE UMA VIDA DO JOGADOR CASO O JOGADOR ESTEJA NA MESMA POSICAO DE UM MONSTRO VIVO, CASO CONTRARIO, A FUNCAO RETORNA 0
 int attackMonster(game *InGame)
 {
     int i;
@@ -896,56 +1003,69 @@ int attackMonster(game *InGame)
     }
     return 0;
 }
+
+//A FUNCAO RECEBE O JOGO ATUAL
 void chatchSword(game *InGame)
 {
     PlaySound(lifeSound);
-    InGame->atualStatus.sword = 1;
-    InGame->atualSword.alive = 0;
+    InGame->atualStatus.sword = 1; // O JOGADOR PEGOU A ARMA
+    InGame->atualSword.alive = 0; // A ARMA FOI COLETADA
 }
+
+//A FUNCAO RECEBE O JOGO ATUAL
+//SE A ARMA NAO FOI COLETADA AINDA, A FUNCAO DESENHA A ARMA DO PERSONAGEM SELECIONADO EM SUA POSICAO
 void drawSword(game *InGame)
 {
     if(InGame->atualSword.alive){
         DrawTexture(swords[InGame->atualPlayer.person], InGame->atualSword.x, InGame->atualSword.y, WHITE);
     }
 }
+
+//A FUNCAO RECEBE O BOSS DO JOGO ATUAL E O CONTADOR DO BOSS
+//A FUNCAO TORNA MUDA A QUANTIDADE DO ATAQUE DO BOSS E REINICIA O SEU CONTADOR
 void bossDificultMode(boss *bossBill, int *counter)
 {
     //Muda a rapidez e a quantidade do ataque do boss
     bossBill->attack = 5;
     *counter = 0;
 }
+
+//A FUNCAO RECEBE O JOGO ATUAL E O CONTADOR DO BOSS
+//A FUNCAO DANIFICA O BOSS CASO ELE ESTEJA NA AREA DE ATAQUE DO JOGADOR;
 void killBoss(game *InGame, int *counter)
 {
-    int x_max, x_min, y_max, y_min, y_monster, x_monster, orientation, x, y;
+    int x_max, y_boss, x_boss, orientation, x, y;
     if(InGame->bossBill.lifes != 0){
         orientation =InGame->atualPlayer.orientation;
         x = InGame->atualPlayer.x;
         y = InGame->atualPlayer.y;
         x_max = InGame->atualPlayer.x + 3*SPRITE_SIZE;
-        x_min = InGame->atualPlayer.x - 3*SPRITE_SIZE;
-        y_max = InGame->atualPlayer.y + 3*SPRITE_SIZE;
-        y_min = InGame->atualPlayer.y - 3*SPRITE_SIZE;
-        y_monster = InGame->bossBill.y;
-        x_monster = InGame->bossBill.x;
-              switch(orientation){
-                 case 1:
-                     if(((x_monster <= x_max)&&(x_monster >= x))&&(y == y_monster || y == y_monster + SPRITE_SIZE || y == y_monster + 2*SPRITE_SIZE)){
-                            InGame->bossBill.lifes--;
-                            PlaySound(killMonsterSound);
-                            if(InGame->bossBill.lifes == 15){
-                                bossDificultMode(&InGame->bossBill, counter);
-                            }
-                     }
-                     break;
+        y_boss = InGame->bossBill.y;
+        x_boss = InGame->bossBill.x;
+              if(orientation == 1){//se o jogador estiver orientado ao leste
+                    //SE O BOSS ESTIVER NA AREA DE 3 SPRITES A DIREITA DO PLAYER E NA MESMA ALTURA DO PLAYER,
+                    //(DESTACA-SE QUE O BOSS OCUPA TRES SPRITES DE ALTURA, LOGO EH NECESSARIO CONFERIR O Y EM 3 SPRITES DIFERENTES)
+                    if(((x_boss <= x_max)&&(x_boss >= x))&&(y == y_boss || y == y_boss + SPRITE_SIZE || y == y_boss + 2*SPRITE_SIZE)){
+                        InGame->bossBill.lifes--; //REMOVE UMA VIDA DO BOSS
+                        PlaySound(killMonsterSound);
+                        if(InGame->bossBill.lifes == 15){ //SE A VIDA DO BOSS ATINGIR 15,
+                            bossDificultMode(&InGame->bossBill, counter); //ATIVAR O MODO DIFICIL DO BOSS
+                        }
+                    }
              }
         }
     }
-int fireBallsMove(game *InGame, fireBall fireBalls[5], int *counter, int mapArray[SPRITE_HEIGHT][SPRITE_WIDHT], player atualPlayer, int imune_muahaha)
+
+//A FUNCAO RECEBE O JOGO ATUAL, O ARRAY DE FIREBALLS, O CONTADOR DA IMUNIDADE, A MATRIZ DO MAPA E A VARIAVEL DO CHEAT MUAHAHA
+//A FUNCAO DESENHA AS BOLAS DE FOGO E AS MOVIMENTA, SE ELAS EXISTIREM
+//CASO UMA BOLA DE FOGO ATINGA O PLAYER OU ALGUMA PAREDE, ELA DEIXA DE EXISTIR
+//A FUNCAO RETORNA 1 CASO A BOLA ATINGA UM PLAYER NAO IMUNE, CASO CONTRARIO, A FUNCAO RETORNA 0
+int fireBallsMove(game *InGame, fireBall fireBalls[5], int *counter, int mapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int imune_muahaha)
 {
     int new_counter, i, x_player, y_player;
-    x_player = atualPlayer.x;
-    y_player = atualPlayer.y;
-    if(InGame->bossBill.lifes > 0){
+    x_player = InGame->atualPlayer.x;
+    y_player = InGame->atualPlayer.y;
+    if(InGame->bossBill.lifes != 0){
         for(i = 0; i < InGame->bossBill.attack; i++){
             if(fireBalls[i].exist == 1){
                 if(InGame->bossBill.attack == 3)
@@ -963,7 +1083,7 @@ int fireBallsMove(game *InGame, fireBall fireBalls[5], int *counter, int mapArra
                     } else {
                         fireBalls[i].exist = 0;
                     }
-                    if(!atualPlayer.imune && !imune_muahaha){
+                    if(!InGame->atualPlayer.imune && !imune_muahaha){
                         if(((fireBalls[i].x + 2*SPRITE_SIZE >= x_player)&&(fireBalls[i].x <= x_player))&&((fireBalls[i].y + SPRITE_SIZE == y_player))){
                             fireBalls[i].exist = 0;
                             return 1;
@@ -977,19 +1097,26 @@ int fireBallsMove(game *InGame, fireBall fireBalls[5], int *counter, int mapArra
     }
     return 0;
 }
+
+//A FUNCAO RECEBE O JOGO ATUAL
+//CASO O PLAYER ESTEJA NA MESMA POSICAO DO BOSS, A FUNCAO RETORNA 1, CASO CONTRARIO, A FUNCAO RETORNA 0
 int attackContactBoss(game *InGame)
 {
+    //DESTACA-SE QUE EH NECESSARIO FAZER VARIAS CONFERENCIAS CONSIDERANDO QUE O BOSS CUPA 3X3 SPRITES
     if((InGame->atualPlayer.x >= InGame->bossBill.x)&&((InGame->atualPlayer.y == InGame->bossBill.y) || (InGame->atualPlayer.y == InGame->bossBill.y + SPRITE_SIZE) || (InGame->atualPlayer.y == InGame->bossBill.y + 2*SPRITE_SIZE))&&(InGame->bossBill.lifes > 0)){
-        if(InGame->bossBill.attack == 3)
-           changeLife(&InGame->atualStatus, -2);
-        else
-           changeLife(&InGame->atualStatus, -3);
+        if(InGame->bossBill.attack == 3)//SE O MODO DIFICIL ESTIVER DESATIVADO
+           changeLife(&InGame->atualStatus, -2); //TIRA DUAS VIDAS DO PLAYER
+        else //SENAO
+           changeLife(&InGame->atualStatus, -3); //TIRA TRES VIDAS DO PLAYER
         return 1;
     }
     else{
     return 0;
     }
 }
+
+//A FUNCAO RECEBE O BOSS DO JOGO ATUAL, O CONTADOR DO BOSS E AS FIREBALLS
+//A FUNCAO INICIALIZA OS ATAUQES DE BOLAS DE FOGO QUE NAO FORAM INICIALIZADAS AINDA QUANDO O CONTADOR DO BOSS CHEGA A DETERMINADO NUMERO
 void attackBoss(boss *bossBill, int *counter, fireBall fireBalls[5])
 {
     int new_counter, i;
@@ -1009,13 +1136,16 @@ void attackBoss(boss *bossBill, int *counter, fireBall fireBalls[5])
         }
     }
 }
+
+//A FUNCAO RECEBE O BOSS DO JOGO ATUAL E O CONTADOR DO BOSS
+//A FUNCAO DESENHA E MOVIMENTA O BOSS
 void drawBoss(boss *bossBill, int *counter)
 {
     int new_counter;
     if(bossBill->lifes != 0){
         DrawRectangleLines(bossBill->x - 5 - 2, bossBill->y - 5 - 2, MAX_LIFES_BOSS*8 +2,  20 + 2, RED);
-        DrawRectangle(bossBill->x - 5, bossBill->y - 5, bossBill->lifes*8, 20, RED);
-        if(bossBill->attack == 5){
+        DrawRectangle(bossBill->x - 5, bossBill->y - 5, bossBill->lifes*8, 20, RED); //BARRA DE VIDA DO BOSS
+        if(bossBill->attack == 5){ //A TEXTURA DO BOSS MUDA DEPENDENDO SE O MODO DIFICIL FOI ATIVADO OU NAO
             DrawTexture(bossDificultTexture, bossBill->x, bossBill->y, WHITE);
         } else {
             DrawTexture(bossTexture, bossBill->x, bossBill->y, WHITE);
@@ -1033,33 +1163,38 @@ void drawBoss(boss *bossBill, int *counter)
         } else {
             new_counter = *counter + 1;
         }
-        if(bossBill->y <= 60){//60 da barra de status -  tamanho do boss
+        if(bossBill->y <= TOP_BAR_HEIGHT){//60 da barra de status -  tamanho do boss
             bossBill->orientation = 1;
-        } else if(bossBill->y >= ALTURA - 3*SPRITE_SIZE - 60) { // altura da tela + 60 da barra de status
+        } else if(bossBill->y >= ALTURA - 3*SPRITE_SIZE - TOP_BAR_HEIGHT) { // altura da tela + 60 da barra de status
             bossBill->orientation = 0;
         }
         *counter = new_counter;
     }
 }
-void drawMonsters(monster monsters[MAX_MONSTERS], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int *monsterCounter, game *InGame)
+
+//A MATRIZ DO MAPA, O CONTADOR DA MOVIMENTACAO E O JOGO ATUAL
+//A FUNCAO DESENHA E MOVIMENTA OS MONSTROS BASEADO NO CONTADOR DE MOVIMENTACAO E NA ALEATORIEDADE
+//SE A NOVA POSICAO DO MONSTRO NAO PASSAR PELA FUNCAO CHECKPOSITION, ALTERA A POSICAO ATE ACHAR UMA POSICAO VALIDA
+void drawMonsters(int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int *monsterCounter, game *InGame)
 {
     int i, randow, move, x, y;
     *monsterCounter += 1;
-    for(i = 0; i < monsters[0].qnt; i++){
-        if(monsters[i].alive){
-            x = monsters[i].x;
-            y = monsters[i].y;
-            DrawTexture(arrayTexturesMonster[monsters[i].sprite][monsters[i].orientation - 1], x, y, WHITE);
+    for(i = 0; i < InGame->monsters[0].qnt; i++){
+        if(InGame->monsters[i].alive){
+            x = InGame->monsters[i].x;
+            y = InGame->monsters[i].y;
+            DrawTexture(arrayTexturesMonster[InGame->monsters[i].sprite][InGame->monsters[i].orientation - 1], x, y, WHITE);//DESENHA O MONSTRO
             randow = rand()%(2);
             if(randow == 1){
-                move = monsters[i].orientation;
+                move = InGame->monsters[i].orientation; //50% DE CHANCE DO MONSTRO MANTER A MESMA ORIENTACAO
             } else{
-                move = rand()%(4) + 1;
+                move = rand()%(4) + 1; //50% DE CHANCE DO MONSTRO MUDAR DE ORIENTACAO
             }
             randow = rand()%(3 + 1);
-            if((*monsterCounter % 8 == 0 && randow == 1) || (*monsterCounter % 14 == 0 && randow == 2)){
-                monsters[i].orientation = move;
-                switch(move){
+            //O MONSTRO TEM CHANCE DE MOVER TODA VEZ QUE O CONTADOR FOR DIVISIVEL POR 10 OU POR 16
+            if((*monsterCounter % 10 == 0 && randow == 1) || (*monsterCounter % 16 == 0 && randow == 2)){
+                InGame->monsters[i].orientation = move;
+                switch(move){//ALTERA A COORDENADA DO MONSTRO BASEADO NA ORIENTACAO
                 case 1:
                     x += SPRITE_SIZE;
                     break;
@@ -1073,11 +1208,11 @@ void drawMonsters(monster monsters[MAX_MONSTERS], int MapArray[SPRITE_HEIGHT][SP
                     y -= SPRITE_SIZE;
                 }
             }
-            if(checkPosition(x, y, MapArray)){
-                monsters[i].x = x;
-                monsters[i].y = y;
+            if(checkPosition(x, y, MapArray)){// SE PASSAR PELO TESTE, DEFINE A NOVA POSICAO DO MONSTRO
+                InGame->monsters[i].x = x;
+                InGame->monsters[i].y = y;
             }
-            else do{
+            else do{//SENAO, RETORNA PARA AS COORDENADAS ANTERIORES
                 switch(move){
                 case 1:
                     x -= SPRITE_SIZE;
@@ -1091,20 +1226,20 @@ void drawMonsters(monster monsters[MAX_MONSTERS], int MapArray[SPRITE_HEIGHT][SP
                 case 4:
                     y += SPRITE_SIZE;
                 }
-                if(move == 1){
+                if(move == 1){//SE A ORIENTACAO ESTAVA PARA O LESTE, AGORA ESTA PARA O NORTE
                     move = 4;
                 }
-                else if(move == 2){
+                else if(move == 2){//SE A ORIENTACAO ESTAVA PARA O OESTE, AGORA ESTA PARA O SUL
                     move = 3;
                 }
-                else if(move == 3){
+                else if(move == 3){//SE A ORIENTACAO ESTAVA PARA O SUL, AGORA ESTA PARA O LESTE
                     move = 1;
                 }
-                else{
+                else{//SE A ORIENTACAO ESTAVA PARA O NORTE, AGORA ESTA PARA O OESTE
                     move = 2;
                 }
-                monsters[i].orientation = move;
-                switch(move){
+                InGame->monsters[i].orientation = move;
+                switch(move){//ALTERA A COORDENADA DO MONSTRO BASEADO NA NOVA ORIENTACAO
                 case 1:
                     x += SPRITE_SIZE;
                     break;
@@ -1117,14 +1252,16 @@ void drawMonsters(monster monsters[MAX_MONSTERS], int MapArray[SPRITE_HEIGHT][SP
                 case 4:
                     y -= SPRITE_SIZE;
                 }
-                if(checkPosition(x, y, MapArray)){
-                    monsters[i].x = x;
-                    monsters[i].y = y;
+                if(checkPosition(x, y, MapArray)){// SE PASSAR PELO TESTE, DEFINE A NOVA POSICAO DO MONSTRO
+                    InGame->monsters[i].x = x;
+                    InGame->monsters[i].y = y;
                 }
-            }while(!checkPosition(x, y, MapArray));
+            }while(!checkPosition(x, y, MapArray));//REPETE O PROCESSO ATE ACHAR UMA POSICAO VALIDA
         }
     }
 }
+
+//A FUNCAO RECEBE AS VIDAS DO JOGO ATUAL E AS DESENHA SE AINDA NAO TIVEREM SIDO CAPTURADAS
 void drawLifes(life lifes[MAX_LIFES])
 {
     int i;
@@ -1134,10 +1271,14 @@ void drawLifes(life lifes[MAX_LIFES])
         }
     }
 }
+
+// A FUNCAO RECEBE O INDICE DO CONFETE E DESENHA O CONFETE
 void drawConfetti(int indconf)
 {
     DrawTexture(confettis[indconf], 1000, 150, WHITE);
 }
+
+//A FUNCAO EXECUTA O MENU DE VITORIA E RETORNA A OPCAO QUE O USUARIO ESCOLHER
 int winGame()
 {
     char *optionsText[3];
@@ -1202,6 +1343,8 @@ int winGame()
     }
     return optionSelected;
 }
+
+//A POSICAO RECEBE OS HIGHSCORES E OS EXIBE NA TELA ATE O USUARIO APERTAR ENTER PARA VOLTAR
 void showHighScores(score highscores[5])
 {
     char scoreString[20];
@@ -1225,6 +1368,8 @@ void showHighScores(score highscores[5])
 	    }
     }
 }
+
+// A FUNCAO RECEBE UM SAVE E O JOGO ATUAL E SALVO O JOGO NESSE SAVE
 void saveGame(save saveSave, game *InGame)
 {
     printf("%s\n", saveSave.path);
@@ -1232,6 +1377,8 @@ void saveGame(save saveSave, game *InGame)
     fwrite(InGame, sizeof(game), 1, saveFileSave);
     fclose(saveFileSave);
 }
+
+//A FUNCAO RECEBE UM SAVE, A MATRIZ DO MAPA E O JOGO ATUAL E CARREGA O SAVE NO JOGO ATUAL
 void loadGame(save loadSave, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame)
 {
     FILE *loadFileSave = fopen(loadSave.path, "rb");
@@ -1246,6 +1393,9 @@ void loadGame(save loadSave, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *In
     generateArrayMap(atualFile, MapArray);
     fclose(loadFileSave);
 }
+
+//A FUNCAO RECEBE UMA VARIAVEL DE OPCAO, A MATRIZ DO MAPA E O JOGO ATUAL
+//A FUNCAO EXECUTA O MENU DE SALVAR OU CARREGAR O JOGO, DEPENDENDO DA OPCAO
 void saves(int option, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame)//option pode ser 0, para salvar o jogo, ou 1 para carregar o jogo
 {
     FILE *file_saves = fopen("../assets/saves/saves.bin", "rb");
@@ -1319,6 +1469,11 @@ void saves(int option, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame)/
 	    }
     }
 }
+
+//FUNCAO QUE RECEBE UMA VARIAVEL QUE REPRESENTA SE O JOGO ESTA EM PROGRESSO OU NAO E UMA VARIAVEL QUE REPRESENTA SE O JOGO DEVE CONTINUAR OU NAO
+//ALEM DISSO, A FUNCAO RECEBE OS HIGHSCORES, A MATRIZ DO MAPA E O JOGO ATUAL
+//A FUNCAO CHAMA A FUNCAO MENU, QUE VARIA DE ACORDO COM SE O JOGO ESTA EM PROGRESSO OU NAO, E CHAMA OUTRAS FUNCOES BASEADO NA OPCAO DO MENU SELECIONADA PELO USUSARIO
+//A FUNCAO RETORNA 1 SE PRECISA COMECAR OU RECOMECAR O JOGO E RETORNA 0 SE PRECISA RETORNAR AO JOGO ATUAL
 int callMenu(int gameInProgress, int *continueGame, score highscores[5], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame)
 {
     int MenuAswer;
@@ -1344,8 +1499,10 @@ int callMenu(int gameInProgress, int *continueGame, score highscores[5], int Map
             saves(1, MapArray, InGame);
         }
     }
-    return 0;
+    return 0; //retorna ao jogo atual
 }
+
+//A FUNCAO RECEBE O ARRAY DE HIGHSCORES E OS ASSOCIA COM OS HIGHSCORES SALVOS NO ARQUIVO DE HIGHSCORES
 void readHighscores(score highscores[5])
 {
     int i;
@@ -1356,6 +1513,9 @@ void readHighscores(score highscores[5])
     }
     fclose(FHighscores);
 }
+
+//A FUNCAO RECEBE O ARRAY DE HIGHSCORES E UM NOVO SCORE
+//CASO O NOVO SCORE SEJA MAIOR DO QUE UM DOS HIGHSCORES DO ARRAY, ATUALIZA O ARQUIVO DOS HIGHSCORES E RETORNA 1
 int updateScores(score highscores[5], score new_score)
 {
     int i, removedI, changed;
@@ -1390,6 +1550,10 @@ int updateScores(score highscores[5], score new_score)
     fclose(FHighscores);
     return changed;
 }
+
+//A FUNCAO RECEBE UM ARRAY DE HIGHSCORES E O SCORE DO PLAYER
+//A FUNCAO PEDE PRO USUARIO DIGITAR O SEU NOME
+//CASO O SCORE TENHA SIDO ATUALIZADO, ABRE UM MENU PARABENIZANDO O JOGADOR, CASO CONTRARIO, ABRE OUTRO MENU
 void newScore(score highscores[5], int playerScore)
 {
     score new_score;
@@ -1464,22 +1628,24 @@ void newScore(score highscores[5], int playerScore)
     }
 
 }
+
+//A FUNCAO RECEBE A VARIAVEL DO CHEAT MUAHAHA E A STRING DE TESTE DO CHEAT MUAHAHA
 void muahaha(int *imune_muahaha, char test[8])
 {
     int i = 0;
     char muahaha[8] = {'M','U','A','H','A','H','A','\0'}, current, read;
-    current = GetKeyPressed();
-    if(current != 0){
+    current = GetKeyPressed(); //ARMAZENA O CARACTER QUE O PLAYER ESTA DIGITANDO NO MOMENTO
+    if(current != 0){ //SE O PLAYER DIGITOU ALGUM CARACTER,
         for(i=0;i<7;i++){
-            if(i==6){
-                test[6] = current;
+            if(i!=6){
+                test[i] = test [i+1]; // A STRING DE TESTE INTEIRA É EMPURRADA UM CARACTER PARA A ESQUERDA, ELIMINANDO O PRIMEIRO CARACTER
             }
             else{
-                test[i] = test [i+1];
+                test[6] = current; //O CARACTER DIGITADO PELO PLAYER EH ARMAZENADO NO UTLIMO CARACTER DO ARRAY DE TESTE
             }
         }
     }
-    if(strcmp(test, muahaha) == 0){
-        *imune_muahaha = 1;
+    if(strcmp(test, muahaha) == 0){ //SE AS STRINGS FOREM IGUAIS
+        *imune_muahaha = 1; //ATIVA O CHEAT MUAHAHA
     }
 }

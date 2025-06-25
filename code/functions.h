@@ -46,11 +46,11 @@ void genarateWall(int matriz[SPRITE_HEIGHT][SPRITE_WIDHT]);
 
 int allMonstersKilled(monster monsters[MAX_MONSTERS]);
 
-int nextLevel(status *atualStatus, char file[20], int *muahaha, char test[8]);
+int nextLevel(status *atualStatus, char file[20], int *muahaha);
 
 void changeLife(status *lifeStatus, int value);
 
-int checkBossArea(int x, int y, int matriz[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame);
+int checkBossArea(int x, int y, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame);
 
 int checkPosition(int x, int y, int matriz[SPRITE_HEIGHT][SPRITE_WIDHT]);
 
@@ -66,7 +66,7 @@ void bossDificultMode(boss *bossBill, int *counter);
 
 void killBoss(game *InGame, int *counter);
 
-int fireBallsMove(game *InGame, fireBall fireBalls[5], int *counter, int mapArray[SPRITE_HEIGHT][SPRITE_WIDHT], player atualPlayer, int imune_muahaha);
+int fireBallsMove(game *InGame, fireBall fireBalls[5], int *counter, int mapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int imune_muahaha);
 
 int attackContactBoss(game *InGame);
 
@@ -74,7 +74,7 @@ void attackBoss(boss *bossBill, int *counter, fireBall fireBalls[5]);
 
 void drawBoss(boss *bossBill, int *counter);
 
-void drawMonsters(monster monsters[MAX_MONSTERS], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int *monsterCounter, game *InGame);
+void drawMonsters(int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], int *monsterCounter, game *InGame);
 
 void drawLifes(life lifes[MAX_LIFES]);
 
