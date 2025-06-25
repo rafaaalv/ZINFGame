@@ -99,7 +99,7 @@ int main()
                 if(IsKeyPressed(KEY_J)){ //SE O JOGADOR ATACAR
                     monsterKilled = existMonster(&InGame, MapArray); //CONFERE SE EXISTE MONSTRO NA AREA DE ATAQUE E SALVA O INDICE DELE, SE EXISITIR
                     if(monsterKilled > -1){ //E SE EXISTIR MONSTRO NA AREA DE ATAQUE
-                        killMonster(&InGame, monsterKilled); //MATA O MONSTRO COM INDICE SALVO
+                        killMonster(&InGame, monsterKilled); //MATA O MONSTRO COM O INDICE SALVO
                     }
                     killBoss(&InGame, &bossCounter); //DANIFICA O BOSS, SE TIVER NA AREA DE ATAQUE
                 }

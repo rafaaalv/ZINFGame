@@ -1105,7 +1105,7 @@ int fireBallsMove(game *InGame, fireBall fireBalls[5], int *counter, int mapArra
 //CASO O PLAYER ESTEJA NA MESMA POSICAO DO BOSS, A FUNCAO RETORNA 1, CASO CONTRARIO, A FUNCAO RETORNA 0
 int attackContactBoss(game *InGame)
 {
-    //DESTACA-SE QUE EH NECESSARIO FAZER VARIAS CONFERENCIAS CONSIDERANDO QUE O BOSS CUPA 3X3 SPRITES
+    //DESTACA-SE QUE EH NECESSARIO FAZER VARIAS CONFERENCIAS CONSIDERANDO QUE O BOSS OCUPA 3X3 SPRITES
     if((InGame->atualPlayer.x >= InGame->bossBill.x)&&((InGame->atualPlayer.y == InGame->bossBill.y) || (InGame->atualPlayer.y == InGame->bossBill.y + SPRITE_SIZE) || (InGame->atualPlayer.y == InGame->bossBill.y + 2*SPRITE_SIZE))&&(InGame->bossBill.lifes > 0)){
         if(InGame->bossBill.attack == 3)//SE O MODO DIFICIL ESTIVER DESATIVADO
            changeLife(&InGame->atualStatus, -2); //TIRA DUAS VIDAS DO PLAYER
@@ -1298,7 +1298,7 @@ int winGame()
         UpdateMusicStream(winGameMusic);
         DrawTexture(BackGroundWinGameTexture, 0, 0, WHITE);
         underlineText("VOCE GANHOUU!!!!", 100, 20, 100, WHITE, BLACK);
-        underlineText("Obrigado por jogar nosso jogo! =)", 750, 700, 20, WHITE, BLACK); //UM PEQUENO TESTO DE CREDITOS NO FIM DO JOGO
+        underlineText("Obrigado por jogar nosso jogo! =)", 750, 700, 20, WHITE, BLACK); //UM PEQUENO TEXTO DE CREDITOS NO FIM DO JOGO
         underlineText("Jogo feito por:", 750, 725, 20, WHITE, BLACK);
         underlineText("Gabriel Fontaneli", 750, 750, 20, WHITE, BLACK);
         underlineText("Rafaele Castagnara", 750, 775, 20, WHITE, BLACK);
@@ -1377,7 +1377,7 @@ void showHighScores(score highscores[5])
     }
 }
 
-// A FUNCAO RECEBE UM SAVE E O JOGO ATUAL E SALVO O JOGO NESSE SAVE
+// A FUNCAO RECEBE UM SAVE E O JOGO ATUAL E SALVA O JOGO NESSE SAVE
 void saveGame(save saveSave, game *InGame)
 {
     printf("%s\n", saveSave.path);
@@ -1505,6 +1505,7 @@ int callMenu(int gameInProgress, int *continueGame, score highscores[5], int Map
             *continueGame = 0; // sair do jogo
         } else if(MenuAswer == 3){ //Escolheu carregar um jogo anterior
             saves(1, MapArray, InGame);
+            return callMenu(0, continueGame, highscores, MapArray, InGame);
         }
     }
     return 0; //retorna ao jogo atual
