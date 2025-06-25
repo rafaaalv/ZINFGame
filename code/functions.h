@@ -88,7 +88,7 @@ void saveGame(save saveSave, game *InGame);
 
 void loadGame(save loadSave, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame);
 
-void saves(int option, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame);
+int saves(int option, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame);
 
 int callMenu(int gameInProgress, int *continueGame, score highscores[5], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame);
 

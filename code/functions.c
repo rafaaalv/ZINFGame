@@ -1404,7 +1404,8 @@ void loadGame(save loadSave, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *In
 
 //A FUNCAO RECEBE UMA VARIAVEL DE OPCAO, A MATRIZ DO MAPA E O JOGO ATUAL
 //A FUNCAO EXECUTA O MENU DE SALVAR OU CARREGAR O JOGO, DEPENDENDO DA OPCAO
-void saves(int option, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame)//option pode ser 0, para salvar o jogo, ou 1 para carregar o jogo
+//A FUNCAO RETORNA 1 SE O JOGADOR APENAS ESCOLHEU VOLTAR AO MENU E 0 SE ESCOLHEU SALVAR OU CARREGAR O JOGO
+int saves(int option, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame)//option pode ser 0, para salvar o jogo, ou 1 para carregar o jogo
 {
     FILE *file_saves = fopen("../assets/saves/saves.bin", "rb");
     save savesList[3];
@@ -1452,6 +1453,7 @@ void saves(int option, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame)/
 	    EndDrawing();
 	    ClearBackground(BLACK);
 	    if(IsKeyPressed(KEY_ENTER)){
+            draw = 0;
             if(optionSelected != 3){
                 if(option){
                     loadGame(savesList[optionSelected], MapArray, InGame);
@@ -1472,8 +1474,10 @@ void saves(int option, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame)/
                     fclose(file_saves);
                     saveGame(savesList[optionSelected], InGame);
                 }
+                return 0;
+            } else {
+                return 1;
             }
-            draw = 0;
 	    }
     }
 }
@@ -1504,7 +1508,9 @@ int callMenu(int gameInProgress, int *continueGame, score highscores[5], int Map
         } else if(MenuAswer == 4){ //Escolheu sair do jogo
             *continueGame = 0; // sair do jogo
         } else if(MenuAswer == 3){ //Escolheu carregar um jogo anterior
-            saves(1, MapArray, InGame);
+            if(saves(1, MapArray, InGame)){//Escolheu apenas sair da tela de carregar, logo chama o menu inicial
+                return callMenu(0, continueGame, highscores, MapArray, InGame);
+            }
         }
     }
     return 0; //retorna ao jogo atual
