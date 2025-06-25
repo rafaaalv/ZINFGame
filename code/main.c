@@ -196,8 +196,5 @@ int main()
     }
     CloseWindow(); // Fecha a janela
     unloadTextures(); //Descarrega as texturas para liberar espaco na memoria
-
-
-
     return 0;
 }
