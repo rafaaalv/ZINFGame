@@ -1298,7 +1298,7 @@ int winGame()
         UpdateMusicStream(winGameMusic);
         DrawTexture(BackGroundWinGameTexture, 0, 0, WHITE);
         underlineText("VOCE GANHOUU!!!!", 100, 20, 100, WHITE, BLACK);
-        underlineText("Obrigado por jogar nosso jogo! =)", 750, 700, 20, WHITE, BLACK); //UM PEQUENO TESTO DE CREDITOS NO FIM DO JOGO
+        underlineText("Obrigado por jogar nosso jogo! =)", 750, 700, 20, WHITE, BLACK); //UM PEQUENO TEXTO DE CREDITOS NO FIM DO JOGO
         underlineText("Jogo feito por:", 750, 725, 20, WHITE, BLACK);
         underlineText("Gabriel Fontaneli", 750, 750, 20, WHITE, BLACK);
         underlineText("Rafaele Castagnara", 750, 775, 20, WHITE, BLACK);
