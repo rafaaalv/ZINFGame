@@ -445,7 +445,7 @@ void generateTextures()
     iconImage = LoadImage("../assets/icon.png");
 }
 
-//FUNCAO QUE DESCARREGA TODAS AS TEXTURAS UTILIZADAS NO MENU DO JOGO
+//FUNCAO QUE DESCARREGA TODAS AS TEXTURAS UTILIZADAS NOS MENUS DO JOGO
 void unloadTexturesMenus()
 {
     unloadTexturesMenus();
@@ -621,7 +621,7 @@ void generateMap(char path[20], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game 
                     case 'J':
                         InGame->atualPlayer.x = x;
                         InGame->atualPlayer.y = y;
-                        InGame->atualPlayer.orientation = 1;
+                        InGame->atualPlayer.orientation = 1; //INICIALIZA NA ORIENTACAO LESTE
                         InGame->atualPlayer.imune = 0;
                         break;
                     case 'V':
@@ -633,10 +633,10 @@ void generateMap(char path[20], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game 
                     case 'M':
                         InGame->monsters[monsters].x = x;
                         InGame->monsters[monsters].y = y;
-                        InGame->monsters[monsters].score = rand()%(100 + 1);
+                        InGame->monsters[monsters].score = rand()%(100 + 1); // SORTEIA UM NUMERO ALEATORIO ENTRE 0 E 100
                         InGame->monsters[monsters].alive = 1;
-                        InGame->monsters[monsters].orientation = 1;
-                        InGame->monsters[monsters].sprite = rand()%(4);
+                        InGame->monsters[monsters].orientation = 1; // INICIALIZA NA ORIENTACAO LESTE
+                        InGame->monsters[monsters].sprite = rand()%(4); // SORTEIA UM NUMERO DE 0 A 3 PARA SER A SPRITE DO MONSTRO
                         monsters++;
                         break;
                     case 'E':
@@ -656,7 +656,7 @@ void generateMap(char path[20], int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game 
             y = 0;
         }
     }
-    InGame->monsters[0].qnt = monsters;
+    InGame->monsters[0].qnt = monsters; //ARMAZENA A INFORMACAO DE QUANTOS MONSTROS FORAM CARREGADOS
 }
 
 //FUNCAO QUE RECEBE O PLAYER DO JOGO ATUAL E UMA VARIAVEL QUE REPRESENTA SE O JOGO ESTA EM PROGRESSO OU NAO
@@ -681,14 +681,17 @@ int menu(int gameInProgress, player *gamePlayer)
         optionsText[3] = "Carregar jogo";
         optionsText[4] = "Sair";
     }
-    SetTargetFPS(30);
+    SetTargetFPS(30); //DIMINUI OS FPS NORMAL PARA AS ANIMACOES DO MENU FICAREM MAIS DEVAGARES
     while(draw){
         DrawTexture(BackGroundMenuTexture, 0, 0, WHITE);
         DrawText("ZINFAGEDON", 100, 20, 100, WHITE);
+        if(gameInProgress){
+            DrawText("(Pause)", 800, 20, 80, WHITE);
+        }
         for(i = 0; i < 5; i++){
             if(optionSelected == i){ //Se a opcao estiver selecionada, desenha em vermelho e desenha um circulo vermelho do lado
                 if((optionSelected == 2)&&!gameInProgress){
-                    DrawText("<", 100 - 25, 440 - 20, SPRITE_SIZE, RED);
+                    DrawText("<", 100 - 25, 440 - 20, SPRITE_SIZE, RED);// DESENHA A SETA UM POUCO PARA CIMA PARA DAR A IMPRESSAO DE MOVIMENTACAO
                     DrawText(">", 420, 440 - 20, SPRITE_SIZE, RED);
                 } else {
                     DrawCircle(90, i*110 + 220, 5, RED);
@@ -706,7 +709,7 @@ int menu(int gameInProgress, player *gamePlayer)
 
         DrawTexture(arrayTexturesPlayer[gamePlayer->person][0], 440, 440 - 25, WHITE);
         if((IsKeyPressed(KEY_LEFT))&&(optionSelected == 2)&&!gameInProgress){
-            DrawText("<", 100 - 30, 440 - 20, SPRITE_SIZE, RED);
+            DrawText("<", 100 - 30, 440 - 20, SPRITE_SIZE, RED); //DESENHA A SETA PARA O LADO SELECIONADO PARA DAR IMPRESSAO DE MOVIMENTACAO
             PlaySound(menuSound);
             if(gamePlayer->person == 1){
                 gamePlayer->person = 0;
@@ -715,7 +718,7 @@ int menu(int gameInProgress, player *gamePlayer)
             }
         }
         if((IsKeyPressed(KEY_RIGHT))&&(optionSelected == 2)&&!gameInProgress){
-            DrawText(">", 420 + 5, 440 - 20, SPRITE_SIZE, RED);
+            DrawText(">", 420 + 5, 440 - 20, SPRITE_SIZE, RED); //DESENHA A SETA PARA O LADO SELECIONADO PARA DAR IMPRESSAO DE MOVIMENTACAO
             PlaySound(menuSound);
             if(gamePlayer->person == 1){
                 gamePlayer->person = 0;
@@ -747,7 +750,7 @@ int menu(int gameInProgress, player *gamePlayer)
             draw = 0;
 	    }
     }
-    SetTargetFPS(60);
+    SetTargetFPS(60); //RESETA O FPS PARA 60, O PADRAO DO JOGO
     return optionSelected;
 }
 
@@ -1065,9 +1068,9 @@ int fireBallsMove(game *InGame, fireBall fireBalls[5], int *counter, int mapArra
     int new_counter, i, x_player, y_player;
     x_player = InGame->atualPlayer.x;
     y_player = InGame->atualPlayer.y;
-    if(InGame->bossBill.lifes != 0){
+    if(InGame->bossBill.lifes != 0){ // SE O BOSS ESTA VIVO
         for(i = 0; i < InGame->bossBill.attack; i++){
-            if(fireBalls[i].exist == 1){
+            if(fireBalls[i].exist == 1){ // SE EXISTE FIREBALL COM ESSE INDICE, DESENHA A TEXTURA DEPENDENDO DO MODO DO BOSS
                 if(InGame->bossBill.attack == 3)
                     DrawTexture(fireBallTexture, fireBalls[i].x, fireBalls[i].y +20, WHITE);
                 else
@@ -1077,15 +1080,15 @@ int fireBallsMove(game *InGame, fireBall fireBalls[5], int *counter, int mapArra
         if(*counter == 12 - InGame->bossBill.attack){ //12 - 3(bolas de fogo pro vez) para quando ele esta no modo normal e 12 - 5 quando esta no modo difcil diminuindo o tempo do contador para o boss fazer a acao ele fica mais rapido e as bolas de fogo sao geradas mais rapidamente
             new_counter = 0;
             for(i = 0; i < InGame->bossBill.attack; i++){
-                if(fireBalls[i].exist == 1){
+            if(fireBalls[i].exist == 1){ // DESLOCA A FIREBALL PARA A ESQUERDA SE ELA NAO ENCONTRAR O PLAYER, UMA PAREDE, OU O FIM DA TELA
                     if(checkPosition(fireBalls[i].x - SPRITE_SIZE, fireBalls[i].y + SPRITE_SIZE, mapArray)){
                         fireBalls[i].x -= 50;
-                    } else {
+                    } else { // SE BATER EM UMA PAREDE OU ENCONTRAR O FIM DA DELA, ELA DEIXA DE EXISTIR
                         fireBalls[i].exist = 0;
                     }
-                    if(!InGame->atualPlayer.imune && !imune_muahaha){
-                        if(((fireBalls[i].x + 2*SPRITE_SIZE >= x_player)&&(fireBalls[i].x <= x_player))&&((fireBalls[i].y + SPRITE_SIZE == y_player))){
-                            fireBalls[i].exist = 0;
+                    if(!InGame->atualPlayer.imune && !imune_muahaha){ // SE O PLAYER NAO ESTIVER IMUNE
+                        if(((fireBalls[i].x + 2*SPRITE_SIZE >= x_player)&&(fireBalls[i].x <= x_player))&&((fireBalls[i].y + SPRITE_SIZE == y_player))){ //CONFERE SE A FIREBALL ENTROU EM CONTATO COM O PLAYER
+                            fireBalls[i].exist = 0; // SE BATER NO PLAYER, DEIXA DE EXISTIR
                             return 1;
                         }
                     }
@@ -1123,7 +1126,7 @@ void attackBoss(boss *bossBill, int *counter, fireBall fireBalls[5])
     if(bossBill->lifes != 0){
         if(*counter == 12 - bossBill->attack){ //12 - 3(bolas de fogo pro vez) para quando ele esta no modo normal e 12 - 5 quando esta no modo difcil diminuindo o tempo do contador para o boss fazer a acao ele fica mais rapido e as bolas de fogo sao geradas mais rapidamente
             for(i = 0; i < bossBill->attack; i++){
-                if(fireBalls[i].exist != 1){
+                if(fireBalls[i].exist != 1){ // SE NAO EXITIR FIREBALL COM ESSE INDICE, CRIA E SAI DO FOR
                     fireBalls[i].exist = 1;
                     fireBalls[i].x = bossBill->x;
                     fireBalls[i].y = bossBill->y;
@@ -1295,6 +1298,11 @@ int winGame()
         UpdateMusicStream(winGameMusic);
         DrawTexture(BackGroundWinGameTexture, 0, 0, WHITE);
         underlineText("VOCE GANHOUU!!!!", 100, 20, 100, WHITE, BLACK);
+        underlineText("Obrigado por jogar nosso jogo! =)", 750, 700, 20, WHITE, BLACK); //UM PEQUENO TESTO DE CREDITOS NO FIM DO JOGO
+        underlineText("Jogo feito por:", 750, 725, 20, WHITE, BLACK);
+        underlineText("Gabriel Fontaneli", 750, 750, 20, WHITE, BLACK);
+        underlineText("Rafaele Castagnara", 750, 775, 20, WHITE, BLACK);
+        underlineText("Jogo inspirado no desenho Gravity Falls", 750, 800, 20, WHITE, BLACK);
         if(randow == 60){
             if(indconf == 0){
                 indconf = 1;
@@ -1384,13 +1392,13 @@ void loadGame(save loadSave, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *In
     FILE *loadFileSave = fopen(loadSave.path, "rb");
     char atualFile[30];
     fread(InGame, sizeof(game), 1, loadFileSave);
-    if(InGame->atualStatus.level <= 9){
+    if(InGame->atualStatus.level <= 9){ //CARREGA O CAMINHO CERTO DO MAPA DO LEVEL DO SAVE
         sprintf(atualFile, "../assets/maps/mapa0%d.txt", InGame->atualStatus.level);
     }
     else {
         sprintf(atualFile, "../assets/maps/mapa%d.txt", InGame->atualStatus.level);
     }
-    generateArrayMap(atualFile, MapArray);
+    generateArrayMap(atualFile, MapArray); //GERA APENAS A MATRIZ DO MAPA E NAO RECARREGA OS MOSNTROS E OUTROS ATRIBUTOS
     fclose(loadFileSave);
 }
 
@@ -1409,7 +1417,7 @@ void saves(int option, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame)/
     }
     for(i = 0; i < 3; i++){
         fread(&savesList[i], sizeof(save), 1, file_saves);
-        sprintf(optionsText[i], "Save %d da data: %s", i + 1, savesList[i].date);
+        sprintf(optionsText[i], "Save %d da data: %s", i + 1, savesList[i].date); //EXIBE A DATA DO SAVE
     }
     fclose(file_saves);
     strcpy(optionsText[3], "Voltar");
@@ -1456,7 +1464,7 @@ void saves(int option, int MapArray[SPRITE_HEIGHT][SPRITE_WIDHT], game *InGame)/
                     if(file_saves == NULL){
                         printf("FALHOU\n\n\n");
                     }
-                    savesList[optionSelected].index = optionSelected + 1;
+                    savesList[optionSelected].index = optionSelected + 1; //SUBSTITUI O SAVE ANTERIOR
                     sprintf(savesList[optionSelected].path, "../assets/saves/save%d.bin", savesList[optionSelected].index);
                     for(i = 0; i < 3; i++){
                         fwrite(&savesList[i], sizeof(save), 1, file_saves);
