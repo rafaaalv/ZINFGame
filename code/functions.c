@@ -636,19 +636,41 @@ int menu(int gameInProgress, player *gamePlayer)
         optionsText[3] = "Carregar jogo";
         optionsText[4] = "Sair";
     }
+    SetTargetFPS(30);
     while(draw){
         DrawTexture(BackGroundMenuTexture, 0, 0, WHITE);
         DrawText("ZINFAGEDON", 100, 20, 100, WHITE);
         for(i = 0; i < 5; i++){
             if(optionSelected == i){ //Se a opcao estiver selecionada, desenha em vermelho e desenha um circulo vermelho do lado
-                DrawCircle(90, i*110 + 220, 5, RED);
+                if((optionSelected == 2)&&!gameInProgress){
+                    DrawText("<", 100 - 25, 440 - 20, SPRITE_SIZE, RED);
+                    DrawText(">", 420, 440 - 20, SPRITE_SIZE, RED);
+                } else {
+                    DrawCircle(90, i*110 + 220, 5, RED);
+                    if(!gameInProgress){
+                        DrawText("<", 100 - 25, 440 - 15, SPRITE_SIZE, WHITE);
+                        DrawText(">", 420, 440 - 15, SPRITE_SIZE, WHITE);
+                    }
+                }
+
                 DrawText(optionsText[i], 100, i*110 + 200, SPRITE_SIZE, RED);
             } else {
                 DrawText(optionsText[i], 100, i*110 + 200, SPRITE_SIZE, WHITE); //Cada opcao eh 110 pixels abaixo da anterior
             }
         }
-        DrawTexture(arrayTexturesPlayer[gamePlayer->person][0], 420, 440 - 25, WHITE);
-        if((IsKeyPressed(KEY_LEFT)||IsKeyPressed(KEY_RIGHT))&&(optionSelected == 2)&&!gameInProgress){
+
+        DrawTexture(arrayTexturesPlayer[gamePlayer->person][0], 440, 440 - 25, WHITE);
+        if((IsKeyPressed(KEY_LEFT))&&(optionSelected == 2)&&!gameInProgress){
+            DrawText("<", 100 - 30, 440 - 20, SPRITE_SIZE, RED);
+            PlaySound(menuSound);
+            if(gamePlayer->person == 1){
+                gamePlayer->person = 0;
+            } else {
+                gamePlayer->person = 1;
+            }
+        }
+        if((IsKeyPressed(KEY_RIGHT))&&(optionSelected == 2)&&!gameInProgress){
+            DrawText(">", 420 + 5, 440 - 20, SPRITE_SIZE, RED);
             PlaySound(menuSound);
             if(gamePlayer->person == 1){
                 gamePlayer->person = 0;
@@ -680,6 +702,7 @@ int menu(int gameInProgress, player *gamePlayer)
             draw = 0;
 	    }
     }
+    SetTargetFPS(60);
     return optionSelected;
 }
 int gameOver()
@@ -1150,7 +1173,6 @@ int winGame()
                 DrawCircle(90, i*110 + 220, 5, RED);
                 underlineText(optionsText[i], 100, i*110 + 200, SPRITE_SIZE, RED, BLACK);
             } else {
-                DrawCircle(90, i*110 + 220, 5 + 3, BLACK);
                 underlineText(optionsText[i], 100, i*110 + 200, SPRITE_SIZE, WHITE, BLACK);
             }
         }
