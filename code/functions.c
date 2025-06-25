@@ -1505,7 +1505,6 @@ int callMenu(int gameInProgress, int *continueGame, score highscores[5], int Map
             *continueGame = 0; // sair do jogo
         } else if(MenuAswer == 3){ //Escolheu carregar um jogo anterior
             saves(1, MapArray, InGame);
-            return callMenu(0, continueGame, highscores, MapArray, InGame);
         }
     }
     return 0; //retorna ao jogo atual
