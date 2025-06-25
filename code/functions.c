@@ -17,7 +17,7 @@
 #define SWORD_COLLUM 3
 #define LIFES_COLLUM 4
 #define MAX_LIFES_BOSS 30
-#define MUSIC_VOLUME 0.3
+#define MUSIC_VOLUME 0.2
 //DEFINIDO AT� AQUI
 
 
